@@ -182,7 +182,7 @@
 
   <nav class="chips" id="chips" aria-label="종목 탭">
     <button class="chip" data-filter="all" aria-pressed="true">전체</button>
-    <button class="chip" data-filter="yesterday" aria-pressed="false">🗓️ 어제 경기</button>
+    <button class="chip" data-filter="latest" aria-pressed="false">🗓️ 최신 쇼츠</button>
     <button class="chip big" data-filter="worldcup" aria-pressed="false">🏆 월드컵</button>
     <button class="chip kor" data-filter="kor" aria-pressed="false">🇰🇷 한국</button>
     <button class="chip" data-filter="soccer" aria-pressed="false">⚽ 축구</button>
@@ -311,13 +311,12 @@ async function startProbe(){
 }
 
 function thumbUrl(id){ return id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : ''; }
-function kstYmd(ms){ return new Date(ms + 9*3600*1000).toISOString().slice(0,10); }
-const YESTERDAY_KST = kstYmd(Date.now() - 86400000);   // 한국시간 기준 어제 날짜
-function isYesterday(g){ return g.published && kstYmd(Date.parse(g.published)) === YESTERDAY_KST; }
 function visible(){
+  if(activeFilter==='latest'){   // 최신 쇼츠: 업로드 최신순 전체
+    return [...goals].sort((a,b)=> (Date.parse(b.published)||0) - (Date.parse(a.published)||0));
+  }
   return goals.filter(g=>{
     if(activeFilter==='all') return true;
-    if(activeFilter==='yesterday') return isYesterday(g);
     if(activeFilter==='kor') return (g.tags||[]).includes('kor');
     return g.league===activeFilter;
   });
@@ -360,12 +359,12 @@ async function loadData(){
 
 function updateChips(){
   const counts={};
-  rawGoals.forEach(g=>{ counts[g.league]=(counts[g.league]||0)+1; if(g.tags&&g.tags.includes("kor")) counts._kor=(counts._kor||0)+1; if(isYesterday(g)) counts._yest=(counts._yest||0)+1; });
+  rawGoals.forEach(g=>{ counts[g.league]=(counts[g.league]||0)+1; if(g.tags&&g.tags.includes("kor")) counts._kor=(counts._kor||0)+1; });
   document.querySelectorAll(".chip").forEach(c=>{
     const f=c.dataset.filter;
-    if(f==="all"){ c.style.display=""; return; }
-    const n = f==="yesterday" ? (counts._yest||0) : f==="kor" ? (counts._kor||0) : (counts[f]||0);
-    const min = (f==="yesterday"||f==="kor") ? 1 : 2;   // 어제경기·한국=1개부터, 종목=2개부터 노출
+    if(f==="all"||f==="latest"){ c.style.display=""; return; }   // 전체·최신은 항상 노출
+    const n = f==="kor" ? (counts._kor||0) : (counts[f]||0);
+    const min = (f==="kor") ? 1 : 2;   // 한국=1개부터, 종목=2개부터 노출
     c.style.display = n>=min ? "" : "none";
   });
 }
