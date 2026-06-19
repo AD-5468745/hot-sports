@@ -227,9 +227,65 @@ const DEMO = [
 
 const grid = document.getElementById('grid');
 let activeFilter = 'all';
-let goals = DEMO;
+let goals = DEMO;          // 화면에 보이는(재생 가능 확인된) 목록
+let rawGoals = DEMO;       // 수집된 원본 목록
 let view = [];
 let mode = 'demo';
+let probing = 0;                 // 남은 임베드 검사 개수
+const okIds = new Set();         // 재생 확인된 영상 id
+
+/* 임베드 검사 결과 캐시 (다음 방문 빠르게) */
+const EMBED_KEY='nudetv_embed_v1', EMBED_TTL=7*24*3600*1000;
+let embedCache={}; try{embedCache=JSON.parse(localStorage.getItem(EMBED_KEY)||'{}');}catch(e){}
+function embedSave(){ try{localStorage.setItem(EMBED_KEY,JSON.stringify(embedCache));}catch(e){} }
+function embedGet(id){ const c=embedCache[id]; return (c && (Date.now()-c.ts)<EMBED_TTL) ? c.ok : null; }
+
+/* 화면 밖 숨은 칸에서 영상을 몰래 띄워 임베드 되는지 검사 */
+const probeHost=document.createElement('div');
+probeHost.setAttribute('aria-hidden','true');
+probeHost.style.cssText='position:fixed;left:-9999px;top:0;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none';
+document.addEventListener('DOMContentLoaded',()=>document.body.appendChild(probeHost));
+
+function probeOne(id){
+  return new Promise(resolve=>{
+    const cached=embedGet(id);
+    if(cached!==null){ resolve(cached); return; }
+    const div=document.createElement('div'); probeHost.appendChild(div);
+    let done=false, pl=null;
+    const finish=(ok,cache)=>{ if(done)return; done=true;
+      if(cache){ embedCache[id]={ok,ts:Date.now()}; embedSave(); }
+      try{pl&&pl.destroy();}catch(e){} try{probeHost.removeChild(div);}catch(e){}
+      resolve(ok); };
+    try{
+      pl=new YT.Player(div,{ videoId:id, width:'160', height:'90',
+        playerVars:{autoplay:0,mute:1,playsinline:1,rel:0},
+        events:{ onError:()=>finish(false,true), onReady:()=>finish(true,true) } });
+    }catch(e){ finish(false,false); }
+    setTimeout(()=>finish(false,false), 6000);   // 너무 느리면 숨김(캐시 안 함 → 다음에 재시도)
+  });
+}
+
+let probeRenderTimer=null;
+function probeRender(){ if(probeRenderTimer)return; probeRenderTimer=setTimeout(()=>{ probeRenderTimer=null; goals=rawGoals.filter(g=>okIds.has(g.youtubeId)); render(); },350); }
+
+async function startProbe(){
+  const list=rawGoals.slice();
+  probing=list.length; setStatus();
+  // 유튜브 재생기 준비 대기(최대 8초). 끝내 안 뜨면 그냥 다 보여줌.
+  await Promise.race([ new Promise(r=>whenYTReady(r)), new Promise(r=>setTimeout(r,8000)) ]);
+  if(!ytApiReady){ probing=0; goals=rawGoals.slice(); render(); setStatus(); return; }
+  const CONC=5; let idx=0;
+  async function worker(){
+    while(idx<list.length){
+      const g=list[idx++];
+      const ok=await probeOne(g.youtubeId);
+      if(ok) okIds.add(g.youtubeId);
+      probing--; probeRender(); setStatus();
+    }
+  }
+  await Promise.all(Array.from({length:CONC},()=>worker()));
+  probing=0; goals=rawGoals.filter(g=>okIds.has(g.youtubeId)); render(); setStatus();
+}
 
 function thumbUrl(id){ return id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : ''; }
 function visible(){
@@ -250,6 +306,7 @@ function ago(iso){
 function setStatus(){
   const el=document.getElementById('goalCount');
   if(mode==='loading'){ el.textContent='불러오는 중…'; return; }
+  if(probing>0){ el.textContent = goals.length + '  · 재생 가능 확인 중…'; return; }
   el.textContent = goals.length + (mode==='demo'?'  · 데모 화면':'');
 }
 async function loadData(){
@@ -267,9 +324,9 @@ async function loadData(){
       tags: d.tags || [],
       note: d.published ? ago(d.published) : (d.note||'')
     })).filter(g=>g.youtubeId);
-    mode='live'; render();
+    rawGoals=goals; goals=[]; okIds.clear(); mode='live'; render(); startProbe();
   }catch(e){
-    goals=DEMO; mode='demo'; render();   // data.json 없으면(미리보기 등) 데모 표시
+    goals=DEMO; rawGoals=DEMO; mode='demo'; render();   // data.json 없으면(미리보기 등) 데모 표시
   }
 }
 
@@ -277,7 +334,9 @@ function render(){
   view = visible();
   if(mode!=='error') setStatus();
   if(view.length===0){
-    grid.innerHTML = `<div class="empty"><div class="em-ico">🦊</div><b>아직 골이 없어요</b>경기가 시작되면 골 장면이 여기에 올라옵니다.</div>`;
+    grid.innerHTML = probing>0
+      ? `<div class="empty"><div class="em-ico">⏳</div><b>재생 가능한 영상 확인 중…</b>막힌 영상은 빼고 보여드릴게요.</div>`
+      : `<div class="empty"><div class="em-ico">🦊</div><b>아직 골이 없어요</b>경기가 시작되면 골 장면이 여기에 올라옵니다.</div>`;
     return;
   }
   grid.innerHTML = view.map((g,i)=>{
