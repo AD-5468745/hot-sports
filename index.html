@@ -235,7 +235,7 @@ let probing = 0;                 // 남은 임베드 검사 개수
 const okIds = new Set();         // 재생 확인된 영상 id
 
 /* 임베드 검사 결과 캐시 (다음 방문 빠르게) */
-const EMBED_KEY='nudetv_embed_v1', EMBED_TTL=7*24*3600*1000;
+const EMBED_KEY='nudetv_embed_v2', EMBED_TTL=7*24*3600*1000;
 let embedCache={}; try{embedCache=JSON.parse(localStorage.getItem(EMBED_KEY)||'{}');}catch(e){}
 function embedSave(){ try{localStorage.setItem(EMBED_KEY,JSON.stringify(embedCache));}catch(e){} }
 function embedGet(id){ const c=embedCache[id]; return (c && (Date.now()-c.ts)<EMBED_TTL) ? c.ok : null; }
@@ -258,10 +258,15 @@ function probeOne(id){
       resolve(ok); };
     try{
       pl=new YT.Player(div,{ videoId:id, width:'160', height:'90',
-        playerVars:{autoplay:0,mute:1,playsinline:1,rel:0},
-        events:{ onError:()=>finish(false,true), onReady:()=>finish(true,true) } });
+        playerVars:{autoplay:1,mute:1,playsinline:1,rel:0},
+        events:{
+          // 막힘(150/101/100 등) → 숨김 / 실제 재생 시작(버퍼링·재생) → 통과
+          onError:()=>finish(false,true),
+          onStateChange:(e)=>{ if(e.data===1||e.data===3) finish(true,true); },
+          onReady:(e)=>{ try{ e.target.mute(); e.target.playVideo(); }catch(_){} }
+        } });
     }catch(e){ finish(false,false); }
-    setTimeout(()=>finish(false,false), 6000);   // 너무 느리면 숨김(캐시 안 함 → 다음에 재시도)
+    setTimeout(()=>finish(false,false), 7000);   // 끝내 재생 안 되면 숨김(캐시 안 함 → 다음에 재시도)
   });
 }
 
