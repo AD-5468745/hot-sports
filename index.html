@@ -167,7 +167,12 @@ function setActive(slide){ const id=slide.dataset.id; if(id===activeId) return;
   Object.keys(players).forEach(pid=>{ if(!near.has(pid)) teardown(pid); });
   neighbors(slide).forEach(mount);
   Object.keys(players).forEach(pid=>{ const p=players[pid]; try{ if(pid===id){ applySound(p); p.playVideo&&p.playVideo(); } else { p.pauseVideo&&p.pauseVideo(); } }catch(e){} });
-  clearTimeout(slide._st); slide._st=setTimeout(()=>{ if(activeId===id && !slide.classList.contains('played')){ let st=-1; try{st=players[id].getPlayerState();}catch(e){} if(st!==1){ blockId(id); dropSlide(slide); } } },10000); }   // 10초 안에 재생 못하면(죽은 영상) 자동 건너뛰기
+  clearTimeout(slide._st); slide._st=setTimeout(()=>stuckCheck(slide,id,0),8000); }
+function stuckCheck(slide,id,tries){ if(activeId!==id || slide.classList.contains('played')) return;
+  let st=-1; try{ st=players[id].getPlayerState(); }catch(e){}
+  if(st===1) return;                                  // 재생중이면 OK
+  if(st===3 && tries<2){ slide._st=setTimeout(()=>stuckCheck(slide,id,tries+1),8000); return; }  // 버퍼링이면 더 기다림(최대 ~24초)
+  blockId(id); dropSlide(slide); }                    // 진짜 멈춤/오래 버퍼링 → 자동 건너뛰기
 function applySound(p){ try{ soundOn?(p.unMute(),p.setVolume(100)):p.mute(); }catch(e){} }
 function mount(slide){ const id=slide.dataset.id; if(players[id])return; const host=slide.querySelector('.mount'); if(!host)return;
   whenYT(()=>{ if(players[id]||!document.body.contains(slide))return; const d=document.createElement('div'); host.appendChild(d);
