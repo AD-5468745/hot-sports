@@ -156,10 +156,20 @@
 
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
   :focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+  #inappBar{position:sticky;top:0;z-index:40;background:#11201C;color:#fff;font-size:13px;padding:10px 12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;text-align:center;border-bottom:1px solid rgba(255,255,255,.14)}
+  #inappBar button{background:var(--orange);color:#fff;border:0;font-weight:800;font-size:13px;padding:8px 14px;border-radius:999px;cursor:pointer}
+  #inappBar span{opacity:.72;font-size:11px;flex-basis:100%}
+  #reloadBtn{font-size:17px;line-height:1;padding-left:12px;padding-right:12px}
 </style>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
 <div class="wrap">
+
+  <div id="inappBar" hidden>
+    📱 영상이 안 나오나요? <button id="openExt">브라우저로 열기</button>
+    <span>안 되면 오른쪽 위 ⋯ 메뉴 → Safari로 열기</span>
+  </div>
 
   <header>
     <svg class="mascot" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="HOT 스포츠 쇼츠모음 로고">
@@ -173,6 +183,7 @@
       <span class="eyebrow">매일 인기 쇼츠</span>
       <h1>HOT 스포츠 <b>쇼츠모음</b></h1>
     </div>
+    <button class="install" id="reloadBtn" title="새로고침" aria-label="새로고침">↻</button>
     <button class="install" id="installBtn" hidden>홈에 추가</button>
   </header>
 
@@ -474,6 +485,7 @@ function openPlayer(i){
     if (tok !== playToken) return;          // 그새 다른 영상으로 넘어갔으면 무시
     started = true;
     ytPlayer = new YT.Player('ytmount', {
+      host:'https://www.youtube-nocookie.com',
       videoId: g.youtubeId,
       playerVars: { autoplay:1, playsinline:1, rel:0, modestbranding:1 },
       events: {
@@ -519,6 +531,21 @@ document.getElementById('installBtn').addEventListener('click', async()=>{ if(!d
 if('serviceWorker' in navigator){ window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{})); }
 
 
+
+/* 텔레그램 미니앱 / 인앱 브라우저 대응 */
+const TG = window.Telegram && window.Telegram.WebApp;
+try{ if(TG){ TG.ready(); TG.expand(); } }catch(e){}
+const inTelegram = !!(TG && TG.platform && TG.platform!=='unknown');
+function isInApp(){ return inTelegram || /FBAN|FBAV|Instagram|KAKAOTALK|Line\/|NAVER|DaumApps|Telegram/i.test(navigator.userAgent||''); }
+function openExternal(){
+  const url = location.href.split('?')[0];
+  if(inTelegram && TG.openLink){ TG.openLink(url); return; }
+  try{ navigator.clipboard.writeText(url); alert('링크를 복사했어요. Safari 주소창에 붙여넣어 열어주세요:\n'+url); }
+  catch(e){ alert('오른쪽 위 ⋯ 메뉴 → Safari로 열기 를 눌러주세요.'); }
+}
+if(isInApp()){ const b=document.getElementById('inappBar'); if(b) b.hidden=false; }
+document.getElementById('openExt').addEventListener('click', openExternal);
+document.getElementById('reloadBtn').addEventListener('click', ()=>{ location.href = location.pathname + '?r=' + Date.now(); });
 
 loadData();
 </script>
