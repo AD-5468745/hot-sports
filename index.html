@@ -55,6 +55,17 @@
   .dtag{position:absolute;top:46%;z-index:5;background:rgba(0,0,0,.6);color:#fff;font-size:13px;font-weight:800;padding:8px 12px;border-radius:999px;opacity:0;transition:opacity .15s;pointer-events:none}
   .dtag.l{left:7%} .dtag.r{right:7%}
   .dtag.show{opacity:1}
+  .cue{position:absolute;z-index:6;border:0;cursor:pointer;font-family:inherit}
+  .cue[hidden]{display:none}
+  .cue.play{top:50%;left:50%;transform:translate(-50%,-50%);width:98px;height:98px;border-radius:50%;
+    background:rgba(0,0,0,.52);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;backdrop-filter:blur(4px);animation:cueIn .2s ease}
+  .cue.play span{font-size:30px;line-height:1;margin-left:3px}
+  .cue.play b{font-size:11px;font-weight:700;opacity:.92}
+  .cue.snd{bottom:calc(env(safe-area-inset-bottom) + 96px);left:50%;transform:translateX(-50%);
+    background:rgba(226,88,34,.96);color:#fff;font-size:13px;font-weight:800;padding:10px 16px;border-radius:999px;
+    box-shadow:0 6px 20px rgba(0,0,0,.4);animation:cuePulse 1.8s infinite}
+  @keyframes cueIn{from{transform:translate(-50%,-50%) scale(.7);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}
+  @keyframes cuePulse{0%,100%{transform:translateX(-50%) scale(1)}50%{transform:translateX(-50%) scale(1.06)}}
 
   .cap{position:absolute;left:0;right:0;bottom:0;z-index:3;pointer-events:none;
     padding:18px 14px calc(env(safe-area-inset-bottom) + 46px);
@@ -124,8 +135,6 @@
 
 <div id="empty"><div class="ic">🦊</div><b>이 탭에는 아직 영상이 없어요</b><p>다른 탭을 눌러보거나, 잠시 후 다시 확인해 주세요.</p></div>
 
-<div id="toast">오른쪽 위 🔊 를 누르면<br>소리가 나와요</div>
-
 <script>
 /* ============ 상태 ============ */
 const FEED=document.getElementById('feed'), CHIPS=document.getElementById('chips');
@@ -165,7 +174,9 @@ function slideHTML(g){ const id=g.youtubeId, t=thumb(id);
     + '<div class="stage"><div class="thumb" style="background-image:url(\''+t+'\')"></div>'
     +   '<div class="mount"></div>'
     +   '<div class="seek l" data-d="-5"></div><div class="seek r" data-d="5"></div>'
-    +   '<div class="dtag l">« 5초</div><div class="dtag r">5초 »</div></div>'
+    +   '<div class="dtag l">« 5초</div><div class="dtag r">5초 »</div>'
+    +   '<button class="cue play" hidden aria-label="재생"><span>▶</span><b>탭하여 재생</b></button>'
+    +   '<button class="cue snd" hidden aria-label="소리 켜기">🔊 소리 켜기</button></div>'
     + '<div class="cap"><b>'+esc(g.match)+'</b><em>'+esc(g.title)+'</em><span>'+esc(g.channel)+'</span></div>'
     + '</section>';
 }
@@ -186,6 +197,7 @@ function setActive(slide){ const id=slide.dataset.id; if(id===activeId) return; 
   Object.keys(players).forEach(pid=>{ if(!near.has(pid)) teardown(pid); });
   neighbors(slide).forEach(mount);
   Object.keys(players).forEach(pid=>{ const p=players[pid]; try{ if(pid===id){ applySound(p); p.playVideo&&p.playVideo(); } else { p.pauseVideo&&p.pauseVideo(); } }catch(e){} });
+  setTimeout(()=>refreshCue(id),1300);
 }
 function applySound(p){ try{ soundOn?(p.unMute(),p.setVolume(100)):p.mute(); }catch(e){} }
 function mount(slide){ const id=slide.dataset.id; if(players[id])return; const host=slide.querySelector('.mount'); if(!host)return;
@@ -195,7 +207,7 @@ function mount(slide){ const id=slide.dataset.id; if(players[id])return; const h
       events:{
         onReady:e=>{ try{ soundOn?e.target.unMute():e.target.mute(); if(id===activeId)e.target.playVideo(); }catch(_){}},
         onError:()=>{ blockId(id); dropSlide(slide); },
-        onStateChange:e=>{ if(e.data===1||e.data===3){ markGood(id); slide.classList.add('playing'); } }
+        onStateChange:e=>{ if(e.data===1||e.data===3){ markGood(id); slide.classList.add('playing'); } refreshCue(id); }
       } });
   });
 }
@@ -217,14 +229,20 @@ FEED.addEventListener('click',e=>{ const z=e.target.closest('.seek'); if(!z)retu
 
 /* ============ 소리 토글 ============ */
 const soundBtn=document.getElementById('soundBtn');
-soundBtn.addEventListener('click',()=>{ soundOn=!soundOn; soundBtn.textContent=soundOn?'🔊':'🔇';
-  soundBtn.classList.toggle('muted',!soundOn);
-  const p=players[activeId]; if(p){ applySound(p); try{p.playVideo();}catch(e){} } hideToast(); });
+soundBtn.addEventListener('click',()=>{ soundOn=!soundOn; updateHeaderSound();
+  const p=players[activeId]; if(p){ applySound(p); try{p.playVideo();}catch(e){} } refreshCue(activeId); });
 
 /* ============ 토스트 ============ */
-let toastT=null;
-function showToast(){ const t=document.getElementById('toast'); t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),5000); }
-function hideToast(){ const t=document.getElementById('toast'); t.classList.remove('show'); clearTimeout(toastT); }
+function updateHeaderSound(){ soundBtn.textContent=soundOn?'🔊':'🔇'; soundBtn.classList.toggle('muted',!soundOn); }
+function setCue(slide,mode){ const a=slide.querySelector('.cue.play'),b=slide.querySelector('.cue.snd'); if(a)a.hidden=mode!=='play'; if(b)b.hidden=mode!=='snd'; }
+function refreshCue(id){ const slide=FEED.querySelector('.slide[data-id="'+id+'"]'); if(!slide)return;
+  if(id!==activeId){ setCue(slide,'none'); return; }
+  const p=players[id]; let st=-1,mu=true; try{ st=p.getPlayerState(); mu=p.isMuted(); }catch(e){}
+  if(st===1||st===3){ setCue(slide, mu?'snd':'none'); } else { setCue(slide,'play'); } }
+FEED.addEventListener('click',e=>{ const pc=e.target.closest('.cue.play'), sc=e.target.closest('.cue.snd'); if(!pc&&!sc)return;
+  const slide=(pc||sc).closest('.slide'),id=slide.dataset.id,p=players[id]; if(!p)return;
+  try{ p.unMute(); p.setVolume(100); soundOn=true; updateHeaderSound(); if(pc)p.playVideo(); }catch(e2){}
+  setTimeout(()=>refreshCue(id),140); });
 
 /* ============ 탭 ============ */
 CHIPS.addEventListener('click',e=>{ const c=e.target.closest('.chip'); if(!c)return;
@@ -243,7 +261,7 @@ document.getElementById('reloadBtn').addEventListener('click',()=>{ try{localSto
 
 /* ============ 로드 ============ */
 async function load(){ try{ const r=await fetch('data.json?_='+Date.now()); if(!r.ok)throw 0; ALL=(await r.json())||[]; }catch(e){ ALL=[]; }
-  updateChips(); buildFeed(); if(!soundOn) showToast(); }
+  updateChips(); buildFeed(); }
 load();
 if('serviceWorker' in navigator){ window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{})); }
 </script>
