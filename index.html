@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover" />
 <title>HOT 스포츠 쇼츠모음</title>
 <meta name="theme-color" content="#0b1411" />
-<meta name="referrer" content="no-referrer" />
 <meta name="description" content="축구·야구·농구·격투기·LOL 인기 하이라이트 쇼츠 모음" />
 <meta property="og:type" content="website" /><meta property="og:title" content="HOT 스포츠 쇼츠모음" />
 <meta property="og:description" content="축구·야구·농구·격투기·LOL 인기 하이라이트를 쇼츠로 모아봤어요." />
@@ -230,7 +229,7 @@ function cueCheck(slide,id){ if(activeId!==id || slide.classList.contains('playe
 function applySound(p){ try{ soundOn?(p.unMute(),p.setVolume(100)):p.mute(); }catch(e){} }
 function mount(slide){ const id=slide.dataset.id; if(players[id])return; const host=slide.querySelector('.mount'); if(!host)return;
   whenYT(()=>{ if(players[id]||!document.body.contains(slide))return; const d=document.createElement('div'); host.appendChild(d);
-    players[id]=new YT.Player(d,{ host:'https://www.youtube-nocookie.com', videoId:id,
+    players[id]=new YT.Player(d,{ host:'https://www.youtube.com', videoId:id,
       playerVars:{autoplay:(id===activeId?1:0),mute:1,playsinline:1,rel:0,modestbranding:1,controls:1,fs:1},
       events:{
         onReady:e=>{ try{ soundOn?e.target.unMute():e.target.mute(); if(id===activeId)e.target.playVideo(); }catch(_){}},
