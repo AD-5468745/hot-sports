@@ -1,206 +1,115 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="referrer" content="no-referrer" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover" />
 <title>HOT 스포츠 쇼츠모음</title>
-<meta name="theme-color" content="#EAF5F1" />
+<meta name="theme-color" content="#0b1411" />
+<meta name="referrer" content="no-referrer" />
 <link rel="manifest" href="manifest.webmanifest" />
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
-<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="HOT스포츠" />
-<meta name="mobile-web-app-capable" content="yes" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet" />
-<style>
-  :root{
-    --bg:#EFF7F3;
-    --surface:#FFFFFF;
-    --green:#2FA98C;        /* 진한 브랜드 그린 (텍스트/포인트) */
-    --green-soft:#82C9B7;   /* 로고 민트 (타일/채움) */
-    --orange:#C2451A;       /* 번트오렌지 (포인트) */
-    --orange-br:#E1591F;    /* 골 스탬프용 밝은 오렌지 */
-    --ink:#16302A;          /* 본문 글자 (딥 틸-차콜) */
-    --muted:#6E837C;        /* 캡션 */
-    --line:rgba(22,48,42,.10);
-    --card-ink:#0E1A17;     /* 카드 내부 어두운 영상 톤 */
-  }
-  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-  html,body{background:var(--bg);color:var(--ink)}
-  body{
-    font-family:"Pretendard Variable",Pretendard,-apple-system,system-ui,sans-serif;
-    line-height:1.45;min-height:100dvh;overflow-x:hidden;
-    padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
-  }
-  .stamp{font-family:"Bebas Neue",sans-serif;letter-spacing:.5px}
-
-  /* 배너 느낌: 연민트 필드 + 우상단 오렌지 스워시 */
-  body::before{
-    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
-    background:
-      linear-gradient(180deg,#FFFFFF 0%,#EAF5F1 40%,#EFF7F3 100%),
-      radial-gradient(60% 30% at 100% 0%, rgba(194,69,26,.10), transparent 60%);
-  }
-  .wrap{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:0 14px 64px}
-
-  /* ---------- header ---------- */
-  header{padding:18px 2px 12px;display:flex;align-items:center;gap:12px;position:relative}
-  header::before{ /* 배너의 오렌지 라인 오마주 */
-    content:"";position:absolute;top:6px;right:2px;width:64px;height:3px;border-radius:3px;
-    background:linear-gradient(90deg,transparent,var(--orange));
-  }
-  .mascot{
-    width:54px;height:54px;flex:none;object-fit:contain;
-    background:radial-gradient(circle at 50% 45%, rgba(130,201,183,.35), transparent 70%);
-    filter:drop-shadow(0 4px 8px rgba(47,169,140,.25));
-  }
-  .brand{display:flex;flex-direction:column;gap:1px;min-width:0}
-  .brand .eyebrow{font-size:11px;letter-spacing:2.5px;color:var(--green);font-weight:800;text-transform:uppercase}
-  .brand h1{font-size:22px;font-weight:800;letter-spacing:-.5px;color:var(--ink)}
-  .brand h1 b{color:var(--orange)}
-  .install{
-    margin-left:auto;flex:none;border:1px solid var(--line);background:var(--surface);
-    color:var(--green);font-size:12.5px;font-weight:800;padding:9px 13px;border-radius:999px;cursor:pointer;
-    box-shadow:0 2px 8px rgba(22,48,42,.05);
-  }
-  .install:active{transform:scale(.96)}
-  .install[hidden]{display:none}
-
-  .status{display:flex;align-items:center;gap:8px;margin:4px 2px 16px;font-size:13px;color:var(--muted)}
-  .pulse{width:8px;height:8px;border-radius:50%;background:var(--orange-br);box-shadow:0 0 0 0 rgba(225,89,31,.5);animation:pulse 1.8s infinite}
-  .status b{color:var(--ink);font-weight:800}
-  @keyframes pulse{70%{box-shadow:0 0 0 8px rgba(225,89,31,0)}100%{box-shadow:0 0 0 0 rgba(225,89,31,0)}}
-
-  /* ---------- chips ---------- */
-  .chips{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 18px;scrollbar-width:none}
-  .chips::-webkit-scrollbar{display:none}
-  .chip{
-    flex:none;border:1px solid var(--line);background:var(--surface);color:var(--muted);
-    font-size:13px;font-weight:700;padding:9px 15px;border-radius:999px;cursor:pointer;white-space:nowrap;transition:.16s;
-    box-shadow:0 1px 4px rgba(22,48,42,.04);
-  }
-  .chip[aria-pressed="true"]{background:var(--green);color:#fff;border-color:transparent;box-shadow:0 4px 12px rgba(47,169,140,.3)}
-  .chip.big[aria-pressed="true"]{background:var(--orange);box-shadow:0 4px 12px rgba(194,69,26,.3)}
-
-  /* ---------- grid ---------- */
-  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-  @media(min-width:560px){.grid{grid-template-columns:repeat(3,1fr)}}
-
-  .card{
-    position:relative;aspect-ratio:9/16;border-radius:18px;overflow:hidden;cursor:pointer;
-    background:var(--card-ink);border:1px solid var(--line);isolation:isolate;
-    box-shadow:0 6px 18px rgba(22,48,42,.10);transition:transform .18s, box-shadow .18s;
-  }
-  .card:active{transform:scale(.975)}
-  @media(hover:hover){.card:hover{transform:translateY(-3px);box-shadow:0 16px 30px rgba(22,48,42,.18)}}
-
-  .thumb{
-    position:absolute;inset:0;z-index:0;
-    background:
-      radial-gradient(120% 75% at 28% 0%, rgba(130,201,183,.30), transparent 55%),
-      linear-gradient(180deg,#16302A,#0B1714);
-  }
-  .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .3s}
-  .thumb img.on{opacity:1}
-  .card .scrim{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(0,0,0,.05) 32%,rgba(0,0,0,.74) 100%)}
-
-  .minute{position:absolute;top:9px;left:11px;z-index:2;font-family:"Bebas Neue",sans-serif;font-size:32px;line-height:.8;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.55)}
-  .minute span{font-size:16px;color:var(--orange-br)}
-  .src{position:absolute;top:12px;left:11px;z-index:2;font-size:10px;font-weight:800;letter-spacing:.4px;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);padding:4px 7px;border-radius:7px;color:#fff}
-  .kor-flag{position:absolute;top:40px;left:11px;z-index:2;font-size:16px}
-  .card-cta{position:absolute;top:9px;right:9px;z-index:3;background:linear-gradient(135deg,var(--green-soft),var(--green));color:#fff;font-size:10px;font-weight:800;padding:5px 9px;border-radius:999px;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,.35);text-shadow:0 1px 2px rgba(0,0,0,.3)}
-  .card-cta:active{transform:scale(.93)}
-  .play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;width:46px;height:46px;border-radius:50%;background:rgba(194,69,26,.85);display:grid;place-items:center;box-shadow:0 4px 16px rgba(194,69,26,.5)}
-  .play svg{width:18px;height:18px;margin-left:2px;fill:#fff}
-  .meta{position:absolute;left:11px;right:11px;bottom:11px;z-index:2}
-  .meta .match{font-size:11px;font-weight:800;color:var(--green-soft);margin-bottom:2px}
-  .meta .ttl{font-size:13.5px;font-weight:700;letter-spacing:-.2px;color:#fff;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-  .meta .ago{font-size:11px;color:rgba(255,255,255,.6);margin-top:3px}
-
-  .empty{grid-column:1/-1;text-align:center;padding:54px 18px;border:1px dashed var(--line);border-radius:18px;color:var(--muted);background:var(--surface)}
-  .empty .em-ico{font-size:34px;margin-bottom:10px}
-  .empty b{display:block;color:var(--ink);font-size:15px;font-weight:800;margin-bottom:4px}
-
-  footer{margin-top:30px;padding-top:18px;border-top:1px solid var(--line);font-size:11px;color:var(--muted);line-height:1.7}
-  footer b{color:var(--ink)}
-
-  /* ---------- player ---------- */
-  .player{position:fixed;inset:0;z-index:50;background:rgba(8,18,15,.97);display:none}
-  .player.open{display:block}
-  .player-inner{position:absolute;inset:0;display:flex;flex-direction:column;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
-  .pbar{display:flex;align-items:center;gap:10px;padding:14px 16px;color:#fff}
-  .pbar .pttl{font-size:14px;font-weight:800;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .pbar .psrc{font-size:11px;color:var(--green-soft);font-weight:800;flex:none}
-  .close{margin-left:auto;flex:none;width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);color:#fff;font-size:18px;cursor:pointer}
-  .stage{flex:1;position:relative;overflow:hidden}
-  .frame{position:absolute;inset:0;width:100%;height:100%;overflow:hidden;background:#000}
-  .frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-  .frame #pSwipe{position:absolute;top:24%;left:0;right:0;bottom:24%;z-index:4;background:transparent;touch-action:none;-webkit-tap-highlight-color:transparent}
-  .frame{transition:transform .17s ease, opacity .17s ease}
-  .frame.swipe-up{transform:translateY(-14%);opacity:.2}
-  .frame.swipe-down{transform:translateY(14%);opacity:.2}
-  #pMute{position:absolute;top:14px;left:50%;transform:translateX(-50%);z-index:5;background:rgba(0,0,0,.62);color:#fff;font-size:12px;font-weight:700;padding:7px 13px;border-radius:999px;pointer-events:none;display:flex;gap:5px;align-items:center}
-  .frame .cta-wrap{position:absolute;top:10px;right:10px;z-index:6;display:grid;grid-template-columns:1fr 1fr;gap:6px;max-width:250px}
-  .frame .cta-wrap a{display:flex;align-items:center;justify-content:center;gap:4px;background:linear-gradient(135deg,var(--green-soft),var(--green));color:#fff;font-size:11px;font-weight:800;padding:7px 10px;border-radius:999px;text-decoration:none;box-shadow:0 3px 12px rgba(0,0,0,.4);text-shadow:0 1px 2px rgba(0,0,0,.35);white-space:nowrap}
-  .frame .cta-wrap a:active{transform:scale(.95)}
-  .frame .cta-wrap[hidden]{display:none}
-  .frame .blocked{position:absolute;inset:0;z-index:6;display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:24px;text-align:center;background:#11201C;color:#fff}
-  .frame .blocked.on{display:flex}
-  .frame .blocked .b-ico{font-size:32px}
-  .frame .blocked p{font-size:13px;color:rgba(255,255,255,.65);line-height:1.6}
-  .frame .blocked a{display:inline-block;background:var(--orange);color:#fff;font-weight:800;font-size:13px;padding:11px 18px;border-radius:999px;text-decoration:none}
-  .pnav{display:flex;justify-content:space-between;gap:12px;padding:14px 18px}
-  .pnav button{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);color:#fff;font-size:13px;font-weight:700;padding:11px 16px;border-radius:999px;cursor:pointer;flex:1;max-width:160px}
-  .pnav button:disabled{opacity:.32}
-
-  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-  :focus-visible{outline:2px solid var(--orange);outline-offset:2px}
-  #inappBar{position:sticky;top:0;z-index:40;background:#11201C;color:#fff;font-size:13px;padding:10px 12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;text-align:center;border-bottom:1px solid rgba(255,255,255,.14)}
-  #inappBar button{background:var(--orange);color:#fff;border:0;font-weight:800;font-size:13px;padding:8px 14px;border-radius:999px;cursor:pointer}
-  #inappBar span{opacity:.72;font-size:11px;flex-basis:100%}
-  #reloadBtn{font-size:17px;line-height:1;padding-left:12px;padding-right:12px}
-</style>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+  :root{ --green:#1FA85C; --green-soft:#37C98C; --orange:#E25822; --bg:#0b1411; }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;height:100%;background:var(--bg);color:#fff;
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;overflow:hidden}
+
+  /* ---------- 상단바 ---------- */
+  #bar{position:fixed;top:0;left:0;right:0;z-index:30;
+    padding:calc(env(safe-area-inset-top) + 8px) 12px 8px;
+    background:linear-gradient(180deg,rgba(0,0,0,.62) 0%,rgba(0,0,0,.28) 70%,transparent 100%);
+    pointer-events:none}
+  #bar .row{display:flex;align-items:center;gap:10px;pointer-events:auto}
+  .brand{display:flex;align-items:center;gap:8px;margin-right:auto;min-width:0}
+  .brand svg{width:30px;height:30px;flex:none}
+  .brand b{font-size:15px;font-weight:800;letter-spacing:-.2px;white-space:nowrap}
+  .brand b i{color:var(--green-soft);font-style:normal}
+  .iconbtn{flex:none;width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.2);
+    background:rgba(255,255,255,.08);color:#fff;font-size:18px;cursor:pointer;backdrop-filter:blur(6px)}
+  .iconbtn:active{transform:scale(.92)}
+  #chips{display:flex;gap:7px;overflow-x:auto;margin-top:9px;padding-bottom:2px;
+    scrollbar-width:none;pointer-events:auto}
+  #chips::-webkit-scrollbar{display:none}
+  .chip{flex:none;border:1px solid rgba(255,255,255,.22);background:rgba(0,0,0,.32);color:#fff;
+    font-size:13px;font-weight:700;padding:7px 13px;border-radius:999px;cursor:pointer;white-space:nowrap;backdrop-filter:blur(6px)}
+  .chip[aria-pressed="true"]{background:var(--green);border-color:transparent}
+  .chip.big[aria-pressed="true"]{background:var(--orange)}
+
+  /* ---------- 피드(세로 스냅) ---------- */
+  #feed{height:100dvh;overflow-y:scroll;scroll-snap-type:y mandatory;
+    overscroll-behavior-y:contain;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  #feed::-webkit-scrollbar{display:none}
+  .slide{position:relative;height:100dvh;scroll-snap-align:start;scroll-snap-stop:always;
+    display:flex;align-items:center;justify-content:center;background:#000}
+  .stage{position:relative;width:100%;height:100%;max-width:min(100%,520px);margin:0 auto;background:#000;overflow:hidden}
+  .thumb{position:absolute;inset:0;background-size:cover;background-position:center;
+    filter:brightness(.7);transition:opacity .25s}
+  .slide.playing .thumb{opacity:0}
+  .mount,.mount iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+
+  /* 더블탭 5초 영역(좌/우) — 세로 스크롤은 그대로(pan-y), 가운데·하단은 유튜브 컨트롤용으로 비움 */
+  .seek{position:absolute;top:13%;bottom:18%;width:30%;z-index:3;touch-action:pan-y;background:transparent}
+  .seek.l{left:0} .seek.r{right:0}
+  .dtag{position:absolute;top:46%;z-index:4;background:rgba(0,0,0,.55);color:#fff;font-size:13px;font-weight:800;
+    padding:8px 12px;border-radius:999px;opacity:0;transition:opacity .15s;pointer-events:none}
+  .dtag.l{left:8%} .dtag.r{right:8%}
+  .dtag.show{opacity:1}
+
+  .cap{position:absolute;left:0;right:0;bottom:0;z-index:2;pointer-events:none;
+    padding:18px 14px calc(env(safe-area-inset-bottom) + 14px);
+    background:linear-gradient(0deg,rgba(0,0,0,.72),transparent);
+    font-size:13px;line-height:1.4;max-height:38%;overflow:hidden}
+  .cap b{display:block;color:var(--green-soft);font-size:12px;font-weight:800;margin-bottom:3px}
+  .cap span{color:rgba(255,255,255,.6);font-size:11px}
+
+  /* 소리 안내 토스트 */
+  #toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top) + 96px);transform:translateX(-50%);
+    z-index:35;background:rgba(0,0,0,.72);color:#fff;font-size:13px;font-weight:700;
+    padding:10px 16px;border-radius:999px;opacity:0;transition:opacity .35s;pointer-events:none}
+  #toast.show{opacity:1}
+
+  /* 빈 상태 */
+  #empty{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;
+    gap:10px;text-align:center;color:rgba(255,255,255,.85);padding:30px;z-index:5}
+  #empty.show{display:flex}
+  #empty .ic{font-size:40px}
+
+  /* 브라우저 안내 게이트 */
+  #gate{position:fixed;inset:0;z-index:60;display:none;flex-direction:column;align-items:center;justify-content:center;
+    gap:16px;text-align:center;padding:30px;background:#0b1411}
+  #gate.show{display:flex}
+  #gate .ic{font-size:44px}
+  #gate h2{font-size:19px;margin:0}
+  #gate p{margin:0;color:rgba(255,255,255,.7);font-size:14px;line-height:1.6;max-width:320px}
+  #gate .go{background:var(--orange);color:#fff;border:0;font-weight:800;font-size:16px;padding:14px 26px;border-radius:999px;cursor:pointer}
+  #gate .stay{background:none;border:0;color:rgba(255,255,255,.5);font-size:13px;text-decoration:underline;cursor:pointer}
+</style>
 </head>
 <body>
-<div class="wrap">
 
-  <div id="inappBar" hidden>
-    📱 영상이 안 나오나요? <button id="openExt">브라우저로 열기</button>
-    <span>안 되면 오른쪽 위 ⋯ 메뉴 → Safari로 열기</span>
-  </div>
-
-  <header>
-    <svg class="mascot" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="HOT 스포츠 쇼츠모음 로고">
-  <g fill="none" stroke="#1FA85C" stroke-width="6" stroke-linecap="round"><line x1="60" y1="44" x2="42" y2="20"/><line x1="60" y1="44" x2="80" y2="22"/></g>
-  <circle cx="42" cy="18" r="5.5" fill="#1FA85C"/><circle cx="82" cy="20" r="5.5" fill="#1FA85C"/>
-  <g fill="none" stroke="#1FA85C" stroke-width="5" stroke-linecap="round"><path d="M95 31 a13 13 0 0 1 11 11"/><path d="M93 22 a23 23 0 0 1 19 19"/></g>
-  <rect x="16" y="44" width="88" height="62" rx="16" fill="#fff" stroke="#1FA85C" stroke-width="9"/>
-  <text x="60" y="90" text-anchor="middle" font-family="Arial, sans-serif" font-weight="800" font-size="46" fill="#1FA85C" letter-spacing="1">LC</text>
-</svg>
+<header id="bar">
+  <div class="row">
     <div class="brand">
-      <span class="eyebrow">매일 인기 쇼츠</span>
-      <h1>HOT 스포츠 <b>쇼츠모음</b></h1>
+      <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="HOT 스포츠 쇼츠모음">
+        <g fill="none" stroke="#1FA85C" stroke-width="6" stroke-linecap="round"><line x1="60" y1="44" x2="42" y2="20"/><line x1="60" y1="44" x2="80" y2="22"/></g>
+        <circle cx="42" cy="18" r="5.5" fill="#1FA85C"/><circle cx="82" cy="20" r="5.5" fill="#1FA85C"/>
+        <rect x="16" y="44" width="88" height="62" rx="16" fill="#fff" stroke="#1FA85C" stroke-width="9"/>
+        <text x="60" y="90" text-anchor="middle" font-family="Arial" font-weight="800" font-size="46" fill="#1FA85C">LC</text>
+      </svg>
+      <b>HOT 스포츠 <i>쇼츠</i></b>
     </div>
-    <button class="install" id="reloadBtn" title="새로고침" aria-label="새로고침">↻</button>
-    <button class="install" id="installBtn" hidden>홈에 추가</button>
-  </header>
-
-  <div class="status">
-    <span class="pulse" aria-hidden="true"></span>
-    <span>인기 하이라이트 <b id="goalCount">0</b></span>
+    <button class="iconbtn" id="soundBtn" title="소리" aria-label="소리 켜기/끄기">🔇</button>
+    <button class="iconbtn" id="reloadBtn" title="새로고침" aria-label="새로고침">↻</button>
   </div>
-
-  <nav class="chips" id="chips" aria-label="종목 탭">
+  <nav id="chips" aria-label="종목 탭">
     <button class="chip" data-filter="all" aria-pressed="true">전체</button>
     <button class="chip" data-filter="latest" aria-pressed="false">🗓️ 최신 쇼츠</button>
     <button class="chip big" data-filter="worldcup" aria-pressed="false">🏆 월드컵</button>
-    <button class="chip kor" data-filter="kor" aria-pressed="false">🇰🇷 한국</button>
+    <button class="chip" data-filter="kor" aria-pressed="false">🇰🇷 한국</button>
     <button class="chip" data-filter="soccer" aria-pressed="false">⚽ 축구</button>
     <button class="chip" data-filter="baseball" aria-pressed="false">⚾ 야구</button>
     <button class="chip" data-filter="basketball" aria-pressed="false">🏀 농구</button>
@@ -209,369 +118,221 @@
     <button class="chip" data-filter="athletics" aria-pressed="false">🏃 육상</button>
     <button class="chip" data-filter="esports" aria-pressed="false">🎮 LOL</button>
   </nav>
+</header>
 
-  <main class="grid" id="grid"></main>
+<main id="feed" aria-label="쇼츠 피드"></main>
 
-  <footer>
-    <b>HOT 스포츠 쇼츠모음</b> · 영상은 각 방송사·리그 공식 유튜브 채널의 임베드입니다.<br />
-    원본 저작권은 각 방송사·리그에 있으며, 본 사이트는 영상을 보관·재배포하지 않습니다.
-  </footer>
-</div>
+<div id="empty"><div class="ic">🦊</div><b>아직 영상이 없어요</b><div>다른 탭을 눌러보거나 잠시 후 다시 확인해 주세요.</div></div>
 
-<!-- ===== player modal ===== -->
-<div class="player" id="player" role="dialog" aria-modal="true" aria-label="골 영상 재생">
-  <div class="player-inner">
-    <div class="pbar">
-      <span class="pttl" id="pTtl">—</span>
-      <span class="psrc" id="pSrc"></span>
-      <button class="close" id="pClose" aria-label="닫기">✕</button>
-    </div>
-    <div class="stage">
-      <div class="frame">
-        <div id="pMount"></div>
-        <div id="pSwipe" aria-hidden="true"></div>
-        <div id="pMute" hidden>🔇 탭하면 소리 켜짐</div>
-        <div class="blocked" id="pBlocked">
-          <div class="b-ico" aria-hidden="true">🔒</div>
-          <p>이 영상은 퍼가기가 막혀 있어요.<br />공식 채널에서 바로 볼 수 있습니다.</p>
-          <a id="pFallback" href="#" target="_blank" rel="noopener">공식 채널에서 보기</a>
-        </div>
-      </div>
-    </div>
-    <div class="pnav">
-      <button id="pPrev">‹ 이전 쇼츠</button>
-      <button id="pNext">다음 쇼츠 ›</button>
-    </div>
-  </div>
+<div id="toast">🔊 화면 위 스피커를 누르면 소리가 켜져요</div>
+
+<div id="gate">
+  <div class="ic">📱</div>
+  <h2>브라우저에서 열어주세요</h2>
+  <p>지금은 앱 안의 작은 브라우저라 영상이 막혀요. 아래 버튼을 누르면 사파리(기본 브라우저)에서 정상으로 재생됩니다.</p>
+  <button class="go" id="gateGo">브라우저에서 열기</button>
+  <button class="stay" id="gateStay">그냥 여기서 볼게요</button>
 </div>
 
 <script>
-/* ============================================================
-   골은 자동으로 채워집니다.
-   GitHub 자동작업이 30분마다 공식 채널을 읽어 data.json 을 만들고,
-   이 화면은 그 data.json 을 읽어 카드로 보여줍니다. 손볼 것 없습니다.
-   (data.json 이 아직 없으면 아래 데모 화면이 보입니다)
-   ============================================================ */
-const DEMO = [
-  { league:"worldcup", match:"대한민국 vs 체코",        title:"이강인 환상 프리킥 결승골", youtubeId:"", channel:"KBS",  tags:["kor"], note:"데모" },
-  { league:"soccer",      match:"Arsenal vs Chelsea",     title:"사카 원더골 하이라이트",     youtubeId:"", channel:"EPL",  tags:[],      note:"데모" },
-  { league:"baseball",      match:"Dodgers vs Padres",      title:"오타니 끝내기 홈런",         youtubeId:"", channel:"MLB",  tags:[],      note:"데모" },
-  { league:"basketball",      match:"Lakers vs Celtics",      title:"르브론 버저비터",            youtubeId:"", channel:"NBA",  tags:[],      note:"데모" },
-  { league:"soccer",      match:"Tottenham vs Liverpool", title:"손흥민 멀티골 폭발",         youtubeId:"", channel:"EPL",  tags:["kor"], note:"데모" },
-  { league:"baseball",      match:"Padres vs Giants",       title:"김하성 환상 호수비",         youtubeId:"", channel:"MLB",  tags:["kor"], note:"데모" },
-];
-
-const grid = document.getElementById('grid');
+/* ============ 데이터/상태 ============ */
+const FEED = document.getElementById('feed');
+const CHIPS = document.getElementById('chips');
+let ALL = [];                 // data.json 전체
+let list = [];                // 현재 탭의 목록
 let activeFilter = 'all';
-let goals = DEMO;          // 화면에 보이는(재생 가능 확인된) 목록
-let rawGoals = DEMO;       // 수집된 원본 목록
-let view = [];
-let mode = 'demo';
-let probing = 0;                 // 남은 임베드 검사 개수
-const okIds = new Set();         // 재생 확인된 영상 id
+let soundOn = false;          // 전역 소리 상태
+const players = {};           // youtubeId -> YT.Player (마운트된 것만)
+let activeId = null;
 
-/* 임베드 검사 결과 캐시 (다음 방문 빠르게) */
-const EMBED_KEY='nudetv_embed_v2', EMBED_TTL=7*24*3600*1000, EMBED_BAD_TTL=2*3600*1000;
-let embedCache={}; try{embedCache=JSON.parse(localStorage.getItem(EMBED_KEY)||'{}');}catch(e){}
-function embedSave(){ try{localStorage.setItem(EMBED_KEY,JSON.stringify(embedCache));}catch(e){} }
-function embedGet(id){ const c=embedCache[id]; if(!c) return null; const ttl=c.ok?EMBED_TTL:EMBED_BAD_TTL; return (Date.now()-c.ts<ttl) ? c.ok : null; }
+/* 막힘 기억(짧게) — 일시적 실패가 오래 숨기지 않게 */
+const BKEY='hot_blocked_v1', BAD_TTL=2*3600*1000;
+let blocked={}; try{blocked=JSON.parse(localStorage.getItem(BKEY)||'{}');}catch(e){}
+function isBlocked(id){ const t=blocked[id]; return t && (Date.now()-t)<BAD_TTL; }
+function blockId(id){ blocked[id]=Date.now(); try{localStorage.setItem(BKEY,JSON.stringify(blocked));}catch(e){} }
+function markGood(id){ if(blocked[id]){ delete blocked[id]; try{localStorage.setItem(BKEY,JSON.stringify(blocked));}catch(e){} } }
 
-/* 화면 밖 숨은 칸에서 영상을 몰래 띄워 임베드 되는지 검사 */
-const probeHost=document.createElement('div');
-probeHost.setAttribute('aria-hidden','true');
-probeHost.style.cssText='position:fixed;left:-9999px;top:0;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none';
-document.addEventListener('DOMContentLoaded',()=>document.body.appendChild(probeHost));
+function esc(s){ return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function thumb(id){ return 'https://i.ytimg.com/vi/'+id+'/hqdefault.jpg'; }
 
-function probeOne(id){
-  return new Promise(resolve=>{
-    const cached=embedGet(id);
-    if(cached!==null){ resolve(cached); return; }
-    const div=document.createElement('div'); probeHost.appendChild(div);
-    let done=false, pl=null;
-    const finish=(ok,cache)=>{ if(done)return; done=true;
-      if(cache){ embedCache[id]={ok,ts:Date.now()}; embedSave(); }
-      try{pl&&pl.destroy();}catch(e){} try{probeHost.removeChild(div);}catch(e){}
-      resolve(ok); };
-    try{
-      pl=new YT.Player(div,{ videoId:id, width:'160', height:'90',
-        playerVars:{autoplay:1,mute:1,playsinline:1,rel:0},
-        events:{
-          // 막힘(150/101/100 등) → 숨김 / 실제 재생 시작(버퍼링·재생) → 통과
-          onError:()=>finish(false,true),
-          onStateChange:(e)=>{ if(e.data===1||e.data===3) finish(true,true); },
-          onReady:(e)=>{ try{ e.target.mute(); e.target.playVideo(); }catch(_){} }
-        } });
-    }catch(e){ finish(false,false); }
-    setTimeout(()=>finish(false,false), 7000);   // 끝내 재생 안 되면 숨김(캐시 안 함 → 다음에 재시도)
-  });
-}
+/* ============ 유튜브 IFrame API ============ */
+let ytReady=false, ytWait=[];
+(function(){ const s=document.createElement('script'); s.src='https://www.youtube.com/iframe_api'; document.head.appendChild(s); })();
+window.onYouTubeIframeAPIReady=function(){ ytReady=true; ytWait.forEach(f=>f()); ytWait=[]; };
+function whenYT(f){ ytReady?f():ytWait.push(f); }
 
-let probeRenderTimer=null;
-function probeRender(){ if(probeRenderTimer)return; probeRenderTimer=setTimeout(()=>{ probeRenderTimer=null; goals=rawGoals.filter(g=>okIds.has(g.youtubeId)); render(); },350); }
-
-async function startProbe(){
-  const list=rawGoals.slice();
-  probing=list.length; setStatus();
-  // 유튜브 재생기 준비 대기(최대 8초). 끝내 안 뜨면 그냥 다 보여줌.
-  await Promise.race([ new Promise(r=>whenYTReady(r)), new Promise(r=>setTimeout(r,8000)) ]);
-  if(!ytApiReady){ probing=0; goals=rawGoals.slice(); render(); setStatus(); return; }
-  const CONC=5; let idx=0;
-  async function worker(){
-    while(idx<list.length){
-      const g=list[idx++];
-      const ok=await probeOne(g.youtubeId);
-      if(ok) okIds.add(g.youtubeId);
-      probing--; probeRender(); setStatus();
-    }
+/* ============ 목록 계산(탭별) ============ */
+function computeList(){
+  let arr = ALL.filter(g=>g.youtubeId && !isBlocked(g.youtubeId));
+  if(activeFilter==='latest'){
+    const cut=Date.now()-3*86400000;
+    arr = arr.filter(g=> (Date.parse(g.published)||0) >= cut)
+             .sort((a,b)=> (Date.parse(b.published)||0)-(Date.parse(a.published)||0));
+  } else if(activeFilter==='kor'){
+    arr = arr.filter(g=> (g.tags||[]).includes('kor'));
+  } else if(activeFilter!=='all'){
+    arr = arr.filter(g=> g.league===activeFilter);
   }
-  await Promise.all(Array.from({length:CONC},()=>worker()));
-  probing=0; goals=rawGoals.filter(g=>okIds.has(g.youtubeId)); render(); setStatus();
+  return arr;
 }
 
-function thumbUrl(id){ return id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : ''; }
-function visible(){
-  if(activeFilter==='latest'){   // 최신 쇼츠: 최근 3일 이내, 업로드 최신순
-    const cutoff = Date.now() - 3*86400000;
-    return goals.filter(g=> (Date.parse(g.published)||0) >= cutoff)
-                .sort((a,b)=> (Date.parse(b.published)||0) - (Date.parse(a.published)||0));
-  }
-  return goals.filter(g=>{
-    if(activeFilter==='all') return true;
-    if(activeFilter==='kor') return (g.tags||[]).includes('kor');
-    return g.league===activeFilter;
-  });
+/* ============ 피드 렌더 ============ */
+function slideHTML(g){
+  const id=g.youtubeId;
+  return '<section class="slide" data-id="'+id+'">'
+    + '<div class="stage">'
+    +   '<div class="thumb" style="background-image:url(\''+thumb(id)+'\')"></div>'
+    +   '<div class="mount"></div>'
+    +   '<div class="seek l" data-d="-5"></div><div class="seek r" data-d="5"></div>'
+    +   '<div class="dtag l">« 5초</div><div class="dtag r">5초 »</div>'
+    + '</div>'
+    + '<div class="cap"><b>'+esc(g.match)+'</b>'+esc(g.title)+' <span>· '+esc(g.channel)+'</span></div>'
+    + '</section>';
+}
+function buildFeed(){
+  // 기존 플레이어 정리
+  Object.keys(players).forEach(teardown);
+  list = computeList();
+  document.getElementById('empty').classList.toggle('show', list.length===0);
+  FEED.innerHTML = list.map(slideHTML).join('');
+  FEED.scrollTop = 0;
+  activeId = null;
+  FEED.querySelectorAll('.slide').forEach(s=>io.observe(s));
+  const first = FEED.querySelector('.slide');
+  if(first) setActive(first);
 }
 
-function ago(iso){
-  const t=new Date(iso).getTime(); if(isNaN(t)) return '';
-  const m=Math.floor((Date.now()-t)/60000);
-  if(m<1) return '방금'; if(m<60) return m+'분 전';
-  const h=Math.floor(m/60); if(h<24) return h+'시간 전';
-  return Math.floor(h/24)+'일 전';
-}
-function setStatus(){
-  const el=document.getElementById('goalCount');
-  if(mode==='loading'){ el.textContent='불러오는 중…'; return; }
-  if(probing>0){ el.textContent = goals.length + '  · 재생 가능 확인 중…'; return; }
-  el.textContent = goals.length + (mode==='demo'?'  · 데모 화면':'');
-}
-async function loadData(){
-  mode='loading'; setStatus();
-  try{
-    const res=await fetch('data.json?_=' + Date.now());   // 캐시 방지
-    if(!res.ok) throw 0;
-    const data=await res.json();
-    goals=(data||[]).map(d=>({
-      league: d.league || '',
-      match: d.match || '경기',
-      title: d.title || '하이라이트',
-      youtubeId: d.youtubeId || '',
-      channel: d.channel || '',
-      tags: d.tags || [],
-      published: d.published || '',
-      note: d.published ? ago(d.published) : (d.note||'')
-    })).filter(g=>g.youtubeId);
-    rawGoals=goals.filter(g=>embedGet(g.youtubeId)!==false); goals=rawGoals.slice(); mode='live'; render();
-  }catch(e){
-    goals=DEMO; rawGoals=DEMO; mode='demo'; render();   // data.json 없으면(미리보기 등) 데모 표시
-  }
+/* ============ 화면에 보이는 영상만 재생 ============ */
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting && e.intersectionRatio>=0.6) setActive(e.target); });
+}, {root:FEED, threshold:[0.6]});
+
+function neighbors(slide){ return [slide, slide.previousElementSibling, slide.nextElementSibling].filter(Boolean); }
+
+function setActive(slide){
+  const id=slide.dataset.id;
+  if(id===activeId) return;
+  activeId=id;
+  const near=new Set(neighbors(slide).map(s=>s.dataset.id));
+  // 멀어진 영상 정리
+  Object.keys(players).forEach(pid=>{ if(!near.has(pid)) teardown(pid); });
+  // 주변 영상 마운트
+  neighbors(slide).forEach(mount);
+  // 활성만 재생, 나머지 일시정지
+  Object.keys(players).forEach(pid=>{ const p=players[pid]; try{
+    if(pid===id){ applySound(p); p.playVideo && p.playVideo(); }
+    else { p.pauseVideo && p.pauseVideo(); }
+  }catch(e){} });
 }
 
-function updateChips(){
-  const counts={};
-  rawGoals.forEach(g=>{ counts[g.league]=(counts[g.league]||0)+1; if(g.tags&&g.tags.includes("kor")) counts._kor=(counts._kor||0)+1; });
-  document.querySelectorAll(".chip").forEach(c=>{
-    const f=c.dataset.filter;
-    if(f==="all"||f==="latest"){ c.style.display=""; return; }   // 전체·최신은 항상 노출
-    const n = f==="kor" ? (counts._kor||0) : (counts[f]||0);
-    const min = (f==="kor") ? 1 : 2;   // 한국=1개부터, 종목=2개부터 노출
-    c.style.display = n>=min ? "" : "none";
-  });
-}
-function render(){
-  updateChips();
-  view = visible();
-  if(mode!=='error') setStatus();
-  if(view.length===0){
-    grid.innerHTML = probing>0
-      ? `<div class="empty"><div class="em-ico">⏳</div><b>재생 가능한 영상 확인 중…</b>막힌 영상은 빼고 보여드릴게요.</div>`
-      : `<div class="empty"><div class="em-ico">🦊</div><b>아직 골이 없어요</b>경기가 시작되면 골 장면이 여기에 올라옵니다.</div>`;
-    return;
-  }
-  grid.innerHTML = view.map((g,i)=>{
-    const isKor = g.tags.includes('kor');
-    const t = thumbUrl(g.youtubeId);
-    return `
-    <article class="card" data-i="${i}" tabindex="0" role="button" aria-label="${g.match} ${g.title} 재생">
-      <div class="thumb">${t?`<img src="${t}" alt="" loading="lazy" onload="this.classList.add('on')" onerror="this.remove()">`:''}</div>
-      <div class="scrim"></div>
-      ${g.minute?`<div class="minute stamp">${g.minute.replace("'","")}<span>'</span></div>`:''}
-      ${g.channel?`<div class="src">${g.channel}</div>`:''}
-      ${isKor?`<div class="kor-flag" aria-hidden="true">🇰🇷</div>`:''}
-      <div class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
-      <div class="meta">
-        <div class="match">${g.match}</div>
-        <div class="ttl">${g.title}</div>
-        ${g.note?`<div class="ago">${g.note}</div>`:''}
-      </div>
-    </article>`;
-  }).join('');
-}
+function applySound(p){ try{ soundOn ? (p.unMute(), p.setVolume(100)) : p.mute(); }catch(e){} }
 
-document.getElementById('chips').addEventListener('click', e=>{
-  const c = e.target.closest('.chip'); if(!c) return;
-  document.querySelectorAll('.chip').forEach(x=>x.setAttribute('aria-pressed','false'));
-  c.setAttribute('aria-pressed','true');
-  activeFilter = c.dataset.filter; render();
-});
-
-const player = document.getElementById('player');
-const pMount = document.getElementById('pMount');
-const pBlocked = document.getElementById('pBlocked');
-let pIndex = 0;
-
-/* 유튜브 공식 재생기(IFrame API): 퍼가기 금지·지역차단 영상을 자동 감지해
-   '공식 채널에서 보기'로 대체합니다(회원이 유튜브로 빠져나가지 않게). */
-let ytApiReady = false, ytWaiters = [];
-(function loadYTApi(){
-  if (window.YT && window.YT.Player){ ytApiReady = true; return; }
-  const sc = document.createElement('script');
-  sc.src = 'https://www.youtube.com/iframe_api';
-  document.head.appendChild(sc);
-})();
-window.onYouTubeIframeAPIReady = function(){
-  ytApiReady = true; ytWaiters.forEach(fn=>fn()); ytWaiters = [];
-};
-function whenYTReady(fn){ ytApiReady ? fn() : ytWaiters.push(fn); }
-
-let ytPlayer = null, playToken = 0, wantSound = false;
-function destroyYTPlayer(){
-  if (ytPlayer){ try{ ytPlayer.destroy(); }catch(e){} ytPlayer = null; }
-  pMount.innerHTML = '';
-}
-function showBlocked(msg){
-  destroyYTPlayer();
-  if (msg) pBlocked.querySelector('p').innerHTML = msg;
-  pBlocked.classList.add('on');
-}
-
-function markBlocked(id){ embedCache[id]={ok:false,ts:Date.now()}; embedSave(); rawGoals=rawGoals.filter(g=>g.youtubeId!==id); goals=goals.filter(g=>g.youtubeId!==id); }
-function markGood(id){ if(embedGet(id)!==true){ embedCache[id]={ok:true,ts:Date.now()}; embedSave(); } }
-function skipToNext(idx){
-  render();           // 막힌 카드 제거 반영 + view 갱신
-  view = visible();
-  if(view.length===0){ showBlocked('지금은 재생 가능한 영상이 없어요.<br>잠시 후 다시 확인해 주세요.'); return; }
-  openPlayer(Math.min(idx, view.length-1));
-}
-
-function openPlayer(i){
-  const tok = ++playToken;
-  pIndex = i; const g = view[pIndex];
-  document.getElementById('pTtl').textContent = `${g.match} · ${g.title}`;
-  document.getElementById('pSrc').textContent = g.channel;
-  document.getElementById('pFallback').href = g.youtubeId ? `https://www.youtube.com/watch?v=${g.youtubeId}` : '#';
-  pBlocked.classList.remove('on');
-  pBlocked.querySelector('p').innerHTML = '이 영상은 퍼가기가 막혀 있어요.<br>공식 채널에서 바로 볼 수 있습니다.';
-  destroyYTPlayer();
-
-  document.getElementById('pPrev').disabled = pIndex===0;
-  document.getElementById('pNext').disabled = pIndex===view.length-1;
-  player.classList.add('open'); document.body.style.overflow='hidden';
-
-  if(!g.youtubeId){
-    showBlocked('영상 연결 준비 중입니다.<br>공식 채널에서 먼저 확인할 수 있어요.');
-    return;
-  }
-
-  const holder = document.createElement('div'); holder.id = 'ytmount';
-  pMount.appendChild(holder);
-  let started = false;
-  whenYTReady(()=>{
-    if (tok !== playToken) return;          // 그새 다른 영상으로 넘어갔으면 무시
-    started = true;
-    ytPlayer = new YT.Player('ytmount', {
-      host:'https://www.youtube-nocookie.com',
-      videoId: g.youtubeId,
-      playerVars: { autoplay:1, playsinline:1, rel:0, modestbranding:1 },
-      events: {
-        // 소리 자동재생 시도 → 브라우저가 막으면 1.4초 뒤 음소거로라도 재생
-        onReady: ()=>{ setTimeout(()=>{ if(tok===playToken && ytPlayer){ try{ if(ytPlayer.getPlayerState()!==1){ ytPlayer.mute(); ytPlayer.playVideo(); } }catch(_){}}}, 1400); },
-        // 막힘(150/101/100 등) → 자물쇠 대신 자동으로 다음 영상
-        onError: ()=>{ if(tok===playToken){ markBlocked(g.youtubeId); skipToNext(pIndex); } },
-        onStateChange: (e)=>{ if(e.data===1||e.data===3){ markGood(g.youtubeId);
-          const m=document.getElementById('pMute');
-          if(e.data===1){ let muted=false; try{ muted=ytPlayer.isMuted(); }catch(_){}
-            if(muted && wantSound){ try{ ytPlayer.unMute(); ytPlayer.setVolume(100); muted=false; }catch(_){} }
-            if(m) m.hidden = !muted;   // 실제 음소거일 때만 "탭하면 소리" 안내
-          }
-        } }
+function mount(slide){
+  const id=slide.dataset.id;
+  if(players[id]) return;
+  const host=slide.querySelector('.mount'); if(!host) return;
+  whenYT(()=>{
+    if(players[id]) return;
+    if(!document.body.contains(slide)) return;
+    const d=document.createElement('div'); host.appendChild(d);
+    players[id]=new YT.Player(d,{
+      host:'https://www.youtube-nocookie.com', videoId:id,
+      playerVars:{autoplay:(id===activeId?1:0),mute:1,playsinline:1,rel:0,modestbranding:1,controls:1,fs:1},
+      events:{
+        onReady:(e)=>{ try{ soundOn?e.target.unMute():e.target.mute(); if(id===activeId){e.target.playVideo();} }catch(_){}},
+        onError:()=>{ blockId(id); dropSlide(slide); },
+        onStateChange:(e)=>{ if(e.data===1||e.data===3){ markGood(id); slide.classList.add('playing'); } }
       }
     });
   });
-  // 재생기 스크립트가 끝내 안 뜨면(네트워크 차단 등) 7초 뒤 대체 화면.
-  setTimeout(()=>{
-    if (tok === playToken && !started && !ytPlayer && player.classList.contains('open')) showBlocked();
-  }, 7000);
 }
-function closePlayer(){ destroyYTPlayer(); player.classList.remove('open'); document.body.style.overflow=''; }
-grid.addEventListener('click', e=>{ const c=e.target.closest('.card'); if(c) openPlayer(+c.dataset.i); });
-grid.addEventListener('keydown', e=>{ if((e.key==='Enter'||e.key===' ')&&e.target.classList.contains('card')){e.preventDefault();openPlayer(+e.target.dataset.i);} });
-document.getElementById('pClose').addEventListener('click', closePlayer);
-document.getElementById('pPrev').addEventListener('click', ()=>playerPrev());
-document.getElementById('pNext').addEventListener('click', ()=>playerNext());
+function teardown(id){ const p=players[id]; if(p){ try{p.destroy();}catch(e){} } delete players[id];
+  const s=FEED.querySelector('.slide[data-id="'+id+'"]'); if(s){ s.classList.remove('playing'); const m=s.querySelector('.mount'); if(m) m.innerHTML=''; } }
 
-/* 세로 스와이프: 위로=다음 쇼츠, 아래로=이전 쇼츠 / 탭=재생·정지 */
-function slideTo(dir, idx){
-  const fr=document.querySelector('.frame');
-  if(fr) fr.classList.add(dir<0?'swipe-up':'swipe-down');
-  setTimeout(()=>{ if(fr) fr.classList.remove('swipe-up','swipe-down'); openPlayer(idx); }, 160);
+function dropSlide(slide){           // 막힌 영상 → 조용히 제거하고 다음으로
+  const id=slide.dataset.id; teardown(id);
+  const nxt=slide.nextElementSibling||slide.previousElementSibling;
+  io.unobserve(slide); slide.remove();
+  list = list.filter(g=>g.youtubeId!==id);
+  document.getElementById('empty').classList.toggle('show', list.length===0);
+  if(activeId===id){ activeId=null; if(nxt){ nxt.scrollIntoView(); setActive(nxt); } }
 }
-function playerNext(){ if(pIndex < view.length-1) slideTo(-1, pIndex+1); }
-function playerPrev(){ if(pIndex > 0) slideTo(1, pIndex-1); }
-function togglePlay(){
-  if(!ytPlayer) return;
-  try{
-    if(ytPlayer.isMuted && ytPlayer.isMuted()){ wantSound=true; ytPlayer.unMute(); ytPlayer.setVolume(100); ytPlayer.playVideo(); const m=document.getElementById('pMute'); if(m) m.hidden=true; return; }
-    ytPlayer.getPlayerState()===1 ? ytPlayer.pauseVideo() : ytPlayer.playVideo();
-  }catch(e){}
+
+/* ============ 더블탭 5초 ============ */
+let lastTap=0, lastEl=null;
+FEED.addEventListener('click', e=>{
+  const z=e.target.closest('.seek'); if(!z) return;
+  const slide=z.closest('.slide'); const id=slide.dataset.id; const now=Date.now();
+  if(lastEl===z && now-lastTap<330){
+    const d=+z.dataset.d, p=players[id];
+    if(p && p.getCurrentTime){ try{ p.seekTo(Math.max(0,p.getCurrentTime()+d),true); }catch(_){}
+      const tag=slide.querySelector(z.classList.contains('l')?'.dtag.l':'.dtag.r');
+      if(tag){ tag.classList.add('show'); setTimeout(()=>tag.classList.remove('show'),450); } }
+    lastTap=0; lastEl=null;
+  } else { lastTap=now; lastEl=z; }
+});
+
+/* ============ 소리 토글 ============ */
+const soundBtn=document.getElementById('soundBtn');
+soundBtn.addEventListener('click', ()=>{
+  soundOn=!soundOn; soundBtn.textContent = soundOn?'🔊':'🔇';
+  const p=players[activeId]; if(p){ applySound(p); try{p.playVideo();}catch(e){} }
+  hideToast();
+});
+
+/* ============ 토스트(소리 안내) ============ */
+let toastT=null;
+function showToast(){ const t=document.getElementById('toast'); t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),4500); }
+function hideToast(){ const t=document.getElementById('toast'); t.classList.remove('show'); clearTimeout(toastT); }
+
+/* ============ 탭(칩) ============ */
+CHIPS.addEventListener('click', e=>{
+  const c=e.target.closest('.chip'); if(!c) return;
+  CHIPS.querySelectorAll('.chip').forEach(x=>x.setAttribute('aria-pressed','false'));
+  c.setAttribute('aria-pressed','true'); activeFilter=c.dataset.filter; buildFeed();
+});
+function updateChips(){
+  const cnt={}; ALL.forEach(g=>{ if(isBlocked(g.youtubeId))return; cnt[g.league]=(cnt[g.league]||0)+1; if((g.tags||[]).includes('kor')) cnt._kor=(cnt._kor||0)+1; });
+  CHIPS.querySelectorAll('.chip').forEach(c=>{ const f=c.dataset.filter;
+    if(f==='all'||f==='latest'){ c.style.display=''; return; }
+    const n = f==='kor'?(cnt._kor||0):(cnt[f]||0);
+    c.style.display = n>=(f==='kor'?1:2) ? '' : 'none';
+  });
 }
-(function(){
-  const sw = document.getElementById('pSwipe');
-  let sx=0, sy=0, st=0;
-  sw.addEventListener('touchstart', e=>{ const t=e.changedTouches[0]; sx=t.clientX; sy=t.clientY; st=Date.now(); }, {passive:true});
-  sw.addEventListener('touchend', e=>{
-    const t=e.changedTouches[0];
-    const dx=t.clientX-sx, dy=t.clientY-sy, adx=Math.abs(dx), ady=Math.abs(dy), dt=Date.now()-st;
-    if(adx<30 && ady<30 && dt<320){ togglePlay(); return; }   // 탭
-    if(ady>adx && ady>45){ dy<0 ? playerNext() : playerPrev(); }  // 세로 스와이프
-  }, {passive:true});
-})();
-player.addEventListener('click', e=>{ if(e.target===player) closePlayer(); });
-document.addEventListener('keydown', e=>{ if(e.key==='Escape'&&player.classList.contains('open')) closePlayer(); });
 
-let deferred;
-window.addEventListener('beforeinstallprompt', e=>{ e.preventDefault(); deferred=e; document.getElementById('installBtn').hidden=false; });
-document.getElementById('installBtn').addEventListener('click', async()=>{ if(!deferred) return; deferred.prompt(); await deferred.userChoice; deferred=null; document.getElementById('installBtn').hidden=true; });
-if('serviceWorker' in navigator){ window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{})); }
+/* ============ 새로고침(숨김목록 초기화 포함) ============ */
+document.getElementById('reloadBtn').addEventListener('click', ()=>{
+  try{ localStorage.removeItem(BKEY); }catch(e){}
+  location.href = location.pathname + '?r=' + Date.now();
+});
 
-
-
-/* 텔레그램 미니앱 / 인앱 브라우저 대응 */
+/* ============ 텔레그램/인앱 → 브라우저 안내 ============ */
 const TG = window.Telegram && window.Telegram.WebApp;
 try{ if(TG){ TG.ready(); TG.expand(); } }catch(e){}
 const inTelegram = !!(TG && TG.platform && TG.platform!=='unknown');
 function isInApp(){ return inTelegram || /FBAN|FBAV|Instagram|KAKAOTALK|Line\/|NAVER|DaumApps|Telegram/i.test(navigator.userAgent||''); }
 function openExternal(){
-  const url = location.href.split('?')[0];
+  const url=location.href.split('?')[0];
   if(inTelegram && TG.openLink){ TG.openLink(url); return; }
-  try{ navigator.clipboard.writeText(url); alert('링크를 복사했어요. Safari 주소창에 붙여넣어 열어주세요:\n'+url); }
-  catch(e){ alert('오른쪽 위 ⋯ 메뉴 → Safari로 열기 를 눌러주세요.'); }
+  try{ navigator.clipboard.writeText(url); alert('링크를 복사했어요. 사파리에 붙여넣어 열어주세요:\n'+url); }
+  catch(e){ alert('오른쪽 위 ⋯ → Safari로 열기 를 눌러주세요.'); }
 }
-if(isInApp()){ const b=document.getElementById('inappBar'); if(b) b.hidden=false; }
-document.getElementById('openExt').addEventListener('click', openExternal);
-document.getElementById('reloadBtn').addEventListener('click', ()=>{ try{ localStorage.removeItem(EMBED_KEY); }catch(e){} location.href = location.pathname + '?r=' + Date.now(); });
+document.getElementById('gateGo').addEventListener('click', openExternal);
+document.getElementById('gateStay').addEventListener('click', ()=>document.getElementById('gate').classList.remove('show'));
+if(isInApp()){ document.getElementById('gate').classList.add('show'); }
 
-loadData();
+/* ============ 데이터 로드 ============ */
+async function load(){
+  try{
+    const r=await fetch('data.json?_='+Date.now()); if(!r.ok) throw 0;
+    ALL=(await r.json())||[];
+  }catch(e){ ALL=[]; }
+  updateChips(); buildFeed();
+  if(!soundOn) showToast();
+}
+load();
+
+if('serviceWorker' in navigator){ window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{})); }
 </script>
 </body>
 </html>
