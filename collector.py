@@ -18,6 +18,7 @@ GOOD_EN = ["goal","goals","highlight","highlights","home run","homer","walk-off"
            "wondergoal","game recap","condensed game"]
 NOISE   = ["인터뷰","기자회견","프리뷰","예고","전망","관전포인트","응원","추첨","현장",
            "비하인드","폰터뷰","예능","생중계","중계예고","하프타임","클리닝타임","위클리",
+           "당구","pba","lpba","3쿠션","포켓볼",
            "광고","협찬","ppl","이벤트","공지","예매","티켓","구독","브이로그",
            "preview","interview","press conference","press","podcast","reaction","analysis",
            "draft","combine","quiz","trailer","fantasy","fpl","behind the scenes","documentary",
@@ -49,6 +50,7 @@ CHANNELS = [
   ("스탐","UCArK9MK34LsQzPJrl5TZmYA","auto",True),
   ("MBC Sports+","UCMkrtzkegsLZJ1s6H7S0eKw","auto",True),
   ("JTBC","UCTdZyOFVzontd9MZOJDg8Qw","worldcup",True),
+  ("KBS N SPORTS","UCdkrHEDb1xT3gts9lct12Ug","auto",True),
   ("쿠팡플레이","UCnBht7BrOx-A328KFXgysqQ","auto",True),
   ("SPOTV","UCtm_QoN2SIxwCE-59shX7Qg","auto",True),
   ("KBO","UCoVz66yWHzVsXAFG8WhJK9g","baseball",True),
