@@ -110,8 +110,10 @@
 
   .minute{position:absolute;top:9px;left:11px;z-index:2;font-family:"Bebas Neue",sans-serif;font-size:32px;line-height:.8;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.55)}
   .minute span{font-size:16px;color:var(--orange-br)}
-  .src{position:absolute;top:12px;right:10px;z-index:2;font-size:10px;font-weight:800;letter-spacing:.4px;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);padding:4px 7px;border-radius:7px;color:#fff}
-  .kor-flag{position:absolute;top:44px;right:10px;z-index:2;font-size:16px}
+  .src{position:absolute;top:12px;left:11px;z-index:2;font-size:10px;font-weight:800;letter-spacing:.4px;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);padding:4px 7px;border-radius:7px;color:#fff}
+  .kor-flag{position:absolute;top:40px;left:11px;z-index:2;font-size:16px}
+  .card-cta{position:absolute;top:9px;right:9px;z-index:3;background:linear-gradient(135deg,var(--green-soft),var(--green));color:#fff;font-size:10px;font-weight:800;padding:5px 9px;border-radius:999px;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,.35);text-shadow:0 1px 2px rgba(0,0,0,.3)}
+  .card-cta:active{transform:scale(.93)}
   .play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;width:46px;height:46px;border-radius:50%;background:rgba(194,69,26,.85);display:grid;place-items:center;box-shadow:0 4px 16px rgba(194,69,26,.5)}
   .play svg{width:18px;height:18px;margin-left:2px;fill:#fff}
   .meta{position:absolute;left:11px;right:11px;bottom:11px;z-index:2}
@@ -138,7 +140,7 @@
   .frame{position:relative;width:100%;max-width:min(420px,calc((100dvh - 200px) * 9 / 16));aspect-ratio:9/16;border-radius:18px;overflow:hidden;background:#000;border:1px solid rgba(255,255,255,.12)}
   .frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
   .frame .cta{position:absolute;top:10px;right:10px;z-index:6;display:inline-flex;align-items:center;gap:5px;
-    background:linear-gradient(135deg,var(--orange-br),var(--orange));color:#fff;font-size:12px;font-weight:800;
+    background:linear-gradient(135deg,var(--green-soft),var(--green));color:#fff;font-size:12px;font-weight:800;text-shadow:0 1px 2px rgba(0,0,0,.35);
     padding:8px 13px;border-radius:999px;text-decoration:none;box-shadow:0 3px 12px rgba(0,0,0,.4);letter-spacing:-.2px}
   .frame .cta:active{transform:scale(.95)}
   .frame .cta[hidden]{display:none}
@@ -361,6 +363,7 @@ function render(){
       ${g.minute?`<div class="minute stamp">${g.minute.replace("'","")}<span>'</span></div>`:''}
       ${g.channel?`<div class="src">${g.channel}</div>`:''}
       ${isKor?`<div class="kor-flag" aria-hidden="true">🇰🇷</div>`:''}
+      ${PLATFORM_URL?`<a class="card-cta" href="${PLATFORM_URL}" target="_blank" rel="noopener" onclick="event.stopPropagation()">누드TV</a>`:''}
       <div class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
       <div class="meta">
         <div class="match">${g.match}</div>

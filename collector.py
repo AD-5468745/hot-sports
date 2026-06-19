@@ -64,6 +64,7 @@ CHANNELS = [
 ]
 
 SPORT_LABEL={"worldcup":"월드컵","soccer":"축구","baseball":"야구","basketball":"농구","volleyball":"배구","etc":"스포츠"}
+HANGUL=re.compile(r"[가-힣]")   # 제목에 한글이 있어야 통과(해외 영어 쇼츠 제외)
 UA={"User-Agent":"Mozilla/5.0 (compatible; NudeSportsBot/1.0)","Accept-Language":"ko,en;q=0.8"}
 
 def fetch(url):
@@ -111,6 +112,7 @@ def main():
             t=it["title"]
             if not has(t, GOOD_KO+GOOD_EN): continue
             if has(t, NOISE): continue
+            if not HANGUL.search(t): continue   # 제목에 한글 없으면 제외
             if it["youtubeId"] in seen: continue
             seen.add(it["youtubeId"])
             sport=classify(t, default)
