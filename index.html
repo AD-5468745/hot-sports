@@ -179,15 +179,13 @@ function stuckCheck(slide,id,tries){ if(activeId!==id || slide.classList.contain
   blockId(id); dropSlide(slide); }
 function applySound(p){ try{ soundOn?(p.unMute(),p.setVolume(100)):p.mute(); }catch(e){} }
 function mount(slide){ const id=slide.dataset.id; if(players[id])return; const host=slide.querySelector('.mount'); if(!host)return;
-  whenYT(()=>{ if(players[id]||!document.body.contains(slide))return;
-    const ifr=document.createElement('iframe');
-    ifr.allow='autoplay; encrypted-media; picture-in-picture; fullscreen'; ifr.setAttribute('playsinline','1'); ifr.setAttribute('frameborder','0'); ifr.setAttribute('allowfullscreen','');
-    ifr.src='https://www.youtube-nocookie.com/embed/'+id+'?enablejsapi=1&autoplay='+(id===activeId?1:0)+'&mute=1&playsinline=1&rel=0&modestbranding=1&controls=1&fs=1&origin='+encodeURIComponent(location.origin);
-    host.appendChild(ifr);
-    players[id]=new YT.Player(ifr,{ events:{
-      onReady:e=>{ try{ soundOn?e.target.unMute():e.target.mute(); if(id===activeId)e.target.playVideo(); }catch(_){}},
-      onError:()=>{ blockId(id); dropSlide(slide); },
-      onStateChange:e=>{ const st=e.data; if(st===1){ markGood(id); slide.classList.add('playing','played'); clearTimeout(slide._st); } else if(st===0){ if(activeId===id) goNext(); } } } });
+  whenYT(()=>{ if(players[id]||!document.body.contains(slide))return; const d=document.createElement('div'); host.appendChild(d);
+    players[id]=new YT.Player(d,{ host:'https://www.youtube-nocookie.com', videoId:id,
+      playerVars:{autoplay:(id===activeId?1:0),mute:1,playsinline:1,rel:0,modestbranding:1,controls:1,fs:1},
+      events:{
+        onReady:e=>{ try{ soundOn?e.target.unMute():e.target.mute(); if(id===activeId)e.target.playVideo(); }catch(_){}},
+        onError:()=>{ blockId(id); dropSlide(slide); },
+        onStateChange:e=>{ const st=e.data; if(st===1){ markGood(id); slide.classList.add('playing','played'); clearTimeout(slide._st); } else if(st===0){ if(activeId===id) goNext(); } } } });
   }); }
 function teardown(id){ const p=players[id]; if(p){try{p.destroy();}catch(e){}} delete players[id];
   const s=FEED.querySelector('.slide[data-id="'+id+'"]'); if(s){ clearTimeout(s._st); s.classList.remove('playing'); const m=s.querySelector('.mount'); if(m)m.innerHTML=''; const b=s.querySelector('.cue.snd'); if(b)b.hidden=true; } }
