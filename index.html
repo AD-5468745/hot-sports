@@ -11,7 +11,6 @@
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="HOT스포츠" />
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
   :root{ --green:#1FA85C; --green-soft:#37C98C; --orange:#E25822; --bg:#0b1411; }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -21,72 +20,70 @@
   /* ---------- 상단바 ---------- */
   #bar{position:fixed;top:0;left:0;right:0;z-index:30;
     padding:calc(env(safe-area-inset-top) + 8px) 12px 8px;
-    background:linear-gradient(180deg,rgba(0,0,0,.62) 0%,rgba(0,0,0,.28) 70%,transparent 100%);
-    pointer-events:none}
-  #bar .row{display:flex;align-items:center;gap:10px;pointer-events:auto}
+    background:linear-gradient(180deg,rgba(0,0,0,.66) 0%,rgba(0,0,0,.30) 72%,transparent 100%);pointer-events:none}
+  #bar .row{display:flex;align-items:center;gap:8px;pointer-events:auto;max-width:760px;margin:0 auto}
   .brand{display:flex;align-items:center;gap:8px;margin-right:auto;min-width:0}
   .brand svg{width:30px;height:30px;flex:none}
   .brand b{font-size:15px;font-weight:800;letter-spacing:-.2px;white-space:nowrap}
   .brand b i{color:var(--green-soft);font-style:normal}
-  .iconbtn{flex:none;width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.2);
-    background:rgba(255,255,255,.08);color:#fff;font-size:18px;cursor:pointer;backdrop-filter:blur(6px)}
+  .iconbtn{flex:none;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.22);
+    background:rgba(255,255,255,.10);color:#fff;font-size:18px;cursor:pointer;backdrop-filter:blur(6px);display:grid;place-items:center}
   .iconbtn:active{transform:scale(.92)}
-  #chips{display:flex;gap:7px;overflow-x:auto;margin-top:9px;padding-bottom:2px;
-    scrollbar-width:none;pointer-events:auto}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(226,88,34,.55)}50%{box-shadow:0 0 0 9px rgba(226,88,34,0)}}
+  .iconbtn.muted{animation:pulse 1.9s infinite;border-color:var(--orange)}
+  #chips{display:flex;gap:7px;overflow-x:auto;margin:9px auto 0;max-width:760px;padding-bottom:2px;scrollbar-width:none;pointer-events:auto}
   #chips::-webkit-scrollbar{display:none}
-  .chip{flex:none;border:1px solid rgba(255,255,255,.22);background:rgba(0,0,0,.32);color:#fff;
+  .chip{flex:none;border:1px solid rgba(255,255,255,.22);background:rgba(0,0,0,.34);color:#fff;
     font-size:13px;font-weight:700;padding:7px 13px;border-radius:999px;cursor:pointer;white-space:nowrap;backdrop-filter:blur(6px)}
   .chip[aria-pressed="true"]{background:var(--green);border-color:transparent}
   .chip.big[aria-pressed="true"]{background:var(--orange)}
 
   /* ---------- 피드(세로 스냅) ---------- */
-  #feed{height:100dvh;overflow-y:scroll;scroll-snap-type:y mandatory;
-    overscroll-behavior-y:contain;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  #feed{height:100dvh;overflow-y:scroll;scroll-snap-type:y mandatory;overscroll-behavior-y:contain;scrollbar-width:none;-webkit-overflow-scrolling:touch}
   #feed::-webkit-scrollbar{display:none}
   .slide{position:relative;height:100dvh;scroll-snap-align:start;scroll-snap-stop:always;
-    display:flex;align-items:center;justify-content:center;background:#000}
-  .stage{position:relative;width:100%;height:100%;max-width:min(100%,520px);margin:0 auto;background:#000;overflow:hidden}
-  .thumb{position:absolute;inset:0;background-size:cover;background-position:center;
-    filter:brightness(.7);transition:opacity .25s}
+    display:flex;align-items:center;justify-content:center;background:#000;overflow:hidden}
+  .bg{position:absolute;inset:-8%;background-size:cover;background-position:center;filter:blur(28px) brightness(.45);transform:scale(1.15);z-index:0}
+  .stage{position:relative;z-index:1;width:100%;height:100%;max-width:min(100%,480px);margin:0 auto;background:#000;overflow:hidden}
+  .thumb{position:absolute;inset:0;background-size:cover;background-position:center;transition:opacity .25s;z-index:1}
   .slide.playing .thumb{opacity:0}
-  .mount,.mount iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .mount,.mount iframe{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:2}
 
-  /* 더블탭 5초 영역(좌/우) — 세로 스크롤은 그대로(pan-y), 가운데·하단은 유튜브 컨트롤용으로 비움 */
-  .seek{position:absolute;top:13%;bottom:18%;width:30%;z-index:3;touch-action:pan-y;background:transparent}
+  /* 더블탭 5초(좌/우) — 세로 스크롤은 그대로, 가운데·아래는 유튜브 컨트롤용 */
+  .seek{position:absolute;top:14%;bottom:20%;width:28%;z-index:4;touch-action:pan-y;background:transparent}
   .seek.l{left:0} .seek.r{right:0}
-  .dtag{position:absolute;top:46%;z-index:4;background:rgba(0,0,0,.55);color:#fff;font-size:13px;font-weight:800;
-    padding:8px 12px;border-radius:999px;opacity:0;transition:opacity .15s;pointer-events:none}
-  .dtag.l{left:8%} .dtag.r{right:8%}
+  .dtag{position:absolute;top:46%;z-index:5;background:rgba(0,0,0,.6);color:#fff;font-size:13px;font-weight:800;padding:8px 12px;border-radius:999px;opacity:0;transition:opacity .15s;pointer-events:none}
+  .dtag.l{left:7%} .dtag.r{right:7%}
   .dtag.show{opacity:1}
 
-  .cap{position:absolute;left:0;right:0;bottom:0;z-index:2;pointer-events:none;
-    padding:18px 14px calc(env(safe-area-inset-bottom) + 14px);
-    background:linear-gradient(0deg,rgba(0,0,0,.72),transparent);
-    font-size:13px;line-height:1.4;max-height:38%;overflow:hidden}
+  .cap{position:absolute;left:0;right:0;bottom:0;z-index:3;pointer-events:none;
+    padding:18px 14px calc(env(safe-area-inset-bottom) + 46px);
+    background:linear-gradient(0deg,rgba(0,0,0,.78),rgba(0,0,0,.30) 60%,transparent);
+    font-size:14px;line-height:1.4;max-height:42%;overflow:hidden}
   .cap b{display:block;color:var(--green-soft);font-size:12px;font-weight:800;margin-bottom:3px}
-  .cap span{color:rgba(255,255,255,.6);font-size:11px}
+  .cap em{font-style:normal;font-weight:600}
+  .cap span{display:block;margin-top:4px;color:rgba(255,255,255,.62);font-size:11px}
 
-  /* 소리 안내 토스트 */
-  #toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top) + 96px);transform:translateX(-50%);
-    z-index:35;background:rgba(0,0,0,.72);color:#fff;font-size:13px;font-weight:700;
-    padding:10px 16px;border-radius:999px;opacity:0;transition:opacity .35s;pointer-events:none}
-  #toast.show{opacity:1}
+  /* 데스크탑 전용 이동 버튼 */
+  .nav{position:fixed;right:18px;z-index:25;width:46px;height:46px;border-radius:50%;border:1px solid rgba(255,255,255,.2);
+    background:rgba(0,0,0,.45);color:#fff;font-size:18px;cursor:pointer;display:none;place-items:center;backdrop-filter:blur(6px)}
+  .nav:active{transform:scale(.92)}
+  .nav.up{top:calc(50% - 56px)} .nav.down{top:calc(50% + 10px)}
+  @media (min-width:760px){ .nav{display:grid} }
+
+  /* 소리 안내 토스트 — 소리 버튼(오른쪽 위) 아래 */
+  #toast{position:fixed;right:12px;top:calc(env(safe-area-inset-top) + 56px);z-index:35;
+    background:rgba(226,88,34,.95);color:#fff;font-size:13px;font-weight:700;padding:10px 14px;border-radius:12px;
+    max-width:230px;box-shadow:0 6px 20px rgba(0,0,0,.4);opacity:0;transform:translateY(-6px);transition:opacity .35s,transform .35s;pointer-events:none}
+  #toast.show{opacity:1;transform:translateY(0)}
+  #toast::before{content:"";position:absolute;top:-6px;right:16px;border:6px solid transparent;border-top:0;border-bottom-color:rgba(226,88,34,.95)}
 
   /* 빈 상태 */
-  #empty{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;
-    gap:10px;text-align:center;color:rgba(255,255,255,.85);padding:30px;z-index:5}
+  #empty{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;color:rgba(255,255,255,.85);padding:30px;z-index:5}
   #empty.show{display:flex}
-  #empty .ic{font-size:40px}
-
-  /* 브라우저 안내 게이트 */
-  #gate{position:fixed;inset:0;z-index:60;display:none;flex-direction:column;align-items:center;justify-content:center;
-    gap:16px;text-align:center;padding:30px;background:#0b1411}
-  #gate.show{display:flex}
-  #gate .ic{font-size:44px}
-  #gate h2{font-size:19px;margin:0}
-  #gate p{margin:0;color:rgba(255,255,255,.7);font-size:14px;line-height:1.6;max-width:320px}
-  #gate .go{background:var(--orange);color:#fff;border:0;font-weight:800;font-size:16px;padding:14px 26px;border-radius:999px;cursor:pointer}
-  #gate .stay{background:none;border:0;color:rgba(255,255,255,.5);font-size:13px;text-decoration:underline;cursor:pointer}
+  #empty .ic{font-size:42px}
+  #empty b{font-size:16px}
+  #empty p{margin:0;color:rgba(255,255,255,.6);font-size:13px}
 </style>
 </head>
 <body>
@@ -102,12 +99,12 @@
       </svg>
       <b>HOT 스포츠 <i>쇼츠</i></b>
     </div>
-    <button class="iconbtn" id="soundBtn" title="소리" aria-label="소리 켜기/끄기">🔇</button>
+    <button class="iconbtn muted" id="soundBtn" title="소리 켜기/끄기" aria-label="소리 켜기/끄기">🔇</button>
     <button class="iconbtn" id="reloadBtn" title="새로고침" aria-label="새로고침">↻</button>
   </div>
   <nav id="chips" aria-label="종목 탭">
     <button class="chip" data-filter="all" aria-pressed="true">전체</button>
-    <button class="chip" data-filter="latest" aria-pressed="false">🗓️ 최신 쇼츠</button>
+    <button class="chip" data-filter="latest" aria-pressed="false">🗓️ 최신</button>
     <button class="chip big" data-filter="worldcup" aria-pressed="false">🏆 월드컵</button>
     <button class="chip" data-filter="kor" aria-pressed="false">🇰🇷 한국</button>
     <button class="chip" data-filter="soccer" aria-pressed="false">⚽ 축구</button>
@@ -122,30 +119,20 @@
 
 <main id="feed" aria-label="쇼츠 피드"></main>
 
-<div id="empty"><div class="ic">🦊</div><b>아직 영상이 없어요</b><div>다른 탭을 눌러보거나 잠시 후 다시 확인해 주세요.</div></div>
+<button class="nav up" id="navUp" title="이전 영상" aria-label="이전 영상">▲</button>
+<button class="nav down" id="navDn" title="다음 영상" aria-label="다음 영상">▼</button>
 
-<div id="toast">🔊 화면 위 스피커를 누르면 소리가 켜져요</div>
+<div id="empty"><div class="ic">🦊</div><b>이 탭에는 아직 영상이 없어요</b><p>다른 탭을 눌러보거나, 잠시 후 다시 확인해 주세요.</p></div>
 
-<div id="gate">
-  <div class="ic">📱</div>
-  <h2>브라우저에서 열어주세요</h2>
-  <p>지금은 앱 안의 작은 브라우저라 영상이 막혀요. 아래 버튼을 누르면 사파리(기본 브라우저)에서 정상으로 재생됩니다.</p>
-  <button class="go" id="gateGo">브라우저에서 열기</button>
-  <button class="stay" id="gateStay">그냥 여기서 볼게요</button>
-</div>
+<div id="toast">오른쪽 위 🔊 를 누르면<br>소리가 나와요</div>
 
 <script>
-/* ============ 데이터/상태 ============ */
-const FEED = document.getElementById('feed');
-const CHIPS = document.getElementById('chips');
-let ALL = [];                 // data.json 전체
-let list = [];                // 현재 탭의 목록
-let activeFilter = 'all';
-let soundOn = false;          // 전역 소리 상태
-const players = {};           // youtubeId -> YT.Player (마운트된 것만)
-let activeId = null;
+/* ============ 상태 ============ */
+const FEED=document.getElementById('feed'), CHIPS=document.getElementById('chips');
+let ALL=[], list=[], activeFilter='all', soundOn=false, activeId=null;
+const players={};
 
-/* 막힘 기억(짧게) — 일시적 실패가 오래 숨기지 않게 */
+/* 막힘 기억(짧게) */
 const BKEY='hot_blocked_v1', BAD_TTL=2*3600*1000;
 let blocked={}; try{blocked=JSON.parse(localStorage.getItem(BKEY)||'{}');}catch(e){}
 function isBlocked(id){ const t=blocked[id]; return t && (Date.now()-t)<BAD_TTL; }
@@ -155,183 +142,109 @@ function markGood(id){ if(blocked[id]){ delete blocked[id]; try{localStorage.set
 function esc(s){ return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 function thumb(id){ return 'https://i.ytimg.com/vi/'+id+'/hqdefault.jpg'; }
 
-/* ============ 유튜브 IFrame API ============ */
+/* ============ 유튜브 API ============ */
 let ytReady=false, ytWait=[];
 (function(){ const s=document.createElement('script'); s.src='https://www.youtube.com/iframe_api'; document.head.appendChild(s); })();
 window.onYouTubeIframeAPIReady=function(){ ytReady=true; ytWait.forEach(f=>f()); ytWait=[]; };
 function whenYT(f){ ytReady?f():ytWait.push(f); }
 
-/* ============ 목록 계산(탭별) ============ */
+/* ============ 목록 ============ */
 function computeList(){
-  let arr = ALL.filter(g=>g.youtubeId && !isBlocked(g.youtubeId));
-  if(activeFilter==='latest'){
-    const cut=Date.now()-3*86400000;
-    arr = arr.filter(g=> (Date.parse(g.published)||0) >= cut)
-             .sort((a,b)=> (Date.parse(b.published)||0)-(Date.parse(a.published)||0));
-  } else if(activeFilter==='kor'){
-    arr = arr.filter(g=> (g.tags||[]).includes('kor'));
-  } else if(activeFilter!=='all'){
-    arr = arr.filter(g=> g.league===activeFilter);
-  }
-  return arr;
+  let a=ALL.filter(g=>g.youtubeId && !isBlocked(g.youtubeId));
+  if(activeFilter==='latest'){ const cut=Date.now()-3*86400000;
+    a=a.filter(g=>(Date.parse(g.published)||0)>=cut).sort((x,y)=>(Date.parse(y.published)||0)-(Date.parse(x.published)||0));
+  } else if(activeFilter==='kor'){ a=a.filter(g=>(g.tags||[]).includes('kor')); }
+  else if(activeFilter!=='all'){ a=a.filter(g=>g.league===activeFilter); }
+  return a;
 }
 
-/* ============ 피드 렌더 ============ */
-function slideHTML(g){
-  const id=g.youtubeId;
+/* ============ 렌더 ============ */
+function slideHTML(g){ const id=g.youtubeId, t=thumb(id);
   return '<section class="slide" data-id="'+id+'">'
-    + '<div class="stage">'
-    +   '<div class="thumb" style="background-image:url(\''+thumb(id)+'\')"></div>'
+    + '<div class="bg" style="background-image:url(\''+t+'\')"></div>'
+    + '<div class="stage"><div class="thumb" style="background-image:url(\''+t+'\')"></div>'
     +   '<div class="mount"></div>'
     +   '<div class="seek l" data-d="-5"></div><div class="seek r" data-d="5"></div>'
-    +   '<div class="dtag l">« 5초</div><div class="dtag r">5초 »</div>'
-    + '</div>'
-    + '<div class="cap"><b>'+esc(g.match)+'</b>'+esc(g.title)+' <span>· '+esc(g.channel)+'</span></div>'
+    +   '<div class="dtag l">« 5초</div><div class="dtag r">5초 »</div></div>'
+    + '<div class="cap"><b>'+esc(g.match)+'</b><em>'+esc(g.title)+'</em><span>'+esc(g.channel)+'</span></div>'
     + '</section>';
 }
 function buildFeed(){
-  // 기존 플레이어 정리
   Object.keys(players).forEach(teardown);
-  list = computeList();
+  list=computeList();
   document.getElementById('empty').classList.toggle('show', list.length===0);
-  FEED.innerHTML = list.map(slideHTML).join('');
-  FEED.scrollTop = 0;
-  activeId = null;
+  FEED.innerHTML=list.map(slideHTML).join(''); FEED.scrollTop=0; activeId=null;
   FEED.querySelectorAll('.slide').forEach(s=>io.observe(s));
-  const first = FEED.querySelector('.slide');
-  if(first) setActive(first);
+  const first=FEED.querySelector('.slide'); if(first) setActive(first);
 }
 
-/* ============ 화면에 보이는 영상만 재생 ============ */
-const io = new IntersectionObserver((entries)=>{
-  entries.forEach(e=>{ if(e.isIntersecting && e.intersectionRatio>=0.6) setActive(e.target); });
-}, {root:FEED, threshold:[0.6]});
-
-function neighbors(slide){ return [slide, slide.previousElementSibling, slide.nextElementSibling].filter(Boolean); }
-
-function setActive(slide){
-  const id=slide.dataset.id;
-  if(id===activeId) return;
-  activeId=id;
+/* ============ 보이는 영상만 재생 ============ */
+const io=new IntersectionObserver(es=>{ es.forEach(e=>{ if(e.isIntersecting && e.intersectionRatio>=0.6) setActive(e.target); }); },{root:FEED,threshold:[0.6]});
+function neighbors(s){ return [s,s.previousElementSibling,s.nextElementSibling].filter(Boolean); }
+function setActive(slide){ const id=slide.dataset.id; if(id===activeId) return; activeId=id;
   const near=new Set(neighbors(slide).map(s=>s.dataset.id));
-  // 멀어진 영상 정리
   Object.keys(players).forEach(pid=>{ if(!near.has(pid)) teardown(pid); });
-  // 주변 영상 마운트
   neighbors(slide).forEach(mount);
-  // 활성만 재생, 나머지 일시정지
-  Object.keys(players).forEach(pid=>{ const p=players[pid]; try{
-    if(pid===id){ applySound(p); p.playVideo && p.playVideo(); }
-    else { p.pauseVideo && p.pauseVideo(); }
-  }catch(e){} });
+  Object.keys(players).forEach(pid=>{ const p=players[pid]; try{ if(pid===id){ applySound(p); p.playVideo&&p.playVideo(); } else { p.pauseVideo&&p.pauseVideo(); } }catch(e){} });
 }
-
-function applySound(p){ try{ soundOn ? (p.unMute(), p.setVolume(100)) : p.mute(); }catch(e){} }
-
-function mount(slide){
-  const id=slide.dataset.id;
-  if(players[id]) return;
-  const host=slide.querySelector('.mount'); if(!host) return;
-  whenYT(()=>{
-    if(players[id]) return;
-    if(!document.body.contains(slide)) return;
-    const d=document.createElement('div'); host.appendChild(d);
-    players[id]=new YT.Player(d,{
-      host:'https://www.youtube-nocookie.com', videoId:id,
+function applySound(p){ try{ soundOn?(p.unMute(),p.setVolume(100)):p.mute(); }catch(e){} }
+function mount(slide){ const id=slide.dataset.id; if(players[id])return; const host=slide.querySelector('.mount'); if(!host)return;
+  whenYT(()=>{ if(players[id]||!document.body.contains(slide))return; const d=document.createElement('div'); host.appendChild(d);
+    players[id]=new YT.Player(d,{ host:'https://www.youtube-nocookie.com', videoId:id,
       playerVars:{autoplay:(id===activeId?1:0),mute:1,playsinline:1,rel:0,modestbranding:1,controls:1,fs:1},
       events:{
-        onReady:(e)=>{ try{ soundOn?e.target.unMute():e.target.mute(); if(id===activeId){e.target.playVideo();} }catch(_){}},
+        onReady:e=>{ try{ soundOn?e.target.unMute():e.target.mute(); if(id===activeId)e.target.playVideo(); }catch(_){}},
         onError:()=>{ blockId(id); dropSlide(slide); },
-        onStateChange:(e)=>{ if(e.data===1||e.data===3){ markGood(id); slide.classList.add('playing'); } }
-      }
-    });
+        onStateChange:e=>{ if(e.data===1||e.data===3){ markGood(id); slide.classList.add('playing'); } }
+      } });
   });
 }
-function teardown(id){ const p=players[id]; if(p){ try{p.destroy();}catch(e){} } delete players[id];
-  const s=FEED.querySelector('.slide[data-id="'+id+'"]'); if(s){ s.classList.remove('playing'); const m=s.querySelector('.mount'); if(m) m.innerHTML=''; } }
-
-function dropSlide(slide){           // 막힌 영상 → 조용히 제거하고 다음으로
-  const id=slide.dataset.id; teardown(id);
-  const nxt=slide.nextElementSibling||slide.previousElementSibling;
-  io.unobserve(slide); slide.remove();
-  list = list.filter(g=>g.youtubeId!==id);
-  document.getElementById('empty').classList.toggle('show', list.length===0);
-  if(activeId===id){ activeId=null; if(nxt){ nxt.scrollIntoView(); setActive(nxt); } }
-}
+function teardown(id){ const p=players[id]; if(p){try{p.destroy();}catch(e){}} delete players[id];
+  const s=FEED.querySelector('.slide[data-id="'+id+'"]'); if(s){ s.classList.remove('playing'); const m=s.querySelector('.mount'); if(m)m.innerHTML=''; } }
+function dropSlide(slide){ const id=slide.dataset.id; teardown(id);
+  const nxt=slide.nextElementSibling||slide.previousElementSibling; io.unobserve(slide); slide.remove();
+  list=list.filter(g=>g.youtubeId!==id); document.getElementById('empty').classList.toggle('show', list.length===0);
+  if(activeId===id){ activeId=null; if(nxt){ nxt.scrollIntoView(); setActive(nxt); } } }
 
 /* ============ 더블탭 5초 ============ */
-let lastTap=0, lastEl=null;
-FEED.addEventListener('click', e=>{
-  const z=e.target.closest('.seek'); if(!z) return;
-  const slide=z.closest('.slide'); const id=slide.dataset.id; const now=Date.now();
-  if(lastEl===z && now-lastTap<330){
-    const d=+z.dataset.d, p=players[id];
-    if(p && p.getCurrentTime){ try{ p.seekTo(Math.max(0,p.getCurrentTime()+d),true); }catch(_){}
-      const tag=slide.querySelector(z.classList.contains('l')?'.dtag.l':'.dtag.r');
-      if(tag){ tag.classList.add('show'); setTimeout(()=>tag.classList.remove('show'),450); } }
-    lastTap=0; lastEl=null;
-  } else { lastTap=now; lastEl=z; }
-});
+let lastTap=0,lastEl=null;
+FEED.addEventListener('click',e=>{ const z=e.target.closest('.seek'); if(!z)return; const slide=z.closest('.slide'),id=slide.dataset.id,now=Date.now();
+  if(lastEl===z && now-lastTap<330){ const d=+z.dataset.d,p=players[id];
+    if(p&&p.getCurrentTime){ try{p.seekTo(Math.max(0,p.getCurrentTime()+d),true);}catch(_){}
+      const tag=slide.querySelector(z.classList.contains('l')?'.dtag.l':'.dtag.r'); if(tag){tag.classList.add('show');setTimeout(()=>tag.classList.remove('show'),450);} }
+    lastTap=0;lastEl=null;
+  } else { lastTap=now;lastEl=z; } });
 
 /* ============ 소리 토글 ============ */
 const soundBtn=document.getElementById('soundBtn');
-soundBtn.addEventListener('click', ()=>{
-  soundOn=!soundOn; soundBtn.textContent = soundOn?'🔊':'🔇';
-  const p=players[activeId]; if(p){ applySound(p); try{p.playVideo();}catch(e){} }
-  hideToast();
-});
+soundBtn.addEventListener('click',()=>{ soundOn=!soundOn; soundBtn.textContent=soundOn?'🔊':'🔇';
+  soundBtn.classList.toggle('muted',!soundOn);
+  const p=players[activeId]; if(p){ applySound(p); try{p.playVideo();}catch(e){} } hideToast(); });
 
-/* ============ 토스트(소리 안내) ============ */
+/* ============ 토스트 ============ */
 let toastT=null;
-function showToast(){ const t=document.getElementById('toast'); t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),4500); }
+function showToast(){ const t=document.getElementById('toast'); t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),5000); }
 function hideToast(){ const t=document.getElementById('toast'); t.classList.remove('show'); clearTimeout(toastT); }
 
-/* ============ 탭(칩) ============ */
-CHIPS.addEventListener('click', e=>{
-  const c=e.target.closest('.chip'); if(!c) return;
+/* ============ 탭 ============ */
+CHIPS.addEventListener('click',e=>{ const c=e.target.closest('.chip'); if(!c)return;
   CHIPS.querySelectorAll('.chip').forEach(x=>x.setAttribute('aria-pressed','false'));
-  c.setAttribute('aria-pressed','true'); activeFilter=c.dataset.filter; buildFeed();
-});
-function updateChips(){
-  const cnt={}; ALL.forEach(g=>{ if(isBlocked(g.youtubeId))return; cnt[g.league]=(cnt[g.league]||0)+1; if((g.tags||[]).includes('kor')) cnt._kor=(cnt._kor||0)+1; });
-  CHIPS.querySelectorAll('.chip').forEach(c=>{ const f=c.dataset.filter;
-    if(f==='all'||f==='latest'){ c.style.display=''; return; }
-    const n = f==='kor'?(cnt._kor||0):(cnt[f]||0);
-    c.style.display = n>=(f==='kor'?1:2) ? '' : 'none';
-  });
-}
+  c.setAttribute('aria-pressed','true'); activeFilter=c.dataset.filter; buildFeed(); });
+function updateChips(){ const cnt={}; ALL.forEach(g=>{ if(isBlocked(g.youtubeId))return; cnt[g.league]=(cnt[g.league]||0)+1; if((g.tags||[]).includes('kor'))cnt._kor=(cnt._kor||0)+1; });
+  CHIPS.querySelectorAll('.chip').forEach(c=>{ const f=c.dataset.filter; if(f==='all'||f==='latest'){c.style.display='';return;}
+    const n=f==='kor'?(cnt._kor||0):(cnt[f]||0); c.style.display=n>=(f==='kor'?1:2)?'':'none'; }); }
 
-/* ============ 새로고침(숨김목록 초기화 포함) ============ */
-document.getElementById('reloadBtn').addEventListener('click', ()=>{
-  try{ localStorage.removeItem(BKEY); }catch(e){}
-  location.href = location.pathname + '?r=' + Date.now();
-});
+/* ============ 데스크탑 이동 버튼 ============ */
+document.getElementById('navUp').addEventListener('click',()=>FEED.scrollBy({top:-FEED.clientHeight,behavior:'smooth'}));
+document.getElementById('navDn').addEventListener('click',()=>FEED.scrollBy({top:FEED.clientHeight,behavior:'smooth'}));
 
-/* ============ 텔레그램/인앱 → 브라우저 안내 ============ */
-const TG = window.Telegram && window.Telegram.WebApp;
-try{ if(TG){ TG.ready(); TG.expand(); } }catch(e){}
-const inTelegram = !!(TG && TG.platform && TG.platform!=='unknown');
-function isInApp(){ return inTelegram || /FBAN|FBAV|Instagram|KAKAOTALK|Line\/|NAVER|DaumApps|Telegram/i.test(navigator.userAgent||''); }
-function openExternal(){
-  const url=location.href.split('?')[0];
-  if(inTelegram && TG.openLink){ TG.openLink(url); return; }
-  try{ navigator.clipboard.writeText(url); alert('링크를 복사했어요. 사파리에 붙여넣어 열어주세요:\n'+url); }
-  catch(e){ alert('오른쪽 위 ⋯ → Safari로 열기 를 눌러주세요.'); }
-}
-document.getElementById('gateGo').addEventListener('click', openExternal);
-document.getElementById('gateStay').addEventListener('click', ()=>document.getElementById('gate').classList.remove('show'));
-if(isInApp()){ document.getElementById('gate').classList.add('show'); }
+/* ============ 새로고침(숨김목록 초기화) ============ */
+document.getElementById('reloadBtn').addEventListener('click',()=>{ try{localStorage.removeItem(BKEY);}catch(e){} location.href=location.pathname+'?r='+Date.now(); });
 
-/* ============ 데이터 로드 ============ */
-async function load(){
-  try{
-    const r=await fetch('data.json?_='+Date.now()); if(!r.ok) throw 0;
-    ALL=(await r.json())||[];
-  }catch(e){ ALL=[]; }
-  updateChips(); buildFeed();
-  if(!soundOn) showToast();
-}
+/* ============ 로드 ============ */
+async function load(){ try{ const r=await fetch('data.json?_='+Date.now()); if(!r.ok)throw 0; ALL=(await r.json())||[]; }catch(e){ ALL=[]; }
+  updateChips(); buildFeed(); if(!soundOn) showToast(); }
 load();
-
 if('serviceWorker' in navigator){ window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{})); }
 </script>
 </body>
