@@ -139,11 +139,10 @@
   .stage{flex:1;display:grid;place-items:center;padding:0 10px}
   .frame{position:relative;width:100%;max-width:min(420px,calc((100dvh - 200px) * 9 / 16));aspect-ratio:9/16;border-radius:18px;overflow:hidden;background:#000;border:1px solid rgba(255,255,255,.12)}
   .frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-  .frame .cta{position:absolute;top:10px;right:10px;z-index:6;display:inline-flex;align-items:center;gap:5px;
-    background:linear-gradient(135deg,var(--green-soft),var(--green));color:#fff;font-size:12px;font-weight:800;text-shadow:0 1px 2px rgba(0,0,0,.35);
-    padding:8px 13px;border-radius:999px;text-decoration:none;box-shadow:0 3px 12px rgba(0,0,0,.4);letter-spacing:-.2px}
-  .frame .cta:active{transform:scale(.95)}
-  .frame .cta[hidden]{display:none}
+  .frame .cta-wrap{position:absolute;top:10px;right:10px;z-index:6;display:grid;grid-template-columns:1fr 1fr;gap:6px;max-width:250px}
+  .frame .cta-wrap a{display:flex;align-items:center;justify-content:center;gap:4px;background:linear-gradient(135deg,var(--green-soft),var(--green));color:#fff;font-size:11px;font-weight:800;padding:7px 10px;border-radius:999px;text-decoration:none;box-shadow:0 3px 12px rgba(0,0,0,.4);text-shadow:0 1px 2px rgba(0,0,0,.35);white-space:nowrap}
+  .frame .cta-wrap a:active{transform:scale(.95)}
+  .frame .cta-wrap[hidden]{display:none}
   .frame .blocked{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:24px;text-align:center;background:#11201C;color:#fff}
   .frame .blocked.on{display:flex}
   .frame .blocked .b-ico{font-size:32px}
@@ -171,7 +170,7 @@
 
   <div class="status">
     <span class="pulse" aria-hidden="true"></span>
-    <span>최신 하이라이트 <b id="goalCount">0</b></span>
+    <span>인기 하이라이트 <b id="goalCount">0</b></span>
   </div>
 
   <nav class="chips" id="chips" aria-label="종목 탭">
@@ -182,6 +181,9 @@
     <button class="chip" data-filter="baseball" aria-pressed="false">⚾ 야구</button>
     <button class="chip" data-filter="basketball" aria-pressed="false">🏀 농구</button>
     <button class="chip" data-filter="volleyball" aria-pressed="false">🏐 배구</button>
+    <button class="chip" data-filter="mma" aria-pressed="false">🥊 격투기</button>
+    <button class="chip" data-filter="athletics" aria-pressed="false">🏃 육상</button>
+    <button class="chip" data-filter="esports" aria-pressed="false">🎮 LOL</button>
   </nav>
 
   <main class="grid" id="grid"></main>
@@ -203,7 +205,7 @@
     <div class="stage">
       <div class="frame">
         <div id="pMount"></div>
-        <a class="cta" id="ctaBtn" target="_blank" rel="noopener" hidden>▶ 누드TV 바로가기</a>
+        <div class="cta-wrap" id="ctaWrap" hidden></div>
         <div class="blocked" id="pBlocked">
           <div class="b-ico" aria-hidden="true">🔒</div>
           <p>이 영상은 퍼가기가 막혀 있어요.<br />공식 채널에서 바로 볼 수 있습니다.</p>
@@ -476,8 +478,48 @@ if('serviceWorker' in navigator){ window.addEventListener('load',()=>navigator.s
 
 /* ★★ 누드TV 플랫폼 주소 — 아래 따옴표 안만 본인 주소로 바꾸면 됩니다 ★★
    (텔레그램이면 https://t.me/... , 사이트면 https://... ; 비우면 버튼 숨김) */
-const PLATFORM_URL = "https://ad-5468745.github.io/nudetv-sports/";
-(function(){ const b=document.getElementById('ctaBtn'); if(b && PLATFORM_URL){ b.href=PLATFORM_URL; b.hidden=false; } })();
+/* ===== 플랫폼 버튼 =====
+   구글시트를 '웹에 게시(CSV)'한 주소를 SHEET_CSV_URL 에 넣으면 그 시트의 버튼이 자동 표시됩니다.
+   시트 형식(첫 줄 머리글): 버튼이름,주소,표시   (표시 칸이 N이면 숨김)
+   비어 있으면 아래 기본 버튼 표시. 버튼은 영상 위 오른쪽에 2열로 배치됩니다. */
+const SHEET_CSV_URL = "";   // ★게시한 구글시트 CSV 주소를 여기에 넣으세요★
+let PLATFORM_URL = "https://ad-5468745.github.io/nudetv-sports/";
+const DEFAULT_BUTTONS = [
+  { name:"누드TV 바로가기", url:PLATFORM_URL },
+  { name:"누드TV 채널입장", url:PLATFORM_URL }
+];
+let BUTTONS = DEFAULT_BUTTONS.slice();
+function renderCtaButtons(){
+  const w=document.getElementById('ctaWrap'); if(!w) return;
+  const list=BUTTONS.filter(b=>b && b.url && b.name);
+  w.innerHTML = list.map(b=>`<a href="${b.url}" target="_blank" rel="noopener">${b.name}</a>`).join('');
+  w.hidden = list.length===0;
+  if(list[0] && list[0].url) PLATFORM_URL = list[0].url;
+}
+function parseCsvButtons(text){
+  const rows=text.trim().split(/\r?\n/).map(r=>r.split(','));
+  let start=0;
+  if(rows[0] && /이름|name|버튼|url|주소/i.test((rows[0]||[]).join(','))) start=1;
+  const out=[];
+  for(let i=start;i<rows.length;i++){
+    const name=(rows[i][0]||'').trim(), url=(rows[i][1]||'').trim(), show=(rows[i][2]||'').trim();
+    if(!name||!url) continue;
+    if(/^(n|no|x|숨김|off|false)$/i.test(show)) continue;
+    out.push({name, url});
+  }
+  return out;
+}
+async function loadButtons(){
+  renderCtaButtons();
+  if(!SHEET_CSV_URL) return;
+  try{
+    const r=await fetch(SHEET_CSV_URL, {cache:'no-store'});
+    if(!r.ok) throw 0;
+    const list=parseCsvButtons(await r.text());
+    if(list.length){ BUTTONS=list; renderCtaButtons(); render(); }
+  }catch(e){}
+}
+loadButtons();
 
 loadData();
 </script>
