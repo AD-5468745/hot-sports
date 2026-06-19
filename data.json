@@ -1,184 +1,944 @@
 [
  {
-  "youtubeId": "up5QJyUC5dY",
-  "title": "Luis Romo Goal | Mexico 1-0 Korea Republic | FIFA World Cup 2026™",
-  "published": "2026-06-19T05:04:00+00:00",
-  "channel": "FIFA",
+  "youtubeId": "cl-IxRaYxqI",
+  "title": "[MLB] 시카고 화이트삭스 vs 뉴욕 양키스｜5분 하이라이트｜2026 MLB (06.19)",
+  "published": "2026-06-19T08:00:16+00:00",
+  "channel": "SPOTV",
+  "short": false,
+  "league": "baseball",
+  "match": "화이트삭스 vs 뉴욕",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "53ijPJMMLPg",
+  "title": "[MLB] 뉴욕 메츠 vs 필라델피아｜5분 하이라이트｜2026 MLB (06.19)",
+  "published": "2026-06-19T08:00:10+00:00",
+  "channel": "SPOTV",
+  "short": false,
+  "league": "baseball",
+  "match": "메츠 vs 필라델피아",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "Ab8Swa3isvk",
+  "title": "[3분 하이라이트] B조 조별리그 2차전 캐나다 VS 카타르｜2026 FIFA 북중미 월드컵",
+  "published": "2026-06-19T07:56:03+00:00",
+  "channel": "JTBC",
+  "short": false,
   "league": "worldcup",
-  "match": "2026 월드컵",
-  "tags": [
-   "kor"
-  ]
+  "match": "캐나다 vs 카타르",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "D3Pzn8EiCtE",
+  "title": "카타르의 자책골ㅠㅠ",
+  "published": "2026-06-19T07:55:34+00:00",
+  "channel": "JTBC",
+  "short": true,
+  "league": "soccer",
+  "match": "축구",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "nlATTOvkYfs",
+  "title": "[하이라이트] 골 장면 모음｜ B조 조별리그 2차전 캐나다 VS 카타르｜2026 FIFA 북중미 월드컵",
+  "published": "2026-06-19T07:55:31+00:00",
+  "channel": "JTBC",
+  "short": false,
+  "league": "worldcup",
+  "match": "캐나다 vs 카타르",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "mpL6CwWHYPg",
+  "title": "두 경기 연속 골!!!",
+  "published": "2026-06-19T07:55:21+00:00",
+  "channel": "JTBC",
+  "short": true,
+  "league": "soccer",
+  "match": "축구",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "dGqV1Bh8eHE",
+  "title": "[하이라이트] 조너선 데이비드 모음｜ B조 조별리그 2차전 캐나다 VS 카타르｜2026 FIFA 북중미 월드컵",
+  "published": "2026-06-19T07:55:16+00:00",
+  "channel": "JTBC",
+  "short": false,
+  "league": "worldcup",
+  "match": "캐나다 vs 카타르",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "OTgrp_bBrto",
+  "title": "[하이라이트] '2명 퇴장' 카타르 주요 장면 모음｜ B조 조별리그 2차전 캐나다 VS 카타르｜2026 FIFA 북중미 월드컵",
+  "published": "2026-06-19T07:55:08+00:00",
+  "channel": "JTBC",
+  "short": false,
+  "league": "worldcup",
+  "match": "캐나다 vs 카타르",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "eDnTP9F_oWs",
+  "title": "이게 스롱피아비의 폭발력이다... 바비인형 기세에 몰렸던 스롱피아비의 반격｜명장면｜하이원리조트LPBA챔피언십 2026-2027",
+  "published": "2026-06-19T07:00:11+00:00",
+  "channel": "SBS Sports",
+  "short": false,
+  "league": "etc",
+  "match": "스포츠",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "CiSpdM8KHBo",
+  "title": "승부를 뒤바꾼 결정적 선택｜명장면｜우리금융캐피탈PBA챔피언십 2026-2027",
+  "published": "2026-06-19T05:30:09+00:00",
+  "channel": "SBS Sports",
+  "short": false,
+  "league": "etc",
+  "match": "스포츠",
+  "tags": [],
+  "kor_src": true
  },
  {
   "youtubeId": "8Z35ntVDZW8",
   "title": "[3분 하이라이트] B조 조별리그 2차전 스위스 VS 보스니아헤르체고비나｜2026 FIFA 북중미 월드컵",
   "published": "2026-06-19T04:56:33+00:00",
   "channel": "JTBC",
+  "short": false,
   "league": "worldcup",
   "match": "스위스 vs 보스니아헤르체고비나",
-  "tags": []
+  "tags": [],
+  "kor_src": true
  },
  {
-  "youtubeId": "behWs6mwCcU",
-  "title": "[하이라이트] 그라니트 자카 모음｜B조 조별리그 2차전 스위스 VS 보스니아헤르체고비나｜2026 FIFA 북중미 월드컵",
-  "published": "2026-06-19T04:55:31+00:00",
-  "channel": "JTBC",
-  "league": "worldcup",
-  "match": "스위스 vs 보스니아헤르체고비나",
-  "tags": []
+  "youtubeId": "PkD6_galZRk",
+  "title": "쿠션에 붙어 있는 이 공을... 너무 완벽해서 충격적이라는 득점｜난구분석｜우리금융캐피탈LPBA챔피언십 2026-2027",
+  "published": "2026-06-19T03:00:19+00:00",
+  "channel": "SBS Sports",
+  "short": false,
+  "league": "etc",
+  "match": "스포츠",
+  "tags": [],
+  "kor_src": true
  },
  {
-  "youtubeId": "GNlLXUbf5cg",
-  "title": "[하이라이트] 요한 만잠비 모음｜B조 조별리그 2차전 스위스 VS 보스니아헤르체고비나｜2026 FIFA 북중미 월드컵",
-  "published": "2026-06-19T04:55:23+00:00",
-  "channel": "JTBC",
-  "league": "worldcup",
-  "match": "스위스 vs 보스니아헤르체고비나",
-  "tags": []
+  "youtubeId": "KovNS8UIvmQ",
+  "title": "전민재 이틀 연속 역전 홈런포! #베이스볼투나잇",
+  "published": "2026-06-19T02:32:29+00:00",
+  "channel": "엠스플야구",
+  "short": true,
+  "league": "baseball",
+  "match": "야구",
+  "tags": [],
+  "kor_src": true
  },
  {
-  "youtubeId": "FHhaJ0rWMQ0",
-  "title": "[하이라이트] 골 장면 모음｜B조 조별리그 2차전 스위스 VS 보스니아헤르체고비나｜2026 FIFA 북중미 월드컵",
-  "published": "2026-06-19T04:55:22+00:00",
-  "channel": "JTBC",
+  "youtubeId": "h8-EAS327fY",
+  "title": "창원의 하늘을 수놓은 천재환의 투런 홈런💫",
+  "published": "2026-06-19T02:30:35+00:00",
+  "channel": "KBO",
+  "short": true,
+  "league": "baseball",
+  "match": "야구",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "rwGf73CFjlY",
+  "title": "파죽지세 여제, 이 경기로 대회 애버리지 남자 선수 넘어버림ㅎㄷㄷ｜명장면｜하이원리조트LPBA챔피언십 2026-2027",
+  "published": "2026-06-19T00:59:16+00:00",
+  "channel": "SBS Sports",
+  "short": false,
+  "league": "etc",
+  "match": "스포츠",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "pWyTafFGrDc",
+  "title": "득점권에서 쏠쏠한 활약! 문상철의 뜨거운 타격감🔥",
+  "published": "2026-06-19T00:13:07+00:00",
+  "channel": "KBO",
+  "short": true,
+  "league": "baseball",
+  "match": "야구",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "EygVw73WknQ",
+  "title": "[키움 vs 삼성] (초고화질 무해설)로 보는 2번 타자 최형우의 7회 동점타 - 9회 끝내기 순간!  | 6.18 | 크보모먼트 | KBO 야구 하이라이트",
+  "published": "2026-06-18T13:57:38+00:00",
+  "channel": "KBO",
+  "short": false,
+  "league": "baseball",
+  "match": "키움 vs 삼성",
+  "tags": [
+   "kor"
+  ],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "7nHJ5k3v6xo",
+  "title": "[키움히어로즈 vs 삼성라이온즈] 6.18(목) 야구 하이라이트｜2026 KBO 리그｜KBO X TVING",
+  "published": "2026-06-18T13:44:00+00:00",
+  "channel": "KBO",
+  "short": false,
+  "league": "baseball",
+  "match": "키움히어로즈 vs 삼성라이온즈",
+  "tags": [
+   "kor"
+  ],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "-qNKtinv4ZA",
+  "title": "[롯데 vs SSG] 안타성 타구를 삭제하는 롯데 황성빈 - 전민재의 나이스 캐치! 호수비 모음 | 6.18 | 크보모먼트 | KBO 야구 하이라이트",
+  "published": "2026-06-18T13:42:23+00:00",
+  "channel": "KBO",
+  "short": false,
+  "league": "baseball",
+  "match": "롯데 vs SSG",
+  "tags": [
+   "kor"
+  ],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "qSf4Z4JzV2U",
+  "title": "[롯데자이언츠 vs SSG랜더스] 6.18(목) 야구 하이라이트｜2026 KBO 리그｜KBO X TVING",
+  "published": "2026-06-18T13:41:40+00:00",
+  "channel": "KBO",
+  "short": false,
+  "league": "baseball",
+  "match": "롯데자이언츠 vs SSG랜더스",
+  "tags": [
+   "kor"
+  ],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "vWqtuZEyu2o",
+  "title": "[LG트윈스 vs KIA타이거즈] 6.18(목) 야구 하이라이트｜2026 KBO 리그｜KBO X TVING",
+  "published": "2026-06-18T13:29:23+00:00",
+  "channel": "KBO",
+  "short": false,
+  "league": "baseball",
+  "match": "LG트윈스 vs KIA타이거즈",
+  "tags": [
+   "kor"
+  ],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "Jwhyh3mL2Ys",
+  "title": "[KT위즈 vs 두산베어스] 6.18(목) 야구 하이라이트｜2026 KBO 리그｜KBO X TVING",
+  "published": "2026-06-18T13:29:21+00:00",
+  "channel": "KBO",
+  "short": false,
+  "league": "baseball",
+  "match": "KT위즈 vs 두산베어스",
+  "tags": [
+   "kor"
+  ],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "gXIZ2R1HkVw",
+  "title": "삼성의 이틀 연속 끝내기!! 오늘의 주인공은 명실상부 해결사 최형우☄️",
+  "published": "2026-06-18T13:18:32+00:00",
+  "channel": "KBO",
+  "short": true,
+  "league": "baseball",
+  "match": "야구",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "7x6nlb2ujRM",
+  "title": "[LG vs KIA] 강한 타구 내야 뚫고 갑니다!!! KIA 박민의 귀중한 추가 적시타! | 6.18 | 크보모먼트 | KBO 야구 하이라이트",
+  "published": "2026-06-18T13:15:14+00:00",
+  "channel": "KBO",
+  "short": false,
+  "league": "baseball",
+  "match": "LG vs KIA",
+  "tags": [
+   "kor"
+  ],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "XfrqoiwCRyg",
+  "title": "[한화이글스 vs NC다이노스] 6.18(목) 야구 하이라이트｜2026 KBO 리그｜KBO X TVING",
+  "published": "2026-06-18T13:01:28+00:00",
+  "channel": "KBO",
+  "short": false,
+  "league": "baseball",
+  "match": "한화이글스 vs NC다이노스",
+  "tags": [
+   "kor"
+  ],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "noBhRD9pGRM",
+  "title": "[키움 vs 삼성] ※어제 경기 아님※ 오늘도 끝내기!!! 3안타에 이어 끝내기 희생플라이를 기록하는 최형우! | 6.18 | 크보모먼트 | KBO 야구 하이라이트",
+  "published": "2026-06-18T13:00:52+00:00",
+  "channel": "KBO",
+  "short": false,
+  "league": "baseball",
+  "match": "키움 vs 삼성",
+  "tags": [
+   "kor"
+  ],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "cU8gEncDHf8",
+  "title": "대한민국 골 넣는 주파수 [국대: 로드 투 노스 아메리카]",
+  "published": "2026-06-18T12:00:30+00:00",
+  "channel": "쿠팡플레이",
+  "short": true,
+  "league": "soccer",
+  "match": "국대 vs 로드",
+  "tags": [
+   "kor"
+  ],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "X_8asuSpmXE",
+  "title": "오현규의 득점 비결! 미꾸라지의 승부예측 l 멕시코 vs 대한민국 | 6월 3주 차 승부예측 Pick",
+  "published": "2026-06-18T10:00:26+00:00",
+  "channel": "쿠팡플레이",
+  "short": true,
+  "league": "etc",
+  "match": "멕시코 vs 대한민국",
+  "tags": [
+   "kor"
+  ],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "euRyTLNGiJY",
+  "title": "무득점을 2점으로 바꾼 극적 어필｜명장면｜하이원리조트LPBA챔피언십 2026-2027",
+  "published": "2026-06-18T09:00:22+00:00",
+  "channel": "SBS Sports",
+  "short": false,
+  "league": "etc",
+  "match": "스포츠",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "usOaF4t2Ts4",
+  "title": "[MLB] 샌프란시스코 vs 애틀랜타｜5분 하이라이트｜2026 MLB (06.18)",
+  "published": "2026-06-18T08:00:11+00:00",
+  "channel": "SPOTV",
+  "short": false,
+  "league": "baseball",
+  "match": "샌프란시스코 vs 애틀랜타",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "ZTub-PzuZuI",
+  "title": "엥간한 일에도 웃음을 잃지 않는 PBA 미소천사 응우옌꾸옥응우옌 정색하는 장면을 보고 계십니다｜명장면｜우리금융캐피탈PBA챔피언십 2026-2027",
+  "published": "2026-06-18T07:00:24+00:00",
+  "channel": "SBS Sports",
+  "short": false,
+  "league": "etc",
+  "match": "스포츠",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "GCjO0cCcMvI",
+  "title": "WNBA 한국인 최다 득점을 기록한 박지현 l WNBA l 미네소타 vs LA 스파크스",
+  "published": "2026-06-18T06:33:41+00:00",
+  "channel": "쿠팡플레이",
+  "short": true,
+  "league": "basketball",
+  "match": "미네소타 vs LA",
+  "tags": [
+   "kor"
+  ],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "eXVH7pFSSMc",
+  "title": "오 ㅏ.... 이건 진짜 엄청났다... 조재호, 쏴라있음을 알리는 뱅크샷 두 방｜명장면｜우리금융캐피탈PBA챔피언십 2026-2027",
+  "published": "2026-06-18T05:30:37+00:00",
+  "channel": "SBS Sports",
+  "short": false,
+  "league": "etc",
+  "match": "스포츠",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "zsWyJy13Zns",
+  "title": "우리팀 캡틴이라 화낼수도 없고...｜명장면｜우리금융캐피탈PBA챔피언십 2026-2027",
+  "published": "2026-06-18T04:00:10+00:00",
+  "channel": "SBS Sports",
+  "short": false,
+  "league": "etc",
+  "match": "스포츠",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "puJsjS8GbB8",
+  "title": "이 공을 볼 줄 아는 수준까지 올라온 #이미래｜명장면｜하이원리조트LPBA챔피언십 2026-2027",
+  "published": "2026-06-18T02:30:34+00:00",
+  "channel": "SBS Sports",
+  "short": false,
+  "league": "etc",
+  "match": "스포츠",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "T1RPmNef5-g",
+  "title": "[MLB] 탬파베이 vs LA 다저스｜5분 하이라이트｜2026 MLB (06.18)",
+  "published": "2026-06-18T02:00:26+00:00",
+  "channel": "SPOTV",
+  "short": false,
+  "league": "baseball",
+  "match": "탬파베이 vs LA",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "IlyT4jpzFXA",
+  "title": "[MLB] 샌디에이고 vs 세인트루이스｜5분 하이라이트｜2026 MLB (06.18)",
+  "published": "2026-06-18T02:00:11+00:00",
+  "channel": "SPOTV",
+  "short": false,
+  "league": "baseball",
+  "match": "샌디에이고 vs 세인트루이스",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "nWq21wAjU8Y",
+  "title": "[MLB] 샌프란시스코 vs 애틀랜타 DH-1｜5분 하이라이트｜2026 MLB (06.18)",
+  "published": "2026-06-18T02:00:04+00:00",
+  "channel": "SPOTV",
+  "short": false,
+  "league": "baseball",
+  "match": "샌프란시스코 vs 애틀랜타",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "1I2LTex9ebI",
+  "title": "칼 갈고 나온 스롱피아비, 영봉세트에 셧아웃 승리까지 1시간도 안 걸림...｜명장면｜하이원리조트LPBA챔피언십 2026-2027",
+  "published": "2026-06-18T01:02:39+00:00",
+  "channel": "SBS Sports",
+  "short": false,
+  "league": "etc",
+  "match": "스포츠",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "aFGAN-ppjP0",
+  "title": "삼성 구자욱 \"너무 오랜만에 끝내기라...\" #베이스볼투나잇 26.06.17",
+  "published": "2026-06-18T00:16:04+00:00",
+  "channel": "엠스플야구",
+  "short": false,
+  "league": "baseball",
+  "match": "야구",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "hswOVThJ3Hs",
+  "title": "[MLB] 새벽에 잠을 깨우는 데버스-이정후의 데칼코마니 백투백 홈런 (06.18)",
+  "published": "2026-06-17T19:06:39+00:00",
+  "channel": "SPOTV",
+  "short": true,
+  "league": "baseball",
+  "match": "야구",
+  "tags": [
+   "kor"
+  ],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "LJ-cQYBQLNs",
+  "title": "[사운드오브더게임] 팀의 2,900승을 책임진 나스타의 홈런 무해설.ver l #베이스볼투나잇 26.06.16",
+  "published": "2026-06-17T14:10:48+00:00",
+  "channel": "엠스플야구",
+  "short": false,
+  "league": "baseball",
+  "match": "야구",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "XFdofkOgTiI",
+  "title": "롯데의 거포 유격수 전민재! 연이틀 역전 홈런포 l #베이스볼투나잇 26.06.17",
+  "published": "2026-06-17T14:10:13+00:00",
+  "channel": "엠스플야구",
+  "short": false,
+  "league": "baseball",
+  "match": "야구",
+  "tags": [
+   "kor"
+  ],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "zq4_emsLjw4",
+  "title": "[MLB] 샌디에이고 vs 세인트루이스｜5분 하이라이트｜2026 MLB (06.17)",
+  "published": "2026-06-17T08:00:37+00:00",
+  "channel": "SPOTV",
+  "short": false,
+  "league": "baseball",
+  "match": "샌디에이고 vs 세인트루이스",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "rm6CwfUqDak",
+  "title": "[MLB] 탬파베이 vs LA 다저스｜5분 하이라이트｜2026 MLB (06.17)",
+  "published": "2026-06-17T08:00:07+00:00",
+  "channel": "SPOTV",
+  "short": false,
+  "league": "baseball",
+  "match": "탬파베이 vs LA",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "plW1B5dAU9g",
+  "title": "[득점모음] '캄보디아 특급의 위력!' 스롱 피아비 결승 득점 모음 l 2026 하이원리조트 LPBA 챔피언십",
+  "published": "2026-06-17T00:00:28+00:00",
+  "channel": "MBC Sports+",
+  "short": false,
+  "league": "etc",
+  "match": "스포츠",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "WbTzNRTh1p4",
+  "title": "[득점모음] '아쉽지만 빛났던 여제의 카리스마!' 김가영 결승 득점 모음 l 2026 하이원리조트 LPBA 챔피언십",
+  "published": "2026-06-17T00:00:21+00:00",
+  "channel": "MBC Sports+",
+  "short": false,
+  "league": "etc",
+  "match": "스포츠",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "73HcmIu8hXw",
+  "title": "[득점모음] '이게 바로 07년생 당구다!' 김영원 결승 득점 모음 l 2026 하이원리조트 PBA 챔피언십",
+  "published": "2026-06-16T09:47:34+00:00",
+  "channel": "MBC Sports+",
+  "short": false,
+  "league": "etc",
+  "match": "스포츠",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "ivYXYJqdlyA",
+  "title": "[MLB] 샌디에이고 vs 세인트루이스｜5분 하이라이트｜2026 MLB (06.16)",
+  "published": "2026-06-16T08:00:26+00:00",
+  "channel": "SPOTV",
+  "short": false,
+  "league": "baseball",
+  "match": "샌디에이고 vs 세인트루이스",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "g1I462LIwBw",
+  "title": "[MLB] 탬파베이 vs LA 다저스｜5분 하이라이트｜2026 MLB (06.16)",
+  "published": "2026-06-16T08:00:07+00:00",
+  "channel": "SPOTV",
+  "short": false,
+  "league": "baseball",
+  "match": "탬파베이 vs LA",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "ADQKamWk3x8",
+  "title": "[풀버전] 응오딘나이 vs 김영원 | 하이원리조트 PBA 챔피언십 결승 2026.06.11 방송",
+  "published": "2026-06-15T03:00:05+00:00",
+  "channel": "MBC Sports+",
+  "short": false,
+  "league": "etc",
+  "match": "응오딘나이 vs 김영원",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "0iXWJ2cyTNA",
+  "title": "[풀버전] 응오딘나이 vs 김준태 | 하이원리조트PBA챔피언십 준결승 2026.06.11 방송",
+  "published": "2026-06-15T02:00:35+00:00",
+  "channel": "MBC Sports+",
+  "short": false,
+  "league": "etc",
+  "match": "응오딘나이 vs 김준태",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "W9WMupA_DUI",
+  "title": "[풀버전] 신정주 vs 김영원 | 하이원리조트 PBA 챔피언십 준결승 2026.06.11 방송",
+  "published": "2026-06-15T02:00:13+00:00",
+  "channel": "MBC Sports+",
+  "short": false,
+  "league": "etc",
+  "match": "신정주 vs 김영원",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "6s_H9SruiW0",
+  "title": "[풀버전] 김가영 vs 스롱 피아비 | 하이원리조트 LPBA 챔피언십 2026 결승 2026.06.10 방송",
+  "published": "2026-06-11T04:20:56+00:00",
+  "channel": "MBC Sports+",
+  "short": false,
+  "league": "etc",
+  "match": "김가영 vs 스롱",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "CyV4Li1h210",
+  "title": "김영원 득점 모음 | 하이원리조트 PBA 챔피언십 16강",
+  "published": "2026-06-10T09:30:35+00:00",
+  "channel": "MBC Sports+",
+  "short": false,
+  "league": "etc",
+  "match": "스포츠",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "986i_NjWoE8",
+  "title": "스롱 득점 모음 | 하이원리조트 LPBA 챔피언십 준결승",
+  "published": "2026-06-10T08:30:12+00:00",
+  "channel": "MBC Sports+",
+  "short": false,
+  "league": "etc",
+  "match": "스포츠",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "N_vObIZlkoc",
+  "title": "옆 사람도 황당한 끝내기 샷 #LPBA",
+  "published": "2026-06-10T05:00:00+00:00",
+  "channel": "MBC Sports+",
+  "short": true,
+  "league": "baseball",
+  "match": "야구",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "-gkLWsQGWIw",
+  "title": "[30분 하이라이트] 하나은행 K리그2 2026 15R 서울E vs 충북청주 | SeoulE vs ChungbukCheongju (26.06.07)",
+  "published": "2026-06-07T14:37:48+00:00",
+  "channel": "K리그",
+  "short": false,
+  "league": "soccer",
+  "match": "서울E vs 충북청주",
+  "tags": [
+   "kor"
+  ],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "b7305yiiGAY",
+  "title": "[골모음] 하나은행 K리그2 2026 15라운드 골모음 | ALL GOALS of K LEAGUE2 R15",
+  "published": "2026-06-07T14:36:11+00:00",
+  "channel": "K LEAGUE",
+  "short": false,
+  "league": "soccer",
+  "match": "축구",
+  "tags": [
+   "kor"
+  ],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "TK37Hr95GtI",
+  "title": "[30분 하이라이트] 하나은행 K리그2 2026 15R 김포 vs 전남 | Gimpo vs Jeonnam (26.06.07)",
+  "published": "2026-06-07T14:30:10+00:00",
+  "channel": "K리그",
+  "short": false,
+  "league": "soccer",
+  "match": "김포 vs 전남",
+  "tags": [
+   "kor"
+  ],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "LxYUfPuOaRs",
+  "title": "[30분 하이라이트] 하나은행 K리그2 2026 15R 천안 vs 수원FC | Cheonan vs SuwonFC (26.06.07)",
+  "published": "2026-06-07T14:30:00+00:00",
+  "channel": "K리그",
+  "short": false,
+  "league": "soccer",
+  "match": "천안 vs 수원FC",
+  "tags": [
+   "kor"
+  ],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "eJpIYiQUNTY",
+  "title": "골 넣을 때부터 춤 생각한 듯ㅋㅋㅋㅋㅋ #천안 #라마스",
+  "published": "2026-06-07T11:58:52+00:00",
+  "channel": "K LEAGUE",
+  "short": true,
+  "league": "soccer",
+  "match": "축구",
+  "tags": [],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "e5Pr3FqE70Y",
+  "title": "[30분 하이라이트] 하나은행 K리그2 2026 15R 화성 vs 수원 | Hwaseong vs Suwon (26.06.06)",
+  "published": "2026-06-06T14:30:35+00:00",
+  "channel": "K리그",
+  "short": false,
+  "league": "soccer",
+  "match": "화성 vs 수원",
+  "tags": [
+   "kor"
+  ],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "6UjPT4V9I18",
+  "title": "[30분 하이라이트] 하나은행 K리그2 2026 15R 경남 vs 용인 | Gyeongnam vs Yongin (26.06.06)",
+  "published": "2026-06-06T14:30:29+00:00",
+  "channel": "K리그",
+  "short": false,
+  "league": "soccer",
+  "match": "경남 vs 용인",
+  "tags": [
+   "kor"
+  ],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "SkSU8CTnaK8",
+  "title": "[30분 하이라이트] 하나은행 K리그2 2026 15R 대구 vs 파주 | Daegu vs Paju (26.06.05)",
+  "published": "2026-06-05T14:36:27+00:00",
+  "channel": "K리그",
+  "short": false,
+  "league": "soccer",
+  "match": "대구 vs 파주",
+  "tags": [
+   "kor"
+  ],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "MN1n8qQ6UKM",
+  "title": "[30분 하이라이트] 하나은행 K리그2 2026 15R 부산 vs 충남아산 | Busan vs ChungnamAsan (26.06.05)",
+  "published": "2026-06-05T14:30:38+00:00",
+  "channel": "K리그",
+  "short": false,
+  "league": "soccer",
+  "match": "부산 vs 충남아산",
+  "tags": [
+   "kor"
+  ],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "7OoCuvN68Ss",
+  "title": "[30분 하이라이트] 하나은행 K리그2 2026 15R 성남 vs 김해 | Seongnam vs Gimhae (26.06.05)",
+  "published": "2026-06-05T14:30:20+00:00",
+  "channel": "K리그",
+  "short": false,
+  "league": "soccer",
+  "match": "성남 vs 김해",
+  "tags": [
+   "kor"
+  ],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "D6EtqX31TgE",
+  "title": "[30분 하이라이트] 하나은행 K리그2 2026 14R 안산 vs 천안 | Ansan vs Cheonan (26.05.31)",
+  "published": "2026-05-31T14:00:27+00:00",
+  "channel": "K리그",
+  "short": false,
+  "league": "soccer",
+  "match": "안산 vs 천안",
+  "tags": [
+   "kor"
+  ],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "OvWa2rM3eTI",
+  "title": "[30분 하이라이트] 하나은행 K리그2 2026 14R 전남 vs 서울E | Jeonnam vs SeoulE (26.05.31)",
+  "published": "2026-05-31T11:30:40+00:00",
+  "channel": "K리그",
+  "short": false,
+  "league": "soccer",
+  "match": "전남 vs 서울E",
+  "tags": [
+   "kor"
+  ],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "zuHRfjVrhho",
+  "title": "[30분 하이라이트] 하나은행 K리그2 2026 14R 화성 vs 경남 | Hwaseong vs Gyeongnam (26.05.31)",
+  "published": "2026-05-31T11:30:30+00:00",
+  "channel": "K리그",
+  "short": false,
+  "league": "soccer",
+  "match": "화성 vs 경남",
+  "tags": [
+   "kor"
+  ],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "cC4qon7FLj8",
+  "title": "[30분 하이라이트] 하나은행 K리그2 2026 14R 김해 vs 김포 | Gimhae vs Gimpo (26.05.30)",
+  "published": "2026-05-30T14:00:24+00:00",
+  "channel": "K리그",
+  "short": false,
+  "league": "soccer",
+  "match": "김해 vs 김포",
+  "tags": [
+   "kor"
+  ],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "__7_kPNU7OI",
+  "title": "[30분 하이라이트] 하나은행 K리그2 2026 14R 수원FC vs 성남 | SuwonFC vs Seongnam (26.05.30)",
+  "published": "2026-05-30T14:00:19+00:00",
+  "channel": "K리그",
+  "short": false,
+  "league": "soccer",
+  "match": "수원FC vs 성남",
+  "tags": [
+   "kor"
+  ],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "nwYQ2V_VfuA",
+  "title": "[30분 하이라이트] 하나은행 K리그2 2026 14R 충남아산 vs 수원 | ChungnamAsan vs Suwon (26.05.30)",
+  "published": "2026-05-30T11:30:37+00:00",
+  "channel": "K리그",
+  "short": false,
+  "league": "soccer",
+  "match": "충남아산 vs 수원",
+  "tags": [
+   "kor"
+  ],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "_vbOW7dnqk0",
+  "title": "[30분 하이라이트] 하나은행 K리그2 2026 14R 용인 vs 대구 | Yongin vs Daegu (26.05.30)",
+  "published": "2026-05-30T11:30:09+00:00",
+  "channel": "K리그",
+  "short": false,
+  "league": "soccer",
+  "match": "용인 vs 대구",
+  "tags": [
+   "kor"
+  ],
+  "kor_src": true
+ },
+ {
+  "youtubeId": "7Wnf6RqwbWY",
+  "title": "Alt Cast Highlights: Ghana v Panama | FIFA World Cup 2026™",
+  "published": "2026-06-19T08:30:38+00:00",
+  "channel": "FIFA",
+  "short": false,
   "league": "worldcup",
-  "match": "스위스 vs 보스니아헤르체고비나",
-  "tags": []
+  "match": "Highlights vs Ghana",
+  "tags": [],
+  "kor_src": false
+ },
+ {
+  "youtubeId": "up5QJyUC5dY",
+  "title": "Luis Romo Goal | Mexico 1-0 Korea Republic | FIFA World Cup 2026™",
+  "published": "2026-06-19T05:04:00+00:00",
+  "channel": "FIFA",
+  "short": false,
+  "league": "worldcup",
+  "match": "월드컵",
+  "tags": [
+   "kor"
+  ],
+  "kor_src": false
  },
  {
   "youtubeId": "FWG_41sJwdk",
   "title": "ANGELS vs. ATHLETICS Full Game Highlights (6/18/26) | MLB Highlights",
   "published": "2026-06-19T04:51:05+00:00",
   "channel": "MLB",
-  "league": "mlb",
-  "match": "MLB",
-  "tags": []
+  "short": false,
+  "league": "baseball",
+  "match": "야구",
+  "tags": [],
+  "kor_src": false
  },
  {
   "youtubeId": "cjsFUxVHAX0",
   "title": "Highlights | Uzbekistan 1-3 Colombia | FIFA World Cup 2026™",
   "published": "2026-06-19T04:30:21+00:00",
   "channel": "FIFA",
+  "short": false,
   "league": "worldcup",
-  "match": "2026 월드컵",
-  "tags": []
+  "match": "월드컵",
+  "tags": [],
+  "kor_src": false
  },
  {
   "youtubeId": "7UUMD1BbSzY",
   "title": "CARDINALS vs. ROYALS Full Game Highlights (6/18/26) | MLB Highlights",
   "published": "2026-06-19T03:57:08+00:00",
   "channel": "MLB",
-  "league": "mlb",
-  "match": "MLB",
-  "tags": []
- },
- {
-  "youtubeId": "ZCc6OvwaJko",
-  "title": "Nathan Saliba Goal | Canada 6-0 Qatar | FIFA World Cup 2026™",
-  "published": "2026-06-19T03:31:20+00:00",
-  "channel": "FIFA",
-  "league": "worldcup",
-  "match": "2026 월드컵",
-  "tags": []
+  "short": false,
+  "league": "baseball",
+  "match": "야구",
+  "tags": [],
+  "kor_src": false
  },
  {
   "youtubeId": "yjC9MsqBYUI",
   "title": "METS vs. PHILLIES Full Game Highlights (6/18/26) | MLB Highlights",
   "published": "2026-06-19T03:05:54+00:00",
   "channel": "MLB",
-  "league": "mlb",
-  "match": "MLB",
-  "tags": []
- },
- {
-  "youtubeId": "EClhGIXizhA",
-  "title": "WHITE SOX vs. YANKEES Full Game Highlights (6/18/26) | MLB Highlights",
-  "published": "2026-06-19T02:32:19+00:00",
-  "channel": "MLB",
-  "league": "mlb",
-  "match": "MLB",
-  "tags": []
- },
- {
-  "youtubeId": "SXYjTQYNqU4",
-  "title": "Colson Montgomery’s 20th home run of 2026! 💪 | MLB Highlights (White Sox vs. Yankees)",
-  "published": "2026-06-18T23:49:59+00:00",
-  "channel": "MLB",
-  "league": "mlb",
-  "match": "MLB",
-  "tags": []
- },
- {
-  "youtubeId": "wZ_dOxxV8Zk",
-  "title": "GUARDIANS vs. BREWERS Full Game Highlights (6/18/26) | MLB Highlights",
-  "published": "2026-06-18T23:48:20+00:00",
-  "channel": "MLB",
-  "league": "mlb",
-  "match": "MLB",
-  "tags": []
- },
- {
-  "youtubeId": "WSNxz8TlwPs",
-  "title": "ORIOLES vs. MARINERS Full Game Highlights (6/18/26) | MLB Highlights",
-  "published": "2026-06-18T23:42:28+00:00",
-  "channel": "MLB",
-  "league": "mlb",
-  "match": "MLB",
-  "tags": []
- },
- {
-  "youtubeId": "i46ZDPTU4kE",
-  "title": "BLUE JAYS vs. RED SOX Full Game Highlights (6/18/26) | MLB Highlights",
-  "published": "2026-06-18T23:37:38+00:00",
-  "channel": "MLB",
-  "league": "mlb",
-  "match": "MLB",
-  "tags": []
- },
- {
-  "youtubeId": "vCXzMw3Xynk",
-  "title": "Juan Soto CRUSHES a 1st-inning HOMER off the SECOND DECK! 🔥😱 | MLB Highlights",
-  "published": "2026-06-18T23:12:55+00:00",
-  "channel": "MLB",
-  "league": "mlb",
-  "match": "MLB",
-  "tags": []
- },
- {
-  "youtubeId": "Um1XUOdxNX4",
-  "title": "TWINS vs. RANGERS Full Game Highlights (6/18/26) | MLB Highlights",
-  "published": "2026-06-18T22:57:52+00:00",
-  "channel": "MLB",
-  "league": "mlb",
-  "match": "MLB",
-  "tags": []
- },
- {
-  "youtubeId": "C2xUv4Q3bVw",
-  "title": "German Power! 11 Brilliant Goals You Can't Miss",
-  "published": "2026-06-15T10:15:15+00:00",
-  "channel": "EPL",
-  "league": "epl",
-  "match": "EPL",
-  "tags": []
- },
- {
-  "youtubeId": "iqTaf3G-qHw",
-  "title": "Viktor Gyokeres LOVES Scoring Goals 🤩",
-  "published": "2026-06-15T10:01:32+00:00",
-  "channel": "EPL",
-  "league": "epl",
-  "match": "EPL",
-  "tags": []
- },
- {
-  "youtubeId": "CZkG_0c4v8s",
-  "title": "Do You Remember When Goalkeeper Tim Howard Scored THIS Goal? 🤯",
-  "published": "2026-06-13T15:39:20+00:00",
-  "channel": "EPL",
-  "league": "epl",
-  "match": "EPL",
-  "tags": []
+  "short": false,
+  "league": "baseball",
+  "match": "야구",
+  "tags": [],
+  "kor_src": false
  }
 ]
