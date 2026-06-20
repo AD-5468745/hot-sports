@@ -99,7 +99,7 @@
   @keyframes heartpop{0%{transform:scale(1)}35%{transform:scale(1.45)}60%{transform:scale(.9)}100%{transform:scale(1)}}
   #feed.fade{animation:feedfade .34s ease}
   @keyframes feedfade{from{opacity:.25}to{opacity:1}}
-  .catpill{flex:none;display:flex;align-items:center;gap:5px;border:0;background:linear-gradient(135deg,var(--green),var(--green-soft));color:#fff;font-size:13px;font-weight:800;padding:8px 14px;border-radius:999px;cursor:pointer;max-width:46vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 2px 8px rgba(31,168,92,.35);animation:catpulse 2.6s ease-in-out infinite}
+  .catpill{flex:none;display:flex;align-items:center;gap:5px;border:0;background:linear-gradient(135deg,var(--green),var(--green-soft));color:#fff;font-size:13px;font-weight:800;padding:8px 14px;border-radius:999px;cursor:pointer;max-width:46vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 2px 8px rgba(31,168,92,.3)}
   .catpill .caret{opacity:.95;font-size:10px;animation:caretbob 2.6s ease-in-out infinite}
   .catpill:active{transform:scale(.95)}
   @keyframes catpulse{0%,100%{box-shadow:0 2px 8px rgba(31,168,92,.35),0 0 0 0 rgba(55,201,140,0)}50%{box-shadow:0 2px 10px rgba(31,168,92,.5),0 0 0 6px rgba(55,201,140,.22)}}
@@ -110,7 +110,7 @@
   @keyframes sheetup{from{transform:translateY(100%)}to{transform:translateY(0)}}
   .sheet-grab{width:42px;height:4px;border-radius:2px;background:rgba(255,255,255,.25);margin:4px auto 14px}
   .sheet-title{font-size:15px;font-weight:800;margin:0 2px 14px;color:#fff}
-  .instpill{flex:none;display:flex;align-items:center;gap:4px;border:0;background:linear-gradient(135deg,var(--accent),#f0743f);color:#fff;font-size:13px;font-weight:800;padding:8px 12px;border-radius:999px;cursor:pointer;box-shadow:0 2px 8px rgba(226,88,34,.4);animation:instpulse 2.6s ease-in-out infinite}
+  .instpill{flex:none;display:flex;align-items:center;gap:4px;border:0;background:linear-gradient(135deg,var(--accent),#f0743f);color:#fff;font-size:13px;font-weight:800;padding:8px 12px;border-radius:999px;cursor:pointer;box-shadow:0 2px 8px rgba(226,88,34,.35)}
   .instpill svg{width:16px;height:16px} .instpill[hidden]{display:none} .instpill:active{transform:scale(.95)}
   @keyframes instpulse{0%,100%{box-shadow:0 2px 8px rgba(226,88,34,.35),0 0 0 0 rgba(226,88,34,0)}50%{box-shadow:0 2px 10px rgba(226,88,34,.55),0 0 0 6px rgba(226,88,34,.22)}}
   #installhelp{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.55);display:none;-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)}
@@ -127,8 +127,8 @@
   <div class="row">
     <div class="brand" role="button" tabindex="0" aria-label="홈으로"><svg viewBox="0 0 120 120"><g fill="none" stroke="#1FA85C" stroke-width="6" stroke-linecap="round"><line x1="60" y1="44" x2="42" y2="20"/><line x1="60" y1="44" x2="80" y2="22"/></g><circle cx="42" cy="18" r="5.5" fill="#1FA85C"/><circle cx="82" cy="20" r="5.5" fill="#1FA85C"/><rect x="16" y="44" width="88" height="62" rx="16" fill="#fff" stroke="#1FA85C" stroke-width="9"/><text x="60" y="90" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="46" fill="#1FA85C">LC</text></svg><b>HOT 스포츠 <i>쇼츠</i></b></div>
     <button class="catpill" id="catBtn" aria-haspopup="dialog" aria-label="종목 선택">전체 <span class="caret">▾</span></button>
-    <button class="iconbtn" id="searchBtn" title="검색" aria-label="검색"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg></button>
     <button class="instpill" id="installBtn" aria-label="홈 화면에 추가"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><polyline points="7 10 12 15 17 10"/><path d="M5 21h14"/></svg><span>설치</span></button>
+    <button class="iconbtn" id="searchBtn" title="검색" aria-label="검색"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg></button>
     <button class="iconbtn" id="reloadBtn" title="새로고침" aria-label="새로고침"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg></button>
   </div>
   <div id="searchRow" hidden><input id="searchInput" type="search" placeholder="팀·선수·키워드 검색 (예: 손흥민)" autocomplete="off" /></div>
