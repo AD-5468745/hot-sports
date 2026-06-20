@@ -56,6 +56,7 @@
   /* 단일 플레이어 */
   #player{position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;height:100vh;height:100dvh;z-index:5;background:#000;display:none}
   #player.show{display:block}
+  #player.fs{position:fixed;inset:0;max-width:none;width:100vw;height:100dvh;transform:none;z-index:90;background:#000}
   #player .pmount,#player .pmount iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
   #player .ptap{position:absolute;left:0;right:0;top:0;bottom:64px;z-index:2}
   #player .spin{position:absolute;inset:0;z-index:3;display:grid;place-items:center;pointer-events:none}
@@ -194,6 +195,8 @@ const LOGO='<svg viewBox="0 0 120 120"><g fill="none" stroke="#1FA85C" stroke-wi
 const SVG_HEART='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>';
 const SVG_SND='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
 const SVG_MUTE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="22" y1="9" x2="16" y2="15"/><line x1="16" y1="9" x2="22" y2="15"/></svg>';
+const SVG_FS='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>';
+const SVG_FSX='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
 const FEED=document.getElementById('feed'), CHIPS=document.getElementById('chips'), HOME=document.getElementById('home'), PLAYER=document.getElementById('player');
 const catBtn=document.getElementById('catBtn'), catSheet=document.getElementById('catsheet'), muteBtn=document.getElementById('muteBtn');
 const IOS=/iP(hone|od|ad)/.test(navigator.userAgent)||(navigator.maxTouchPoints>1&&/Macintosh/.test(navigator.userAgent));
@@ -208,28 +211,36 @@ function ytThumbFb(img){ const id=img.dataset.id, s=img.dataset.s||'max'; if(s==
 window.ytThumbFb=ytThumbFb;
 /* ===== 단일 플레이어 ===== */
 function ytCmd(func,args){ if(!yt)return; try{ yt.contentWindow.postMessage(JSON.stringify({event:'command',func:func,args:args||[]}),'*'); }catch(e){} }
-function ensurePlayer(){ if(yt)return;
+function ensurePlayer(id){ if(yt)return false;
   yt=document.createElement('iframe');
   yt.allow='autoplay; encrypted-media; picture-in-picture; fullscreen'; yt.setAttribute('allowfullscreen',''); yt.setAttribute('playsinline','1');
-  yt.src='https://www.youtube.com/embed/?enablejsapi=1&playsinline=1&controls=0&rel=0&modestbranding=1&iv_load_policy=3&origin='+encodeURIComponent(location.origin);
-  yt.addEventListener('load',()=>{ let n=0; const h=setInterval(()=>{ try{yt.contentWindow.postMessage(JSON.stringify({event:'listening',id:1,channel:'widget'}),'*');}catch(e){} if(++n>=10)clearInterval(h); },350); });
-  PLAYER.querySelector('.pmount').appendChild(yt); }
+  yt.src='https://www.youtube.com/embed/'+id+'?enablejsapi=1&autoplay=1&mute=1&playsinline=1&controls=0&rel=0&modestbranding=1&iv_load_policy=3&origin='+encodeURIComponent(location.origin);
+  yt.addEventListener('load',()=>{ let n=0; const hh=setInterval(()=>{ try{yt.contentWindow.postMessage(JSON.stringify({event:'listening',id:1,channel:'widget'}),'*');}catch(e){} if(++n>=12)clearInterval(hh); },350); });
+  PLAYER.querySelector('.pmount').appendChild(yt); return true; }
 function setSpin(on){ const s=PLAYER.querySelector('.spin'); if(s){ if(on)s.innerHTML=LOGO; s.hidden=!on; } }
 function setPfill(fr){ const fl=PLAYER.querySelector('.pfill'); if(fl)fl.style.width=Math.max(0,Math.min(100,fr*100))+'%'; }
 function updateMuteUI(){ muteBtn.innerHTML=soundOn?SVG_SND:SVG_MUTE; muteBtn.setAttribute('aria-label',soundOn?'음소거':'소리 켜기');
   const pill=PLAYER.querySelector('.sndpill'); if(pill){ if(soundOn){ pill.classList.remove('show'); } else { pill.innerHTML=SVG_SND+'소리 켜기'; pill.classList.add('show'); } } }
-function loadVideo(id){ ensurePlayer(); if(id===curId)return; curId=id; curDur=0; setPfill(0); setSpin(true);
-  ytCmd('loadVideoById',[id]);
+function loadVideo(id){ if(yt && id===curId)return; curDur=0; setPfill(0); setSpin(true);
+  if(ensurePlayer(id)){ curId=id; return; }
+  curId=id; ytCmd('loadVideoById',[id]);
   setTimeout(()=>{ if(soundOn){ ytCmd('unMute'); ytCmd('setVolume',[100]); } else { ytCmd('mute'); } ytCmd('playVideo'); },150); }
 function showPlayer(){ PLAYER.classList.add('show'); }
-function hidePlayer(){ PLAYER.classList.remove('show'); }
+function hidePlayer(){ if(!PLAYER.classList.contains('fs')) PLAYER.classList.remove('show'); }
 /* 탭 = 재생/정지 */
-PLAYER.querySelector('.ptap').addEventListener('click',()=>{ if(PLAYER.dataset.playing==='1'){ ytCmd('pauseVideo'); } else { ytCmd('playVideo'); } });
+const ptap=PLAYER.querySelector('.ptap');
+function togglePlay(){ if(PLAYER.dataset.playing==='1') ytCmd('pauseVideo'); else ytCmd('playVideo'); }
+let _ty=null,_tmoved=false,_tused=false;
+ptap.addEventListener('touchstart',e=>{ _ty=e.touches[0].clientY; _tmoved=false; },{passive:true});
+ptap.addEventListener('touchmove',e=>{ if(_ty!==null&&Math.abs(e.touches[0].clientY-_ty)>10)_tmoved=true; },{passive:true});
+ptap.addEventListener('touchend',e=>{ if(_ty===null)return; const dy=_ty-e.changedTouches[0].clientY; _ty=null; _tused=true; setTimeout(()=>_tused=false,500); if(Math.abs(dy)>45){ if(dy>0)goNext(); else goPrev(); } else if(!_tmoved){ togglePlay(); } },{passive:true});
+ptap.addEventListener('click',()=>{ if(_tused)return; togglePlay(); });
 /* 소리 버튼(상단) */
 muteBtn.addEventListener('click',()=>{ if(soundOn){ ytCmd('mute'); soundOn=false; } else { ytCmd('unMute'); ytCmd('setVolume',[100]); soundOn=true; } updateMuteUI(); });
 PLAYER.querySelector('.sndpill').addEventListener('click',()=>{ ytCmd('unMute'); ytCmd('setVolume',[100]); soundOn=true; updateMuteUI(); });
 /* 전체화면 */
-PLAYER.querySelector('.fsbtn').addEventListener('click',()=>{ const el=yt||PLAYER; const fn=el.requestFullscreen||el.webkitRequestFullscreen||el.webkitEnterFullscreen; if(fn){ try{ const r=fn.call(el); if(r&&r.catch)r.catch(()=>{}); }catch(_){} } });
+const fsbtn=PLAYER.querySelector('.fsbtn');
+fsbtn.addEventListener('click',()=>{ const on=PLAYER.classList.toggle('fs'); fsbtn.innerHTML=on?SVG_FSX:SVG_FS; if(on)showPlayer(); });
 /* 진행바 드래그 */
 function pbarSeek(clientX){ const pb=PLAYER.querySelector('.pbar'); const r=pb.getBoundingClientRect(); let fr=(clientX-r.left)/r.width; fr=Math.max(0,Math.min(1,fr)); setPfill(fr); if(curDur) ytCmd('seekTo',[fr*curDur,true]); }
 PLAYER.querySelector('.pbar').addEventListener('pointerdown',e=>{ scrubbing=true; PLAYER.querySelector('.pbar').classList.add('drag'); pbarSeek(e.clientX); },{passive:true});
