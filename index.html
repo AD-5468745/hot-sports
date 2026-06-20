@@ -234,10 +234,10 @@ function hidePlayer(){ if(!PLAYER.classList.contains('fs')) PLAYER.classList.rem
 /* 탭 = 재생/정지 */
 const ptap=PLAYER.querySelector('.ptap');
 function togglePlay(){ if(PLAYER.dataset.playing==='1') ytCmd('pauseVideo'); else ytCmd('playVideo'); }
-let _ty=null,_tmoved=false,_tused=false;
-ptap.addEventListener('touchstart',e=>{ _ty=e.touches[0].clientY; _tmoved=false; },{passive:true});
-ptap.addEventListener('touchmove',e=>{ if(_ty!==null&&Math.abs(e.touches[0].clientY-_ty)>10)_tmoved=true; },{passive:true});
-ptap.addEventListener('touchend',e=>{ if(_ty===null)return; const dy=_ty-e.changedTouches[0].clientY; _ty=null; _tused=true; setTimeout(()=>_tused=false,500); if(Math.abs(dy)>45){ if(dy>0)goNext(); else goPrev(); } else if(!_tmoved){ togglePlay(); } },{passive:true});
+let _ty=null,_lastY=0,_tmoved=false,_tused=false;
+ptap.addEventListener('touchstart',e=>{ _ty=e.touches[0].clientY; _lastY=_ty; _tmoved=false; },{passive:true});
+ptap.addEventListener('touchmove',e=>{ if(_ty===null)return; const y=e.touches[0].clientY; if(!_tmoved&&Math.abs(y-_ty)>6){ _tmoved=true; hidePlayer(); } if(_tmoved){ FEED.scrollTop += (_lastY-y); } _lastY=y; },{passive:true});
+ptap.addEventListener('touchend',()=>{ if(_ty===null)return; _ty=null; _tused=true; setTimeout(()=>_tused=false,400); if(_tmoved){ clearTimeout(scrollT); scrollT=setTimeout(settleLoad,160); } else { togglePlay(); } },{passive:true});
 ptap.addEventListener('click',()=>{ if(_tused)return; togglePlay(); });
 /* 소리 버튼(상단) */
 muteBtn.addEventListener('click',()=>{ if(soundOn){ ytCmd('mute'); soundOn=false; } else { ytCmd('unMute'); ytCmd('setVolume',[100]); soundOn=true; } updateMuteUI(); });
