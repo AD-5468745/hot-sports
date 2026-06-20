@@ -201,7 +201,7 @@ const FEED=document.getElementById('feed'), CHIPS=document.getElementById('chips
 const catBtn=document.getElementById('catBtn'), catSheet=document.getElementById('catsheet'), muteBtn=document.getElementById('muteBtn');
 const IOS=/iP(hone|od|ad)/.test(navigator.userAgent)||(navigator.maxTouchPoints>1&&/Macintosh/.test(navigator.userAgent));
 let ALL=[], list=[], activeFilter='all', searchQ='', activeSlide=null, scrubbing=false;
-let yt=null, curId=null, curDur=0, soundOn=false, loadT=null, scrollT=null;
+let yt=null, curId=null, curDur=0, soundOn=false, loadT=null, scrollT=null, posTimer=null, pos=0, posAt=0;
 let saved={}; try{ saved=JSON.parse(localStorage.getItem('hot_saved')||'{}'); }catch(e){}
 function isSaved(id){return !!saved[id];}
 function toggleSaved(id){ if(saved[id])delete saved[id]; else saved[id]=1; try{localStorage.setItem('hot_saved',JSON.stringify(saved));}catch(e){} }
@@ -219,9 +219,11 @@ function ensurePlayer(id){ if(yt)return false;
   PLAYER.querySelector('.pmount').appendChild(yt); return true; }
 function setSpin(on){ const s=PLAYER.querySelector('.spin'); if(s){ if(on)s.innerHTML=LOGO; s.hidden=!on; } }
 function setPfill(fr){ const fl=PLAYER.querySelector('.pfill'); if(fl)fl.style.width=Math.max(0,Math.min(100,fr*100))+'%'; }
+function startPos(){ stopPos(); posAt=Date.now(); posTimer=setInterval(()=>{ if(PLAYER.dataset.playing==='1'&&curDur>0){ pos+=(Date.now()-posAt)/1000; if(pos>curDur)pos=curDur; if(!scrubbing) setPfill(pos/curDur); } posAt=Date.now(); },250); }
+function stopPos(){ if(posTimer){clearInterval(posTimer);posTimer=null;} }
 function updateMuteUI(){ muteBtn.innerHTML=soundOn?SVG_SND:SVG_MUTE; muteBtn.setAttribute('aria-label',soundOn?'음소거':'소리 켜기');
   const pill=PLAYER.querySelector('.sndpill'); if(pill){ if(soundOn){ pill.classList.remove('show'); } else { pill.innerHTML=SVG_SND+'소리 켜기'; pill.classList.add('show'); } } }
-function loadVideo(id){ if(yt && id===curId)return; curDur=0; setPfill(0); setSpin(true);
+function loadVideo(id){ if(yt && id===curId)return; curDur=0; pos=0; setPfill(0); setSpin(true);
   if(ensurePlayer(id)){ curId=id; return; }
   curId=id; ytCmd('loadVideoById',[id]);
   setTimeout(()=>{ if(soundOn){ ytCmd('unMute'); ytCmd('setVolume',[100]); } else { ytCmd('mute'); } ytCmd('playVideo'); },150); }
@@ -242,19 +244,19 @@ PLAYER.querySelector('.sndpill').addEventListener('click',()=>{ ytCmd('unMute');
 const fsbtn=PLAYER.querySelector('.fsbtn');
 fsbtn.addEventListener('click',()=>{ const on=PLAYER.classList.toggle('fs'); fsbtn.innerHTML=on?SVG_FSX:SVG_FS; if(on)showPlayer(); });
 /* 진행바 드래그 */
-function pbarSeek(clientX){ const pb=PLAYER.querySelector('.pbar'); const r=pb.getBoundingClientRect(); let fr=(clientX-r.left)/r.width; fr=Math.max(0,Math.min(1,fr)); setPfill(fr); if(curDur) ytCmd('seekTo',[fr*curDur,true]); }
+function pbarSeek(clientX){ const pb=PLAYER.querySelector('.pbar'); const r=pb.getBoundingClientRect(); let fr=(clientX-r.left)/r.width; fr=Math.max(0,Math.min(1,fr)); setPfill(fr); if(curDur){ pos=fr*curDur; ytCmd('seekTo',[fr*curDur,true]); } }
 PLAYER.querySelector('.pbar').addEventListener('pointerdown',e=>{ scrubbing=true; PLAYER.querySelector('.pbar').classList.add('drag'); pbarSeek(e.clientX); },{passive:true});
 window.addEventListener('pointermove',e=>{ if(scrubbing) pbarSeek(e.clientX); },{passive:true});
 window.addEventListener('pointerup',()=>{ if(scrubbing){ scrubbing=false; PLAYER.querySelector('.pbar').classList.remove('drag'); } });
 /* 유튜브 이벤트 수신 */
 window.addEventListener('message',e=>{ if(typeof e.data!=='string'||e.origin.indexOf('youtube')<0)return; let d; try{d=JSON.parse(e.data);}catch(_){return;}
   const info=(d.event==='infoDelivery'&&d.info)?d.info:(d.event==='onStateChange'?{playerState:d.info}:null); if(!info)return;
-  if(typeof info.currentTime==='number'&&info.duration>0){ curDur=info.duration; if(!scrubbing) setPfill(info.currentTime/info.duration); }
+  if(typeof info.currentTime==='number'&&info.duration>0){ curDur=info.duration; pos=info.currentTime; posAt=Date.now(); if(!scrubbing) setPfill(pos/curDur); }
   const st=info.playerState;
-  if(st===1){ PLAYER.dataset.playing='1'; setSpin(false); }
+  if(st===1){ PLAYER.dataset.playing='1'; setSpin(false); startPos(); }
   else if(st===3){ setSpin(true); }
   else if(st===2){ PLAYER.dataset.playing='0'; }
-  else if(st===0){ PLAYER.dataset.playing='0'; goNext(); } });
+  else if(st===0){ PLAYER.dataset.playing='0'; pos=0; goNext(); } });
 /* ===== 피드(썸네일) ===== */
 function computeList(){ let a=ALL.filter(g=>g.youtubeId);
   if(activeFilter==='search'){ const q=(searchQ||'').trim().toLowerCase(); if(q) a=a.filter(g=>((g.title+' '+g.match+' '+g.channel).toLowerCase().includes(q))); }
