@@ -110,22 +110,31 @@
   @keyframes sheetup{from{transform:translateY(100%)}to{transform:translateY(0)}}
   .sheet-grab{width:42px;height:4px;border-radius:2px;background:rgba(255,255,255,.25);margin:4px auto 14px}
   .sheet-title{font-size:15px;font-weight:800;margin:0 2px 14px;color:#fff}
+  .instpill{flex:none;display:flex;align-items:center;gap:4px;border:0;background:linear-gradient(135deg,var(--accent),#f0743f);color:#fff;font-size:13px;font-weight:800;padding:8px 12px;border-radius:999px;cursor:pointer;box-shadow:0 2px 8px rgba(226,88,34,.4);animation:instpulse 2.6s ease-in-out infinite}
+  .instpill svg{width:16px;height:16px} .instpill[hidden]{display:none} .instpill:active{transform:scale(.95)}
+  @keyframes instpulse{0%,100%{box-shadow:0 2px 8px rgba(226,88,34,.35),0 0 0 0 rgba(226,88,34,0)}50%{box-shadow:0 2px 10px rgba(226,88,34,.55),0 0 0 6px rgba(226,88,34,.22)}}
+  #installhelp{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.55);display:none;-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)}
+  #installhelp.open{display:block}
+  .ihelp{margin:6px 2px 14px;padding-left:20px;color:#fff;font-size:14px;line-height:1.7}
+  .ihelp b{color:var(--green-soft)}
+  .ihelp-ok{display:block;width:100%;padding:13px;border:0;border-radius:12px;background:var(--green);color:#fff;font-size:15px;font-weight:800;cursor:pointer}
+  @media(max-width:480px){ .brand b{display:none} }
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
 <header id="bar">
   <div class="row">
-    <div class="brand" role="button" tabindex="0" aria-label="홈으로"><svg viewBox="0 0 120 120"><g fill="none" stroke="#1FA85C" stroke-width="6" stroke-linecap="round"><line x1="60" y1="44" x2="42" y2="20"/><line x1="60" y1="44" x2="80" y2="22"/></g><circle cx="42" cy="18" r="5.5" fill="#1FA85C"/><circle cx="82" cy="20" r="5.5" fill="#1FA85C"/><rect x="16" y="44" width="88" height="62" rx="16" fill="#fff" stroke="#1FA85C" stroke-width="9"/><g fill="none" stroke="#1FA85C" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"><path d="M32 60V90H54"/><path d="M86 60H62V90H86"/></g></svg><b>HOT 스포츠 <i>쇼츠</i></b></div>
+    <div class="brand" role="button" tabindex="0" aria-label="홈으로"><svg viewBox="0 0 120 120"><g fill="none" stroke="#1FA85C" stroke-width="6" stroke-linecap="round"><line x1="60" y1="44" x2="42" y2="20"/><line x1="60" y1="44" x2="80" y2="22"/></g><circle cx="42" cy="18" r="5.5" fill="#1FA85C"/><circle cx="82" cy="20" r="5.5" fill="#1FA85C"/><rect x="16" y="44" width="88" height="62" rx="16" fill="#fff" stroke="#1FA85C" stroke-width="9"/><text x="60" y="90" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="46" fill="#1FA85C">LC</text></svg><b>HOT 스포츠 <i>쇼츠</i></b></div>
     <button class="catpill" id="catBtn" aria-haspopup="dialog" aria-label="종목 선택">전체 <span class="caret">▾</span></button>
     <button class="iconbtn" id="searchBtn" title="검색" aria-label="검색"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg></button>
-    <button class="iconbtn" id="installBtn" hidden title="홈 화면에 추가" aria-label="홈 화면에 추가"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><polyline points="7 10 12 15 17 10"/><path d="M5 21h14"/></svg></button>
+    <button class="instpill" id="installBtn" aria-label="홈 화면에 추가"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><polyline points="7 10 12 15 17 10"/><path d="M5 21h14"/></svg><span>설치</span></button>
     <button class="iconbtn" id="reloadBtn" title="새로고침" aria-label="새로고침"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg></button>
   </div>
   <div id="searchRow" hidden><input id="searchInput" type="search" placeholder="팀·선수·키워드 검색 (예: 손흥민)" autocomplete="off" /></div>
 </header>
 <div id="home" hidden>
-  <div class="hm-hero"><div class="hm-logo"><svg viewBox="0 0 120 120"><g fill="none" stroke="#1FA85C" stroke-width="6" stroke-linecap="round"><line x1="60" y1="44" x2="42" y2="20"/><line x1="60" y1="44" x2="80" y2="22"/></g><circle cx="42" cy="18" r="5.5" fill="#1FA85C"/><circle cx="82" cy="20" r="5.5" fill="#1FA85C"/><rect x="16" y="44" width="88" height="62" rx="16" fill="#fff" stroke="#1FA85C" stroke-width="9"/><g fill="none" stroke="#1FA85C" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"><path d="M32 60V90H54"/><path d="M86 60H62V90H86"/></g></svg></div><h1>HOT 스포츠 <b>쇼츠</b></h1><p>매일 인기 하이라이트를 한 곳에서</p></div>
+  <div class="hm-hero"><div class="hm-logo"><svg viewBox="0 0 120 120"><g fill="none" stroke="#1FA85C" stroke-width="6" stroke-linecap="round"><line x1="60" y1="44" x2="42" y2="20"/><line x1="60" y1="44" x2="80" y2="22"/></g><circle cx="42" cy="18" r="5.5" fill="#1FA85C"/><circle cx="82" cy="20" r="5.5" fill="#1FA85C"/><rect x="16" y="44" width="88" height="62" rx="16" fill="#fff" stroke="#1FA85C" stroke-width="9"/><text x="60" y="90" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="46" fill="#1FA85C">LC</text></svg></div><h1>HOT 스포츠 <b>쇼츠</b></h1><p>매일 인기 하이라이트를 한 곳에서</p></div>
   <input id="homeSearch" type="search" placeholder="팀·선수·키워드 검색 (예: 손흥민)" autocomplete="off" />
   <button class="hm-cta" data-filter="all">▶ 전체 영상 보기</button>
   <div class="hm-sec" id="trendSec" hidden>🔥 지금 인기</div>
@@ -159,8 +168,9 @@
     <button class="chip" data-filter="esports" aria-pressed="false">🎮 LOL</button>
   </nav>
 </div></div>
+<div id="installhelp" aria-hidden="true"><div class="sheet-panel"><div class="sheet-grab"></div><div class="sheet-title">홈 화면에 추가</div><ol class="ihelp"><li>브라우저 <b>공유 버튼</b>(⬆️ 또는 ⋮)을 누르세요</li><li><b>'홈 화면에 추가'</b>를 선택하세요</li><li>완료! 홈 화면 아이콘으로 바로 실행돼요</li></ol><button class="ihelp-ok" id="ihelpOk">확인</button></div></div>
 <script>
-const LOGO='<svg viewBox="0 0 120 120"><g fill="none" stroke="#1FA85C" stroke-width="6" stroke-linecap="round"><line x1="60" y1="44" x2="42" y2="20"/><line x1="60" y1="44" x2="80" y2="22"/></g><circle cx="42" cy="18" r="5.5" fill="#1FA85C"/><circle cx="82" cy="20" r="5.5" fill="#1FA85C"/><rect x="16" y="44" width="88" height="62" rx="16" fill="#fff" stroke="#1FA85C" stroke-width="9"/><g fill="none" stroke="#1FA85C" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"><path d="M32 60V90H54"/><path d="M86 60H62V90H86"/></g></svg>';
+const LOGO='<svg viewBox="0 0 120 120"><g fill="none" stroke="#1FA85C" stroke-width="6" stroke-linecap="round"><line x1="60" y1="44" x2="42" y2="20"/><line x1="60" y1="44" x2="80" y2="22"/></g><circle cx="42" cy="18" r="5.5" fill="#1FA85C"/><circle cx="82" cy="20" r="5.5" fill="#1FA85C"/><rect x="16" y="44" width="88" height="62" rx="16" fill="#fff" stroke="#1FA85C" stroke-width="9"/><text x="60" y="90" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="46" fill="#1FA85C">LC</text></svg>';
 const SVG_HEART='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>';
 const SVG_SHARE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg>';
 const SVG_SND='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
@@ -273,8 +283,12 @@ document.addEventListener('keydown',e=>{ if(HOME.hidden===false)return; if(e.key
 /* 새로고침/설치 */
 document.getElementById('reloadBtn').addEventListener('click',()=>{ location.href=location.pathname+'?r='+Date.now(); });
 let deferred=null;
-window.addEventListener('beforeinstallprompt',e=>{ e.preventDefault(); deferred=e; document.getElementById('installBtn').hidden=false; });
-document.getElementById('installBtn').addEventListener('click',async()=>{ if(!deferred)return; deferred.prompt(); await deferred.userChoice; deferred=null; document.getElementById('installBtn').hidden=true; });
+window.addEventListener('beforeinstallprompt',e=>{ e.preventDefault(); deferred=e; });
+const _installBtn=document.getElementById('installBtn');
+if(matchMedia('(display-mode: standalone)').matches || navigator.standalone){ _installBtn.hidden=true; }
+_installBtn.addEventListener('click',async()=>{ if(deferred){ deferred.prompt(); await deferred.userChoice; deferred=null; } else { document.getElementById('installhelp').classList.add('open'); } });
+const _ih=document.getElementById('installhelp');
+_ih.addEventListener('click',e=>{ if(e.target===_ih||e.target.closest('.sheet-grab')||e.target.id==='ihelpOk') _ih.classList.remove('open'); });
 document.getElementById('errRetry').addEventListener('click',load);
 /* 로드 */
 async function load(){ document.getElementById('err').classList.remove('show');
