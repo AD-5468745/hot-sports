@@ -44,11 +44,11 @@
   .spin{position:absolute;inset:0;z-index:4;display:grid;place-items:center;pointer-events:none}
   .tapzone{position:absolute;inset:0;z-index:3;pointer-events:none}
   .slide.live .tapzone{pointer-events:auto}
-  .fsbtn{position:absolute;right:10px;bottom:26px;z-index:6;width:38px;height:38px;border-radius:50%;border:0;background:rgba(0,0,0,.5);color:#fff;cursor:pointer;display:grid;place-items:center;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
-  .pbar{position:absolute;left:0;right:0;bottom:0;height:18px;z-index:8;touch-action:none;cursor:pointer}
-  .pbar .ptrack{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.28)}
-  .pbar .pfill{position:absolute;left:0;bottom:0;height:3px;background:#fff;width:0}
-  .pbar.drag .ptrack,.pbar.drag .pfill{height:6px}
+  .fsbtn{position:absolute;right:10px;bottom:calc(env(safe-area-inset-bottom) + 28px);z-index:6;width:38px;height:38px;border-radius:50%;border:0;background:rgba(0,0,0,.5);color:#fff;cursor:pointer;display:grid;place-items:center;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+  .pbar{position:absolute;left:0;right:0;bottom:env(safe-area-inset-bottom);height:22px;z-index:8;touch-action:none;cursor:pointer}
+  .pbar .ptrack{position:absolute;left:0;right:0;bottom:0;height:5px;background:rgba(55,201,140,.35)}
+  .pbar .pfill{position:absolute;left:0;bottom:0;height:5px;background:#1FA85C;width:0;box-shadow:0 0 6px rgba(31,168,92,.8)}
+  .pbar.drag .ptrack,.pbar.drag .pfill{height:8px}
   .fsbtn svg{width:20px;height:20px}
   .stage.cssfs{position:fixed;top:50%;left:50%;width:100vh;height:100vw;max-width:none;margin:0;transform:translate(-50%,-50%) rotate(90deg);z-index:9999;background:#000}
   body.fs-on #feed{overflow:hidden}
@@ -246,14 +246,16 @@ function updateMuteIcon(){ if(muteBtn){ muteBtn.innerHTML=soundOn?SVG_SND:SVG_MU
 if(muteBtn){ updateMuteIcon(); muteBtn.addEventListener('click',()=>{ const ifr=activeSlide&&activeSlide.querySelector('.mount iframe'); if(soundOn){ if(ifr)ytCmd(ifr,'mute'); soundOn=false; } else { if(ifr){ytCmd(ifr,'unMute');ytCmd(ifr,'setVolume',[100]);} soundOn=true; } updateMuteIcon(); }); }
 function ytCmd(ifr,func,args){ try{ ifr.contentWindow.postMessage(JSON.stringify({event:'command',func:func,args:args||[]}),'*'); }catch(e){} }
 function play(slide, auto){ const id=slide.dataset.id, host=slide.querySelector('.mount'); if(!host||host.firstChild)return;
+  if(IOS) soundOn=false;
   const spin=slide.querySelector('.spin'); if(spin)spin.hidden=false;
   const ifr=document.createElement('iframe');
   ifr.allow='autoplay; encrypted-media; picture-in-picture; fullscreen'; ifr.setAttribute('allowfullscreen',''); ifr.setAttribute('playsinline','1');
   let src='https://www.youtube.com/embed/'+id+'?enablejsapi=1&playsinline=1&rel=0&controls=0&modestbranding=1&iv_load_policy=3&origin='+encodeURIComponent(location.origin);
   if(auto) src+='&autoplay=1&mute=1';   // PC·안드로이드: 무음 자동재생 / iOS: 자동재생 없이 유튜브 기본 플레이어(한 번 탭=소리)
   ifr.src=src;
-  ifr.addEventListener('load',()=>{ if(spin)spin.hidden=true; let _n=0; const _hs=setInterval(()=>{ try{ifr.contentWindow.postMessage(JSON.stringify({event:'listening',id:1,channel:'widget'}),'*');}catch(e){} if(++_n>=6)clearInterval(_hs); },450); if(auto&&soundOn){ setTimeout(()=>{ytCmd(ifr,'unMute');ytCmd(ifr,'setVolume',[100]);},450);} });
+  ifr.addEventListener('load',()=>{ if(spin)spin.hidden=true; let _n=0; const _hs=setInterval(()=>{ try{ifr.contentWindow.postMessage(JSON.stringify({event:'listening',id:1,channel:'widget'}),'*');}catch(e){} if(++_n>=6)clearInterval(_hs); },450); if(auto&&soundOn&&!IOS){ setTimeout(()=>{ytCmd(ifr,'unMute');ytCmd(ifr,'setVolume',[100]);},450);} });
   host.appendChild(ifr);
+  updateMuteIcon();
   }
 function teardown(slide){ slide.classList.remove('live'); slide.removeAttribute('data-playing'); const _st=slide.querySelector('.stage'); if(_st&&_st.classList.contains('cssfs')){ _st.classList.remove('cssfs'); document.body.classList.remove('fs-on'); } const h=slide.querySelector('.mount'); if(h){ const ifr=h.querySelector('iframe'); if(ifr){ try{ytCmd(ifr,'stopVideo');}catch(e){} try{ifr.src='about:blank';}catch(e){} } h.innerHTML=''; }
   const p=slide.querySelector('.sndpill'); if(p)p.hidden=true;
@@ -269,7 +271,7 @@ function setActive(slide){ if(slide===activeSlide)return; activeSlide=slide; cle
   activeTimer=setTimeout(()=>{ if(activeSlide===slide && !slide.querySelector('.mount').firstChild) play(slide, true); },180); }
 /* 피드 클릭 */
 FEED.addEventListener('click',e=>{
-  const fsb=e.target.closest('.fsbtn'); if(fsb){ const stg=fsb.closest('.stage'); if(IOS){ const on=stg.classList.toggle('cssfs'); document.body.classList.toggle('fs-on',on); } else { const fn=stg.requestFullscreen||stg.webkitRequestFullscreen; if(fn){try{fn.call(stg);}catch(_){}} } return; }
+  const fsb=e.target.closest('.fsbtn'); if(fsb){ const stg=fsb.closest('.stage'); const el=stg.querySelector('iframe')||stg; const fn=el.requestFullscreen||el.webkitRequestFullscreen||el.webkitEnterFullscreen; if(fn){ try{ const r=fn.call(el); if(r&&r.catch)r.catch(()=>{}); }catch(_){} } return; }
   const tz=e.target.closest('.tapzone'); if(tz){ const s=tz.closest('.slide'); const ifr=s.querySelector('.mount iframe'); if(ifr){ if(s.dataset.playing==='1'){ytCmd(ifr,'pauseVideo'); s.dataset.playing='0';}else{ytCmd(ifr,'playVideo'); s.dataset.playing='1';} } return; }
   const lk=e.target.closest('.act.like'); if(lk){ const id=lk.dataset.id; toggleSaved(id); const on=isSaved(id); lk.classList.toggle('on',on); if(on){ lk.classList.remove('pop'); void lk.offsetWidth; lk.classList.add('pop'); } return; }
   const tt=e.target.closest('.cap .ttl'); if(tt){ tt.classList.toggle('expanded'); } });
