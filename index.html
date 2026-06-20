@@ -44,7 +44,11 @@
   .spin{position:absolute;inset:0;z-index:4;display:grid;place-items:center;pointer-events:none}
   .tapzone{position:absolute;inset:0;z-index:3;pointer-events:none}
   .slide.live .tapzone{pointer-events:auto}
-  .fsbtn{position:absolute;right:10px;bottom:14px;z-index:6;width:38px;height:38px;border-radius:50%;border:0;background:rgba(0,0,0,.5);color:#fff;cursor:pointer;display:grid;place-items:center;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+  .fsbtn{position:absolute;right:10px;bottom:26px;z-index:6;width:38px;height:38px;border-radius:50%;border:0;background:rgba(0,0,0,.5);color:#fff;cursor:pointer;display:grid;place-items:center;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+  .pbar{position:absolute;left:0;right:0;bottom:0;height:18px;z-index:8;touch-action:none;cursor:pointer}
+  .pbar .ptrack{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.28)}
+  .pbar .pfill{position:absolute;left:0;bottom:0;height:3px;background:#fff;width:0}
+  .pbar.drag .ptrack,.pbar.drag .pfill{height:6px}
   .fsbtn svg{width:20px;height:20px}
   .stage.cssfs{position:fixed;top:50%;left:50%;width:100vh;height:100vw;max-width:none;margin:0;transform:translate(-50%,-50%) rotate(90deg);z-index:9999;background:#000}
   body.fs-on #feed{overflow:hidden}
@@ -58,7 +62,7 @@
   @keyframes sndblink{0%,100%{transform:translateX(-50%) scale(1);box-shadow:0 3px 14px rgba(226,88,34,.5)}50%{transform:translateX(-50%) scale(1.07);box-shadow:0 3px 22px rgba(226,88,34,.95)}}
   .sndpill[hidden]{display:none} .sndpill svg{width:16px;height:16px}
   .sndpill.on{background:rgba(0,0,0,.5);box-shadow:none;font-weight:700;animation:none}
-  .cap{position:absolute;left:0;right:64px;bottom:0;z-index:7;pointer-events:none;padding:18px 14px calc(env(safe-area-inset-bottom) + 16px);background:linear-gradient(0deg,rgba(0,0,0,.82),rgba(0,0,0,.3) 60%,transparent)}
+  .cap{position:absolute;left:0;right:64px;bottom:0;z-index:7;pointer-events:none;padding:18px 14px calc(env(safe-area-inset-bottom) + 28px);background:linear-gradient(0deg,rgba(0,0,0,.85),rgba(0,0,0,.35) 65%,transparent)}
   .cap .lg{display:inline-block;background:rgba(31,168,92,.92);color:#fff;font-size:11px;font-weight:800;padding:3px 8px;border-radius:6px;margin-bottom:7px}
   .cap .vw{display:inline-block;margin-left:6px;font-size:11px;font-weight:700;color:#fff;background:rgba(0,0,0,.45);padding:3px 8px;border-radius:6px}
   .cap .ttl{font-size:14px;line-height:1.4;font-weight:600;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;pointer-events:auto;cursor:pointer}
@@ -201,7 +205,7 @@ const FEED=document.getElementById('feed'), CHIPS=document.getElementById('chips
 const catBtn=document.getElementById('catBtn'), catSheet=document.getElementById('catsheet');
 function setCatLabel(filter){ let t='전체'; if(filter==='search'){t='🔍 검색';} else { const c=[...CHIPS.querySelectorAll('.chip')].find(x=>x.dataset.filter===filter); if(c)t=c.textContent.trim(); } catBtn.innerHTML=esc(t)+' <span class="caret">▾</span>'; }
 const IOS=/iP(hone|od|ad)/.test(navigator.userAgent)||(navigator.maxTouchPoints>1&&/Macintosh/.test(navigator.userAgent));
-let ALL=[], list=[], activeFilter='all', searchQ='', activeSlide=null, activeTimer=null;
+let ALL=[], list=[], activeFilter='all', searchQ='', activeSlide=null, activeTimer=null, scrubbing=null;
 let saved={}; try{ saved=JSON.parse(localStorage.getItem('hot_saved')||'{}'); }catch(e){}
 function isSaved(id){return !!saved[id];}
 function toggleSaved(id){ if(saved[id])delete saved[id]; else saved[id]=1; try{localStorage.setItem('hot_saved',JSON.stringify(saved));}catch(e){} }
@@ -221,7 +225,7 @@ function slideHTML(g){ const id=g.youtubeId, vw=g.views?('<span class="vw">조�
     + '<div class="bg"></div>'
     + '<div class="stage"><div class="mount"></div><div class="tapzone"></div><div class="spin" hidden>'+LOGO+'</div>'
     +   '<img class="thumb" loading="lazy" data-id="'+id+'" src="https://i.ytimg.com/vi/'+id+'/maxresdefault.jpg" onerror="ytThumbFb(this)" alt="">'
-    +   '<button class="fsbtn" aria-label="전체화면">'+SVG_FS+'</button></div>'
+    +   '<div class="pbar"><div class="ptrack"></div><div class="pfill"></div></div><button class="fsbtn" aria-label="전체화면">'+SVG_FS+'</button></div>'
     + '<div class="acts"><div class="actlogo">'+LOGO+'</div><button class="act like'+(isSaved(id)?' on':'')+'" data-id="'+id+'" aria-label="관심 저장">'+SVG_HEART+'<span class="cnt">관심</span></button></div>'
     + '<div class="cap"><span class="lg">'+esc(g.match)+'</span>'+vw+'<div class="ttl">'+esc(g.title)+'</div><span class="ch">'+esc(g.channel)+'</span></div>'
     + '</section>'; }
@@ -245,7 +249,7 @@ function play(slide, auto){ const id=slide.dataset.id, host=slide.querySelector(
   const spin=slide.querySelector('.spin'); if(spin)spin.hidden=false;
   const ifr=document.createElement('iframe');
   ifr.allow='autoplay; encrypted-media; picture-in-picture; fullscreen'; ifr.setAttribute('allowfullscreen',''); ifr.setAttribute('playsinline','1');
-  let src='https://www.youtube.com/embed/'+id+'?enablejsapi=1&playsinline=1&rel=0&modestbranding=1&origin='+encodeURIComponent(location.origin);
+  let src='https://www.youtube.com/embed/'+id+'?enablejsapi=1&playsinline=1&rel=0&controls=0&modestbranding=1&iv_load_policy=3&origin='+encodeURIComponent(location.origin);
   if(auto) src+='&autoplay=1&mute=1';   // PC·안드로이드: 무음 자동재생 / iOS: 자동재생 없이 유튜브 기본 플레이어(한 번 탭=소리)
   ifr.src=src;
   ifr.addEventListener('load',()=>{ if(spin)spin.hidden=true; let _n=0; const _hs=setInterval(()=>{ try{ifr.contentWindow.postMessage(JSON.stringify({event:'listening',id:1,channel:'widget'}),'*');}catch(e){} if(++_n>=6)clearInterval(_hs); },450); if(auto&&soundOn){ setTimeout(()=>{ytCmd(ifr,'unMute');ytCmd(ifr,'setVolume',[100]);},450);} });
@@ -262,7 +266,7 @@ const io=new IntersectionObserver(es=>{ es.forEach(e=>{
   }); },{root:FEED,threshold:[0,0.5,0.6,1]});
 function setActive(slide){ if(slide===activeSlide)return; activeSlide=slide; clearTimeout(activeTimer);
   FEED.querySelectorAll('.slide').forEach(s=>{ if(s!==slide){ const m=s.querySelector('.mount'); if(m&&m.firstChild) teardown(s); } });
-  activeTimer=setTimeout(()=>{ if(activeSlide===slide && !slide.querySelector('.mount').firstChild) play(slide, !IOS); },180); }
+  activeTimer=setTimeout(()=>{ if(activeSlide===slide && !slide.querySelector('.mount').firstChild) play(slide, true); },180); }
 /* 피드 클릭 */
 FEED.addEventListener('click',e=>{
   const fsb=e.target.closest('.fsbtn'); if(fsb){ const stg=fsb.closest('.stage'); if(IOS){ const on=stg.classList.toggle('cssfs'); document.body.classList.toggle('fs-on',on); } else { const fn=stg.requestFullscreen||stg.webkitRequestFullscreen; if(fn){try{fn.call(stg);}catch(_){}} } return; }
@@ -301,7 +305,12 @@ function buildTrending(){ const top=[...ALL].filter(g=>g.youtubeId).sort((a,b)=>
   el.hidden=false; document.getElementById('trendSec').hidden=false; }
 /* 이동/키보드 */
 function goNext(){ FEED.scrollBy({top:FEED.clientHeight,behavior:'smooth'}); }
-window.addEventListener('message',e=>{ if(typeof e.data!=='string'||e.origin.indexOf('youtube')<0)return; let d; try{d=JSON.parse(e.data);}catch(_){return;} let st; if(d.event==='onStateChange')st=d.info; else if(d.event==='infoDelivery'&&d.info&&d.info.playerState!==undefined)st=d.info.playerState; if(st===undefined||st===null)return; const ifr=[...document.querySelectorAll('.slide .mount iframe')].find(x=>x.contentWindow===e.source); if(!ifr)return; const s=ifr.closest('.slide'); if(!s)return; if(st===0){ s.dataset.playing='0'; if(s===activeSlide) goNext(); } else if(st===1){ s.classList.add('live'); s.dataset.playing='1'; if(IOS){ soundOn=true; updateMuteIcon(); } } else if(st===2){ s.dataset.playing='0'; } });
+window.addEventListener('message',e=>{ if(typeof e.data!=='string'||e.origin.indexOf('youtube')<0)return; let d; try{d=JSON.parse(e.data);}catch(_){return;} const info=(d.event==='infoDelivery'&&d.info)?d.info:(d.event==='onStateChange'?{playerState:d.info}:null); if(!info)return; const ifr=[...document.querySelectorAll('.slide .mount iframe')].find(x=>x.contentWindow===e.source); if(!ifr)return; const s=ifr.closest('.slide'); if(!s)return; if(typeof info.currentTime==='number'&&info.duration>0){ s.dataset.dur=info.duration; if(s!==scrubbing){ const fl=s.querySelector('.pfill'); if(fl)fl.style.width=Math.min(100,(info.currentTime/info.duration)*100)+'%'; } } const st=info.playerState; if(st===0){ s.dataset.playing='0'; if(s===activeSlide) goNext(); } else if(st===1){ s.classList.add('live'); s.dataset.playing='1'; } else if(st===2){ s.dataset.playing='0'; } });
+function pbarSeek(slide,clientX){ const pb=slide.querySelector('.pbar'); if(!pb)return; const r=pb.getBoundingClientRect(); let fr=(clientX-r.left)/r.width; fr=Math.max(0,Math.min(1,fr)); const fl=slide.querySelector('.pfill'); if(fl)fl.style.width=(fr*100)+'%'; const dur=parseFloat(slide.dataset.dur)||0; if(dur){ const ifr=slide.querySelector('.mount iframe'); if(ifr)ytCmd(ifr,'seekTo',[fr*dur,true]); } }
+FEED.addEventListener('pointerdown',e=>{ const pb=e.target.closest('.pbar'); if(pb){ scrubbing=pb.closest('.slide'); pb.classList.add('drag'); pbarSeek(scrubbing,e.clientX); } },{passive:true});
+FEED.addEventListener('pointermove',e=>{ if(scrubbing) pbarSeek(scrubbing,e.clientX); },{passive:true});
+function endScrub(){ if(scrubbing){ const pb=scrubbing.querySelector('.pbar'); if(pb)pb.classList.remove('drag'); scrubbing=null; } }
+window.addEventListener('pointerup',endScrub); window.addEventListener('pointercancel',endScrub);
 
 function goPrev(){ FEED.scrollBy({top:-FEED.clientHeight,behavior:'smooth'}); }
 document.getElementById('navUp').addEventListener('click',goPrev);
