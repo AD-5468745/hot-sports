@@ -13,7 +13,7 @@ from datetime import datetime, timezone
 # ── 통과 단어(하나는 있어야 통과) / 제외 단어(있으면 탈락) ──
 GOOD_KO = ["하이라이트","골","골모음","골 모음","골장면","골 장면","득점","멀티골","원더골",
            "홈런","끝내기","만루","역전","결승골","결승","명장면","베스트","슈퍼플레이","호수비",
-           "덩크","버저비터","버저","스파이크","블로킹","mvp","세리머니","리액션","반응","오열","눈물","분노","역대급","움짤"]
+           "덩크","버저비터","버저","스파이크","블로킹","mvp","세리머니","리액션","반응","오열","눈물","분노","역대급","움짤","치어리더"]
 GOOD_EN = ["goal","goals","highlight","highlights","home run","homer","walk-off","walkoff",
            "top plays","top 10","top 5","game winner","buzzer","full highlights","best plays",
            "wondergoal","game recap","condensed game"]
