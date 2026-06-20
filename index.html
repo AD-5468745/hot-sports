@@ -175,17 +175,19 @@ function buildFeed(){ FEED.querySelectorAll('.mount').forEach(m=>m.innerHTML='')
   if(list.length){ const f0=FEED.querySelector('.slide'); if(f0) setActive(f0); }   // 초기 슬라이드 자동재생 보장(IO 첫콜백 비율0 이슈 보완)
   const et=document.getElementById('endTop'); if(et)et.onclick=()=>FEED.scrollTo({top:0,behavior:'smooth'});
   const eh=document.getElementById('endHome'); if(eh)eh.onclick=showHome; }
-/* 재생 (라이트 임베드: API 없음) */
-function play(slide, muted){ const id=slide.dataset.id, host=slide.querySelector('.mount'); if(!host)return;
+/* 재생 (라이트 임베드: 항상 무음 자동재생 → 어디서나 단일 탭 재생. 소리는 postMessage로 켬) */
+let soundOn=false;
+function ytCmd(ifr,func,args){ try{ ifr.contentWindow.postMessage(JSON.stringify({event:'command',func:func,args:args||[]}),'*'); }catch(e){} }
+function play(slide){ const id=slide.dataset.id, host=slide.querySelector('.mount'); if(!host)return;
   host.innerHTML='';
   const spin=slide.querySelector('.spin'); if(spin)spin.hidden=false;
   const ifr=document.createElement('iframe');
   ifr.allow='autoplay; encrypted-media; picture-in-picture; fullscreen'; ifr.setAttribute('allowfullscreen',''); ifr.setAttribute('playsinline','1');
-  ifr.src='https://www.youtube.com/embed/'+id+'?autoplay=1&playsinline=1&rel=0&modestbranding=1'+(muted?'&mute=1':'');
-  ifr.addEventListener('load',()=>{ if(spin)spin.hidden=true; });
+  ifr.src='https://www.youtube.com/embed/'+id+'?enablejsapi=1&autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1&origin='+encodeURIComponent(location.origin);
+  ifr.addEventListener('load',()=>{ if(spin)spin.hidden=true; if(soundOn){ setTimeout(()=>{ytCmd(ifr,'unMute');ytCmd(ifr,'setVolume',[100]);},350);} });
   host.appendChild(ifr);
   slide.querySelector('.cue').hidden=true;
-  const pill=slide.querySelector('.sndpill'); if(pill)pill.hidden=!muted; }
+  const pill=slide.querySelector('.sndpill'); if(pill)pill.hidden=soundOn; }
 function teardown(slide){ const h=slide.querySelector('.mount'); if(h)h.innerHTML='';
   const c=slide.querySelector('.cue'); if(c)c.hidden=false;
   const p=slide.querySelector('.sndpill'); if(p)p.hidden=true;
@@ -197,11 +199,11 @@ const io=new IntersectionObserver(es=>{ es.forEach(e=>{
     else if(!e.isIntersecting){ teardown(e.target); }
   }); },{root:FEED,threshold:[0,0.6,1]});
 function setActive(slide){ if(slide===activeSlide)return; activeSlide=slide; clearTimeout(activeTimer);
-  if(!IOS){ activeTimer=setTimeout(()=>{ if(activeSlide===slide && !slide.querySelector('.mount').firstChild) play(slide,true); },180); } }
+  if(!IOS){ activeTimer=setTimeout(()=>{ if(activeSlide===slide && !slide.querySelector('.mount').firstChild) play(slide); },180); } }
 /* 피드 클릭 */
 FEED.addEventListener('click',e=>{
-  const pill=e.target.closest('.sndpill'); if(pill){ play(pill.closest('.slide'),false); return; }
-  const cue=e.target.closest('.cue'); if(cue){ play(cue.closest('.slide'),false); return; }
+  const pill=e.target.closest('.sndpill'); if(pill){ const sp=pill.closest('.slide'); const ifr=sp.querySelector('.mount iframe'); soundOn=true; if(ifr){ ytCmd(ifr,'unMute'); ytCmd(ifr,'setVolume',[100]); } else { play(sp); } pill.hidden=true; return; }
+  const cue=e.target.closest('.cue'); if(cue){ play(cue.closest('.slide')); return; }
   const lk=e.target.closest('.act.like'); if(lk){ const id=lk.dataset.id; toggleSaved(id); lk.classList.toggle('on',isSaved(id)); return; }
   const sh=e.target.closest('.act.share'); if(sh){ shareVideo(sh.dataset.id, sh.dataset.title); return; }
   const tt=e.target.closest('.cap .ttl'); if(tt){ tt.classList.toggle('expanded'); } });
