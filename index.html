@@ -43,12 +43,14 @@
   /* 단일 플레이어 (피드 뒤) */
   #player{position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;height:100vh;height:100dvh;z-index:1;background:#000}
   #player .pmount,#player .pmount iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  #player .ptap{position:absolute;inset:0;z-index:3;pointer-events:none}
+  #player.fs .ptap{pointer-events:auto}
   #player .spin{position:absolute;inset:0;z-index:2;display:grid;place-items:center;pointer-events:none}
   #player .spin svg{width:58px;height:58px;animation:logopulse 1.1s ease-in-out infinite;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5))}
   #player .spin[hidden]{display:none}
   @keyframes logopulse{0%,100%{transform:scale(.82);opacity:.55}50%{transform:scale(1.06);opacity:1}}
   #player.fs{position:fixed;inset:0;max-width:none;width:100vw;height:100dvh;transform:none;z-index:95;background:#000}
-  .fsx{position:absolute;top:calc(env(safe-area-inset-top) + 12px);right:14px;z-index:4;width:40px;height:40px;border-radius:50%;border:0;background:rgba(0,0,0,.55);color:#fff;cursor:pointer;display:none;place-items:center}
+  .fsx{position:absolute;top:calc(env(safe-area-inset-top) + 12px);right:14px;z-index:5;width:40px;height:40px;border-radius:50%;border:0;background:rgba(0,0,0,.55);color:#fff;cursor:pointer;display:none;place-items:center}
   #player.fs .fsx{display:grid} .fsx svg{width:22px;height:22px}
   /* 컨트롤 오버레이 (최상단) */
   #ctrl{position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;height:100vh;height:100dvh;z-index:20;pointer-events:none;display:none}
@@ -137,7 +139,7 @@
 </style>
 </head>
 <body>
-<div id="player"><div class="pmount"></div><div class="spin" hidden></div><button class="fsx" aria-label="전체화면 해제"></button></div>
+<div id="player"><div class="pmount"></div><div class="ptap"></div><div class="spin" hidden></div><button class="fsx" aria-label="전체화면 해제"></button></div>
 <header id="bar">
   <div class="row">
     <div class="brand" role="button" tabindex="0" aria-label="홈으로"><svg viewBox="0 0 120 120"><g fill="none" stroke="#1FA85C" stroke-width="6" stroke-linecap="round"><line x1="60" y1="44" x2="42" y2="20"/><line x1="60" y1="44" x2="80" y2="22"/></g><circle cx="42" cy="18" r="5.5" fill="#1FA85C"/><circle cx="82" cy="20" r="5.5" fill="#1FA85C"/><rect x="16" y="44" width="88" height="62" rx="16" fill="#fff" stroke="#1FA85C" stroke-width="9"/><text x="60" y="90" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="46" fill="#1FA85C">LC</text></svg><b>HOT 스포츠 <i>쇼츠</i></b></div>
@@ -228,6 +230,7 @@ function loadVideo(id){ if(yt && id===curId)return; curDur=0; pos=0; setPfill(0)
   curId=id; ytCmd('loadVideoById',[id]);
   setTimeout(()=>{ if(soundOn){ ytCmd('unMute'); ytCmd('setVolume',[100]); } else { ytCmd('mute'); } ytCmd('playVideo'); },150); }
 function togglePlay(){ if(PLAYER.dataset.playing==='1') ytCmd('pauseVideo'); else ytCmd('playVideo'); }
+function step(dir){ const slides=[...FEED.querySelectorAll('.slide')]; let idx=slides.indexOf(activeSec); if(idx<0)idx=0; const n=idx+dir; if(n<0||n>=slides.length)return; const s=slides[n]; activeSec=s; try{s.scrollIntoView();}catch(e){} FEED.querySelectorAll('.slide.live').forEach(x=>{if(x!==s)x.classList.remove('live');}); s.classList.add('live'); CTRL.classList.add('show'); updateOverlay(s.dataset.id); loadVideo(s.dataset.id); }
 /* 소리 */
 function updateMuteUI(){ muteBtn.innerHTML=soundOn?SVG_SND:SVG_MUTE; muteBtn.setAttribute('aria-label',soundOn?'음소거':'소리 켜기');
   const pill=CTRL.querySelector('.sndpill'); if(pill){ if(soundOn)pill.classList.remove('show'); else { pill.innerHTML=SVG_SND+'소리 켜기'; pill.classList.add('show'); } } }
@@ -245,19 +248,24 @@ _like.addEventListener('click',()=>{ const id=_like.dataset.id; if(!id)return; t
 CTRL.querySelector('.cap').addEventListener('click',e=>{ const tt=e.target.closest('.ttl'); if(tt)tt.classList.toggle('expanded'); });
 /* 전체화면(자체) */
 const fsbtn=CTRL.querySelector('.fsbtn'); fsbtn.innerHTML=SVG_FS;
-fsbtn.addEventListener('click',()=>{ PLAYER.classList.add('fs'); });
+function enterFS(){ PLAYER.classList.add('fs'); const el=PLAYER; const rq=el.requestFullscreen||el.webkitRequestFullscreen||el.webkitEnterFullscreen; if(rq){ try{ const p=rq.call(el); if(p&&p.catch)p.catch(()=>{}); }catch(e){} } }
+function exitFS(){ try{ if(document.fullscreenElement||document.webkitFullscreenElement){ (document.exitFullscreen||document.webkitExitFullscreen).call(document); } }catch(e){} PLAYER.classList.remove('fs'); }
+fsbtn.addEventListener('click',enterFS);
 const fsx=PLAYER.querySelector('.fsx'); fsx.innerHTML=SVG_FSX;
-fsx.addEventListener('click',()=>{ PLAYER.classList.remove('fs'); });
+fsx.addEventListener('click',exitFS);
+document.addEventListener('fullscreenchange',()=>{ if(!document.fullscreenElement) PLAYER.classList.remove('fs'); });
+document.addEventListener('webkitfullscreenchange',()=>{ if(!document.webkitFullscreenElement) PLAYER.classList.remove('fs'); });
 /* 진행바 드래그 */
 function pbarSeek(clientX){ const pb=CTRL.querySelector('.pbar'); const r=pb.getBoundingClientRect(); let fr=(clientX-r.left)/r.width; fr=Math.max(0,Math.min(1,fr)); setPfill(fr); if(curDur){ pos=fr*curDur; ytCmd('seekTo',[fr*curDur,true]); } }
 CTRL.querySelector('.pbar').addEventListener('pointerdown',e=>{ scrubbing=true; CTRL.querySelector('.pbar').classList.add('drag'); pbarSeek(e.clientX); },{passive:true});
 window.addEventListener('pointermove',e=>{ if(scrubbing) pbarSeek(e.clientX); },{passive:true});
 window.addEventListener('pointerup',()=>{ if(scrubbing){ scrubbing=false; CTRL.querySelector('.pbar').classList.remove('drag'); } });
 /* 전체화면 스와이프(플레이어가 위로 올라온 fs에서만 터치 도달) */
-let _gy=null,_gmoved=false;
-PLAYER.addEventListener('touchstart',e=>{ _gy=e.touches[0].clientY; _gmoved=false; },{passive:true});
-PLAYER.addEventListener('touchmove',e=>{ if(_gy!==null&&Math.abs(e.touches[0].clientY-_gy)>10)_gmoved=true; },{passive:true});
-PLAYER.addEventListener('touchend',e=>{ if(_gy===null)return; const dy=_gy-e.changedTouches[0].clientY; _gy=null; if(Math.abs(dy)>45){ if(dy>0)goNext(); else goPrev(); } else if(!_gmoved){ togglePlay(); } },{passive:true});
+const PTAP=PLAYER.querySelector('.ptap'); let _gy=null,_gmoved=false;
+PTAP.addEventListener('touchstart',e=>{ _gy=e.touches[0].clientY; _gmoved=false; },{passive:true});
+PTAP.addEventListener('touchmove',e=>{ if(_gy!==null&&Math.abs(e.touches[0].clientY-_gy)>10)_gmoved=true; },{passive:true});
+PTAP.addEventListener('touchend',e=>{ if(_gy===null)return; const dy=_gy-e.changedTouches[0].clientY; _gy=null; if(Math.abs(dy)>45){ step(dy>0?1:-1); } else if(!_gmoved){ togglePlay(); } },{passive:true});
+PTAP.addEventListener('click',()=>{ if(PLAYER.classList.contains('fs')) togglePlay(); });
 /* 유튜브 이벤트 */
 window.addEventListener('message',e=>{ if(typeof e.data!=='string'||e.origin.indexOf('youtube')<0)return; let d; try{d=JSON.parse(e.data);}catch(_){return;}
   const info=(d.event==='infoDelivery'&&d.info)?d.info:(d.event==='onStateChange'?{playerState:d.info}:null); if(!info)return;
