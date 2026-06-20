@@ -160,8 +160,7 @@ function slideHTML(g){ const id=g.youtubeId, vw=g.views?('<span class="vw">조�
     + '<div class="stage"><div class="mount"></div><div class="spin" hidden></div>'
     +   '<img class="thumb" loading="lazy" data-id="'+id+'" src="https://i.ytimg.com/vi/'+id+'/maxresdefault.jpg" onerror="ytThumbFb(this)" alt="">'
     +   '<button class="sndpill" hidden>'+SVG_SND+'소리 켜기</button><div class="wm">'+LOGO+'</div></div>'
-    + '<div class="acts"><button class="act like'+(isSaved(id)?' on':'')+'" data-id="'+id+'" aria-label="관심 저장">'+SVG_HEART+'<span class="cnt">관심</span></button>'
-    +   '<button class="act share" data-id="'+id+'" data-title="'+esc(g.title)+'" aria-label="공유">'+SVG_SHARE+'<span class="cnt">공유</span></button></div>'
+    + '<div class="acts"><button class="act like'+(isSaved(id)?' on':'')+'" data-id="'+id+'" aria-label="관심 저장">'+SVG_HEART+'<span class="cnt">관심</span></button></div>'
     + '<div class="cap"><span class="lg">'+esc(g.match)+'</span>'+vw+'<div class="ttl">'+esc(g.title)+'</div><span class="ch">'+esc(g.channel)+'</span></div>'
     + '</section>'; }
 function endHTML(){ return '<section class="endcard"><div>'+LOGO+'</div><b>여기까지 다 보셨어요</b><p>처음부터 다시 보거나 다른 종목을 골라보세요</p><div><button class="eb pri" id="endTop">맨 위로</button><button class="eb" id="endHome">다른 종목 보기</button></div></section>'; }
@@ -200,7 +199,6 @@ function setActive(slide){ if(slide===activeSlide)return; activeSlide=slide; cle
 FEED.addEventListener('click',e=>{
   const pill=e.target.closest('.sndpill'); if(pill){ const sp=pill.closest('.slide'); const ifr=sp.querySelector('.mount iframe'); soundOn=true; if(ifr){ ytCmd(ifr,'unMute'); ytCmd(ifr,'setVolume',[100]); } else { play(sp,true); } pill.hidden=true; return; }
   const lk=e.target.closest('.act.like'); if(lk){ const id=lk.dataset.id; toggleSaved(id); lk.classList.toggle('on',isSaved(id)); return; }
-  const sh=e.target.closest('.act.share'); if(sh){ shareVideo(sh.dataset.id, sh.dataset.title); return; }
   const tt=e.target.closest('.cap .ttl'); if(tt){ tt.classList.toggle('expanded'); } });
 function shareVideo(id,title){ const url='https://youtu.be/'+id;
   if(navigator.share){ navigator.share({title:title||'스포츠 쇼츠',url}).catch(()=>{}); }
