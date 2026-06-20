@@ -56,7 +56,7 @@
   /* 단일 플레이어 */
   #player{position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;height:100vh;height:100dvh;z-index:5;background:#000;display:none}
   #player.show{display:block}
-  #player.fs{position:fixed;inset:0;max-width:none;width:100vw;height:100dvh;transform:none;z-index:90;background:#000}
+  #player.fs{position:fixed;inset:0;max-width:none;width:100vw;height:100dvh;transform:none;z-index:95;background:#000}
   #player .pmount,#player .pmount iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
   #player .ptap{position:absolute;left:0;right:0;top:0;bottom:64px;z-index:2}
   #player .spin{position:absolute;inset:0;z-index:3;display:grid;place-items:center;pointer-events:none}
@@ -164,6 +164,8 @@
   <div class="ptap"></div>
   <div class="spin" hidden></div>
   <button class="sndpill"></button>
+  <div class="acts"><div class="actlogo"></div><button class="act like" aria-label="관심 저장"></button></div>
+  <div class="cap"></div>
   <button class="fsbtn" aria-label="전체화면"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></button>
   <div class="pbar"><div class="ptrack"></div><div class="pfill"></div></div>
 </div>
@@ -242,7 +244,7 @@ muteBtn.addEventListener('click',()=>{ if(soundOn){ ytCmd('mute'); soundOn=false
 PLAYER.querySelector('.sndpill').addEventListener('click',()=>{ ytCmd('unMute'); ytCmd('setVolume',[100]); soundOn=true; updateMuteUI(); });
 /* 전체화면 */
 const fsbtn=PLAYER.querySelector('.fsbtn');
-fsbtn.addEventListener('click',()=>{ const on=PLAYER.classList.toggle('fs'); fsbtn.innerHTML=on?SVG_FSX:SVG_FS; if(on)showPlayer(); });
+fsbtn.addEventListener('click',()=>{ const on=PLAYER.classList.toggle('fs'); fsbtn.innerHTML=on?SVG_FSX:SVG_FS; showPlayer(); });
 /* 진행바 드래그 */
 function pbarSeek(clientX){ const pb=PLAYER.querySelector('.pbar'); const r=pb.getBoundingClientRect(); let fr=(clientX-r.left)/r.width; fr=Math.max(0,Math.min(1,fr)); setPfill(fr); if(curDur){ pos=fr*curDur; ytCmd('seekTo',[fr*curDur,true]); } }
 PLAYER.querySelector('.pbar').addEventListener('pointerdown',e=>{ scrubbing=true; PLAYER.querySelector('.pbar').classList.add('drag'); pbarSeek(e.clientX); },{passive:true});
@@ -269,8 +271,6 @@ function slideHTML(g){ const id=g.youtubeId, vw=g.views?('<span class="vw">조�
   return '<section class="slide" data-id="'+id+'">'
     + '<div class="bg"></div>'
     + '<div class="stage"><img class="thumb" loading="lazy" data-id="'+id+'" src="https://i.ytimg.com/vi/'+id+'/maxresdefault.jpg" onerror="ytThumbFb(this)" alt=""></div>'
-    + '<div class="acts"><div class="actlogo">'+LOGO+'</div><button class="act like'+(isSaved(id)?' on':'')+'" data-id="'+id+'" aria-label="관심 저장">'+SVG_HEART+'<span class="cnt">관심</span></button></div>'
-    + '<div class="cap"><span class="lg">'+esc(g.match)+'</span>'+vw+'<div class="ttl">'+esc(g.title)+'</div><span class="ch">'+esc(g.channel)+'</span></div>'
     + '</section>'; }
 function brandHTML(){ return '<section class="brandcard"><div class="bc-logo">'+LOGO+'</div><h2>HOT 스포츠 <b>쇼츠</b></h2><p>매일 인기 하이라이트를 한 곳에서</p><div class="bc-go">▾ 아래로 밀어 계속 보기</div></section>'; }
 function endHTML(){ return '<section class="endcard"><div>'+LOGO+'</div><b>여기까지 다 보셨어요</b><p>처음부터 다시 보거나 다른 종목을 골라보세요</p><div><button class="eb pri" id="endTop">맨 위로</button><button class="eb" id="endHome">다른 종목 보기</button></div></section>'; }
@@ -284,7 +284,15 @@ function buildFeed(){ hidePlayer(); curId=null; activeSlide=null; list=computeLi
   if(list.length){ const f0=FEED.querySelector('.slide'); if(f0){ activeSlide=f0; settleLoad(); } } }
 /* 활성 추적 + 스크롤 정지 시 로드 */
 const io=new IntersectionObserver(es=>{ es.forEach(e=>{ if(e.target.classList.contains('slide') && e.isIntersecting && e.intersectionRatio>=0.6){ activeSlide=e.target; } }); },{root:FEED,threshold:[0,0.6,1]});
-function settleLoad(){ if(activeSlide && activeSlide.dataset.id){ showPlayer(); loadVideo(activeSlide.dataset.id); } else { hidePlayer(); } }
+const _alogo=PLAYER.querySelector('.actlogo'); if(_alogo)_alogo.innerHTML=LOGO;
+const _like=PLAYER.querySelector('.act.like'); if(_like)_like.innerHTML=SVG_HEART+'<span class="cnt">관심</span>';
+function updateOverlay(id){ const g=ALL.find(x=>x.youtubeId===id); const cap=PLAYER.querySelector('.cap'); const lk=PLAYER.querySelector('.act.like');
+  if(!g){ if(cap)cap.innerHTML=''; return; }
+  if(cap)cap.innerHTML='<span class="lg">'+esc(g.match)+'</span>'+(g.views?'<span class="vw">조회 '+fmtV(g.views)+'</span>':'')+'<div class="ttl">'+esc(g.title)+'</div><span class="ch">'+esc(g.channel)+'</span>';
+  if(lk){ lk.dataset.id=id; lk.classList.toggle('on',isSaved(id)); } }
+if(_like)_like.addEventListener('click',()=>{ const id=_like.dataset.id; if(!id)return; toggleSaved(id); const on=isSaved(id); _like.classList.toggle('on',on); if(on){_like.classList.remove('pop');void _like.offsetWidth;_like.classList.add('pop');} });
+PLAYER.querySelector('.cap').addEventListener('click',e=>{ const tt=e.target.closest('.ttl'); if(tt)tt.classList.toggle('expanded'); });
+function settleLoad(){ if(activeSlide && activeSlide.dataset.id){ const id=activeSlide.dataset.id; showPlayer(); updateOverlay(id); loadVideo(id); } else { hidePlayer(); } }
 FEED.addEventListener('scroll',()=>{ hidePlayer(); clearTimeout(scrollT); scrollT=setTimeout(settleLoad,150); },{passive:true});
 /* 피드 클릭(관심/제목) */
 FEED.addEventListener('click',e=>{
@@ -341,7 +349,7 @@ function hideSwipeHint(){ if(swipeHint.classList.contains('show')){ swipeHint.cl
 ['scroll','touchmove','wheel'].forEach(ev=>FEED.addEventListener(ev,hideSwipeHint,{passive:true}));
 /* 로드 */
 async function load(){ document.getElementById('err').classList.remove('show');
-  try{ const r=await fetch('data.json?_='+Date.now()); if(!r.ok)throw 0; ALL=(await r.json())||[]; }
+  try{ const r=await fetch('data.json?_='+Date.now()); if(!r.ok)throw 0; ALL=((await r.json())||[]).filter(g=>g.youtubeId&&g.short); }
   catch(e){ ALL=[]; document.getElementById('err').classList.add('show'); }
   updateChips(); buildTrending(); updateMuteUI(); buildFeed(); }
 load();
