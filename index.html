@@ -246,14 +246,13 @@ function updateMuteIcon(){ if(muteBtn){ muteBtn.innerHTML=soundOn?SVG_SND:SVG_MU
 if(muteBtn){ updateMuteIcon(); muteBtn.addEventListener('click',()=>{ const ifr=activeSlide&&activeSlide.querySelector('.mount iframe'); if(soundOn){ if(ifr)ytCmd(ifr,'mute'); soundOn=false; } else { if(ifr){ytCmd(ifr,'unMute');ytCmd(ifr,'setVolume',[100]);} soundOn=true; } updateMuteIcon(); }); }
 function ytCmd(ifr,func,args){ try{ ifr.contentWindow.postMessage(JSON.stringify({event:'command',func:func,args:args||[]}),'*'); }catch(e){} }
 function play(slide, auto){ const id=slide.dataset.id, host=slide.querySelector('.mount'); if(!host||host.firstChild)return;
-  if(IOS) soundOn=false;
   const spin=slide.querySelector('.spin'); if(spin)spin.hidden=false;
   const ifr=document.createElement('iframe');
   ifr.allow='autoplay; encrypted-media; picture-in-picture; fullscreen'; ifr.setAttribute('allowfullscreen',''); ifr.setAttribute('playsinline','1');
   let src='https://www.youtube.com/embed/'+id+'?enablejsapi=1&playsinline=1&rel=0&controls=0&modestbranding=1&iv_load_policy=3&origin='+encodeURIComponent(location.origin);
   if(auto) src+='&autoplay=1&mute=1';   // PC·안드로이드: 무음 자동재생 / iOS: 자동재생 없이 유튜브 기본 플레이어(한 번 탭=소리)
   ifr.src=src;
-  ifr.addEventListener('load',()=>{ if(spin)spin.hidden=true; let _n=0; const _hs=setInterval(()=>{ try{ifr.contentWindow.postMessage(JSON.stringify({event:'listening',id:1,channel:'widget'}),'*');}catch(e){} if(++_n>=6)clearInterval(_hs); },450); if(auto&&soundOn&&!IOS){ setTimeout(()=>{ytCmd(ifr,'unMute');ytCmd(ifr,'setVolume',[100]);},450);} });
+  ifr.addEventListener('load',()=>{ if(spin)spin.hidden=true; let _n=0; const _hs=setInterval(()=>{ try{ifr.contentWindow.postMessage(JSON.stringify({event:'listening',id:1,channel:'widget'}),'*');}catch(e){} if(++_n>=6)clearInterval(_hs); },450); if(auto&&soundOn){ setTimeout(()=>{ ytCmd(ifr,'unMute'); ytCmd(ifr,'setVolume',[100]); if(IOS) slide.dataset.auno=String(Date.now()); },500);} });
   host.appendChild(ifr);
   updateMuteIcon();
   }
@@ -307,7 +306,7 @@ function buildTrending(){ const top=[...ALL].filter(g=>g.youtubeId).sort((a,b)=>
   el.hidden=false; document.getElementById('trendSec').hidden=false; }
 /* 이동/키보드 */
 function goNext(){ FEED.scrollBy({top:FEED.clientHeight,behavior:'smooth'}); }
-window.addEventListener('message',e=>{ if(typeof e.data!=='string'||e.origin.indexOf('youtube')<0)return; let d; try{d=JSON.parse(e.data);}catch(_){return;} const info=(d.event==='infoDelivery'&&d.info)?d.info:(d.event==='onStateChange'?{playerState:d.info}:null); if(!info)return; const ifr=[...document.querySelectorAll('.slide .mount iframe')].find(x=>x.contentWindow===e.source); if(!ifr)return; const s=ifr.closest('.slide'); if(!s)return; if(typeof info.currentTime==='number'&&info.duration>0){ s.dataset.dur=info.duration; if(s!==scrubbing){ const fl=s.querySelector('.pfill'); if(fl)fl.style.width=Math.min(100,(info.currentTime/info.duration)*100)+'%'; } } const st=info.playerState; if(st===0){ s.dataset.playing='0'; if(s===activeSlide) goNext(); } else if(st===1){ s.classList.add('live'); s.dataset.playing='1'; } else if(st===2){ s.dataset.playing='0'; } });
+window.addEventListener('message',e=>{ if(typeof e.data!=='string'||e.origin.indexOf('youtube')<0)return; let d; try{d=JSON.parse(e.data);}catch(_){return;} const info=(d.event==='infoDelivery'&&d.info)?d.info:(d.event==='onStateChange'?{playerState:d.info}:null); if(!info)return; const ifr=[...document.querySelectorAll('.slide .mount iframe')].find(x=>x.contentWindow===e.source); if(!ifr)return; const s=ifr.closest('.slide'); if(!s)return; if(typeof info.currentTime==='number'&&info.duration>0){ s.dataset.dur=info.duration; if(s!==scrubbing){ const fl=s.querySelector('.pfill'); if(fl)fl.style.width=Math.min(100,(info.currentTime/info.duration)*100)+'%'; } } const st=info.playerState; if(st===0){ s.dataset.playing='0'; if(s===activeSlide) goNext(); } else if(st===1){ s.classList.add('live'); s.dataset.playing='1'; } else if(st===2){ s.dataset.playing='0'; if(IOS && s.dataset.auno && (Date.now()-(+s.dataset.auno)<1600)){ delete s.dataset.auno; ytCmd(ifr,'mute'); setTimeout(()=>ytCmd(ifr,'playVideo'),60); soundOn=false; updateMuteIcon(); } } });
 function pbarSeek(slide,clientX){ const pb=slide.querySelector('.pbar'); if(!pb)return; const r=pb.getBoundingClientRect(); let fr=(clientX-r.left)/r.width; fr=Math.max(0,Math.min(1,fr)); const fl=slide.querySelector('.pfill'); if(fl)fl.style.width=(fr*100)+'%'; const dur=parseFloat(slide.dataset.dur)||0; if(dur){ const ifr=slide.querySelector('.mount iframe'); if(ifr)ytCmd(ifr,'seekTo',[fr*dur,true]); } }
 FEED.addEventListener('pointerdown',e=>{ const pb=e.target.closest('.pbar'); if(pb){ scrubbing=pb.closest('.slide'); pb.classList.add('drag'); pbarSeek(scrubbing,e.clientX); } },{passive:true});
 FEED.addEventListener('pointermove',e=>{ if(scrubbing) pbarSeek(scrubbing,e.clientX); },{passive:true});
