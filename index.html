@@ -315,7 +315,8 @@ document.getElementById('obGo').addEventListener('click',()=>{ onboard.classList
 /* 위로 밀기 힌트(처음 한 번, 첫 스와이프 시 사라짐) */
 const swipeHint=document.getElementById('swipeHint');
 try{ if(!localStorage.getItem('hot_swiped')) swipeHint.classList.add('show'); }catch(e){}
-FEED.addEventListener('scroll',()=>{ if(swipeHint.classList.contains('show')){ swipeHint.classList.remove('show'); try{localStorage.setItem('hot_swiped','1');}catch(e){} } },{passive:true});
+function hideSwipeHint(){ if(swipeHint.classList.contains('show')){ swipeHint.classList.remove('show'); try{localStorage.setItem('hot_swiped','1');}catch(e){} } }
+['scroll','touchmove','wheel'].forEach(ev=>FEED.addEventListener(ev,hideSwipeHint,{passive:true}));
 load();
 if('serviceWorker' in navigator){ window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{})); }
 </script>
