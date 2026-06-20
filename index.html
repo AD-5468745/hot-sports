@@ -119,6 +119,17 @@
   .ihelp b{color:var(--green-soft)}
   .ihelp-ok{display:block;width:100%;padding:13px;border:0;border-radius:12px;background:var(--green);color:#fff;font-size:15px;font-weight:800;cursor:pointer}
   @media(max-width:480px){ .brand b{display:none} }
+  #onboard{position:fixed;inset:0;z-index:80;background:rgba(8,16,12,.93);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center}
+  #onboard.show{display:flex}
+  #onboard .ob-logo svg{width:62px;height:62px}
+  #onboard h2{font-size:22px;font-weight:800;margin:14px 0 18px}
+  #onboard ul{list-style:none;padding:0;margin:0 0 22px;max-width:350px;width:100%}
+  #onboard li{display:flex;align-items:center;gap:12px;padding:12px 14px;margin-bottom:10px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:14px;font-size:15px;font-weight:600;text-align:left}
+  #onboard li .em{font-size:21px;flex:none;width:26px;text-align:center}
+  #onboard .ob-go{width:100%;max-width:350px;padding:15px;border:0;border-radius:14px;background:var(--accent);color:#fff;font-size:16px;font-weight:800;cursor:pointer}
+  #swipeHint{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 120px);transform:translateX(-50%);z-index:9;display:none;flex-direction:column;align-items:center;gap:1px;color:#fff;pointer-events:none;text-shadow:0 1px 4px rgba(0,0,0,.8);animation:bob 1.4s ease-in-out infinite}
+  #swipeHint.show{display:flex}
+  #swipeHint svg{width:28px;height:28px} #swipeHint span{font-size:12px;font-weight:800}
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
@@ -127,7 +138,7 @@
   <div class="row">
     <div class="brand" role="button" tabindex="0" aria-label="홈으로"><svg viewBox="0 0 120 120"><g fill="none" stroke="#1FA85C" stroke-width="6" stroke-linecap="round"><line x1="60" y1="44" x2="42" y2="20"/><line x1="60" y1="44" x2="80" y2="22"/></g><circle cx="42" cy="18" r="5.5" fill="#1FA85C"/><circle cx="82" cy="20" r="5.5" fill="#1FA85C"/><rect x="16" y="44" width="88" height="62" rx="16" fill="#fff" stroke="#1FA85C" stroke-width="9"/><text x="60" y="90" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="46" fill="#1FA85C">LC</text></svg><b>HOT 스포츠 <i>쇼츠</i></b></div>
     <button class="catpill" id="catBtn" aria-haspopup="dialog" aria-label="종목 선택">전체 <span class="caret">▾</span></button>
-    <button class="instpill" id="installBtn" aria-label="홈 화면에 추가"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><polyline points="7 10 12 15 17 10"/><path d="M5 21h14"/></svg><span>설치</span></button>
+    <button class="instpill" id="installBtn" aria-label="홈 화면에 추가"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><polyline points="7 10 12 15 17 10"/><path d="M5 21h14"/></svg><span>홈 추가</span></button>
     <button class="iconbtn" id="searchBtn" title="검색" aria-label="검색"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg></button>
     <button class="iconbtn" id="reloadBtn" title="새로고침" aria-label="새로고침"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg></button>
   </div>
@@ -169,6 +180,8 @@
   </nav>
 </div></div>
 <div id="installhelp" aria-hidden="true"><div class="sheet-panel"><div class="sheet-grab"></div><div class="sheet-title">홈 화면에 추가</div><ol class="ihelp"><li>브라우저 <b>공유 버튼</b>(⬆️ 또는 ⋮)을 누르세요</li><li><b>'홈 화면에 추가'</b>를 선택하세요</li><li>완료! 홈 화면 아이콘으로 바로 실행돼요</li></ol><button class="ihelp-ok" id="ihelpOk">확인</button></div></div>
+<div id="onboard"><div class="ob-logo"><svg viewBox="0 0 120 120"><g fill="none" stroke="#1FA85C" stroke-width="6" stroke-linecap="round"><line x1="60" y1="44" x2="42" y2="20"/><line x1="60" y1="44" x2="80" y2="22"/></g><circle cx="42" cy="18" r="5.5" fill="#1FA85C"/><circle cx="82" cy="20" r="5.5" fill="#1FA85C"/><rect x="16" y="44" width="88" height="62" rx="16" fill="#fff" stroke="#1FA85C" stroke-width="9"/><text x="60" y="90" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="46" fill="#1FA85C">LC</text></svg></div><h2>이렇게 즐겨보세요</h2><ul><li><span class="em">👆</span>위로 밀면 다음 영상</li><li><span class="em">⏯️</span>화면을 탭하면 재생·정지</li><li><span class="em">🔊</span>'소리 켜기'를 누르면 소리 ON</li><li><span class="em">⚽</span>'전체 ▾'에서 종목을 골라요</li></ul><button class="ob-go" id="obGo">시작하기</button></div>
+<div id="swipeHint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg><span>위로 밀기</span></div>
 <script>
 const LOGO='<svg viewBox="0 0 120 120"><g fill="none" stroke="#1FA85C" stroke-width="6" stroke-linecap="round"><line x1="60" y1="44" x2="42" y2="20"/><line x1="60" y1="44" x2="80" y2="22"/></g><circle cx="42" cy="18" r="5.5" fill="#1FA85C"/><circle cx="82" cy="20" r="5.5" fill="#1FA85C"/><rect x="16" y="44" width="88" height="62" rx="16" fill="#fff" stroke="#1FA85C" stroke-width="9"/><text x="60" y="90" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="46" fill="#1FA85C">LC</text></svg>';
 const SVG_HEART='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>';
@@ -295,6 +308,14 @@ async function load(){ document.getElementById('err').classList.remove('show');
   try{ const r=await fetch('data.json?_='+Date.now()); if(!r.ok)throw 0; ALL=(await r.json())||[]; }
   catch(e){ ALL=[]; document.getElementById('err').classList.add('show'); }
   updateChips(); buildTrending(); buildFeed(); }
+/* 첫 실행 가이드(한 번만) */
+const onboard=document.getElementById('onboard');
+try{ if(!localStorage.getItem('hot_onboarded')) onboard.classList.add('show'); }catch(e){}
+document.getElementById('obGo').addEventListener('click',()=>{ onboard.classList.remove('show'); try{localStorage.setItem('hot_onboarded','1');}catch(e){} });
+/* 위로 밀기 힌트(처음 한 번, 첫 스와이프 시 사라짐) */
+const swipeHint=document.getElementById('swipeHint');
+try{ if(!localStorage.getItem('hot_swiped')) swipeHint.classList.add('show'); }catch(e){}
+FEED.addEventListener('scroll',()=>{ if(swipeHint.classList.contains('show')){ swipeHint.classList.remove('show'); try{localStorage.setItem('hot_swiped','1');}catch(e){} } },{passive:true});
 load();
 if('serviceWorker' in navigator){ window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{})); }
 </script>
