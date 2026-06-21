@@ -2,7 +2,7 @@ name: 빅리그 골 자동 수집
 
 on:
   schedule:
-    - cron: "*/30 * * * *"     # 30분마다 자동 실행
+    - cron: "0 * * * *"        # 1시간마다 자동 실행 (월드컵 점검량 증가로 30분→1시간)
   workflow_dispatch: {}          # 수동 실행 버튼(Actions 탭)
 
 permissions:
